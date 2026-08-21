@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b23a2e">
+<title>Spanish from Italian</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<main id="app">
+
+  <!-- Home -->
+  <section id="view-home" class="view">
+    <h1>Spanish <span class="from">from</span> Italian</h1>
+
+    <div class="counts">
+      <div class="count"><b id="c-due">–</b><span>due</span></div>
+      <div class="count"><b id="c-new">–</b><span>new</span></div>
+      <div class="count"><b id="c-learned">–</b><span>learned</span></div>
+    </div>
+
+    <button id="start" class="primary">Start review</button>
+    <p id="nothing-due" class="muted hidden">Nothing due. Add new cards below, or come back tomorrow.</p>
+
+    <details class="panel">
+      <summary>Deck</summary>
+
+      <fieldset>
+        <legend>Frequency band</legend>
+        <div id="f-tiers" class="chips"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>How close to Italian</legend>
+        <div id="f-buckets" class="chips"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Direction</legend>
+        <div id="f-directions" class="chips"></div>
+      </fieldset>
+
+      <label class="row">
+        New cards per session
+        <input id="f-new" type="number" min="0" max="100" step="5">
+      </label>
+    </details>
+
+    <details class="panel">
+      <summary>Backup</summary>
+      <p class="muted small">
+        iOS can clear a web app's storage if it goes unused. Export now and then —
+        it is the only copy of your progress.
+      </p>
+      <div class="row-buttons">
+        <button id="export">Export progress</button>
+        <button id="import-btn">Import…</button>
+        <input id="import" type="file" accept="application/json" hidden>
+      </div>
+      <p id="backup-msg" class="muted small"></p>
+    </details>
+  </section>
+
+  <!-- Review -->
+  <section id="view-review" class="view hidden">
+    <header class="review-bar">
+      <button id="quit" class="ghost" aria-label="End session">✕</button>
+      <div class="progress"><div id="progress-fill"></div></div>
+      <span id="remaining" class="muted small"></span>
+    </header>
+
+    <div class="card">
+      <div id="direction" class="direction"></div>
+      <div id="prompt" class="prompt"></div>
+      <div id="answer" class="answer hidden"></div>
+      <div id="meta" class="meta hidden"></div>
+    </div>
+
+    <div id="reveal-row" class="actions">
+      <button id="reveal" class="primary">Show answer</button>
+    </div>
+
+    <div id="grade-row" class="actions grades hidden">
+      <button data-g="0" class="g-again">Again<small></small></button>
+      <button data-g="1" class="g-hard">Hard<small></small></button>
+      <button data-g="2" class="g-good">Good<small></small></button>
+      <button data-g="3" class="g-easy">Easy<small></small></button>
+    </div>
+  </section>
+
+  <!-- Done -->
+  <section id="view-done" class="view hidden">
+    <h2>Session complete</h2>
+    <p id="done-summary" class="muted"></p>
+    <button id="back-home" class="primary">Done</button>
+  </section>
+
+</main>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

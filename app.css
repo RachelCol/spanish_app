@@ -1,0 +1,132 @@
+/* Mobile-first. The review screen is the only one that matters in practice,
+   so it gets the whole viewport and thumb-reachable controls. */
+
+:root {
+  --bg: #fbf8f4;
+  --surface: #ffffff;
+  --ink: #23201d;
+  --muted: #7a726a;
+  --line: #e6ddd2;
+  --accent: #b23a2e;
+  --again: #c0392b;
+  --hard: #b7791f;
+  --good: #2f855a;
+  --easy: #2b6cb0;
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171513;
+    --surface: #211e1b;
+    --ink: #ece6df;
+    --muted: #9b918a;
+    --line: #35302b;
+    --accent: #e0705f;
+    --again: #e05a4c;
+    --hard: #d99a3a;
+    --good: #4fa87a;
+    --easy: #5b95d6;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem
+           max(1rem, env(safe-area-inset-bottom));
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.view { flex: 1; display: flex; flex-direction: column; }
+.hidden { display: none !important; }
+
+h1 { font-size: 1.5rem; margin: .5rem 0 1.25rem; font-weight: 650; letter-spacing: -.01em; }
+h1 .from { color: var(--muted); font-weight: 400; }
+h2 { font-size: 1.25rem; }
+
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+
+/* --- counts --- */
+.counts { display: flex; gap: .5rem; margin-bottom: 1.25rem; }
+.count {
+  flex: 1; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .75rem; text-align: center;
+}
+.count b { display: block; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.count span { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+/* --- buttons --- */
+button {
+  font: inherit; cursor: pointer; border-radius: var(--radius);
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  padding: .7rem 1rem; transition: transform .06s ease, filter .15s ease;
+}
+button:active { transform: scale(.98); }
+
+button.primary {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff; font-weight: 600; padding: .95rem; width: 100%; font-size: 1.05rem;
+}
+button.ghost { border: none; background: none; color: var(--muted); padding: .4rem .6rem; font-size: 1.1rem; }
+
+/* --- panels --- */
+.panel {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); margin-top: 1rem; padding: .25rem .9rem;
+}
+.panel summary { cursor: pointer; padding: .65rem 0; font-weight: 600; }
+fieldset { border: none; padding: 0; margin: .5rem 0 1rem; }
+legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 0 0 .4rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: .35rem .8rem; font-size: .9rem; background: transparent;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip small { display: block; font-size: .7rem; opacity: .75; }
+
+.row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .5rem 0 1rem; }
+.row input { width: 5rem; padding: .5rem; font: inherit; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.row-buttons { display: flex; gap: .5rem; padding-bottom: .75rem; }
+.row-buttons button { flex: 1; }
+
+/* --- review --- */
+.review-bar { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; }
+.progress { flex: 1; height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; }
+#progress-fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+
+.card {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; gap: .75rem;
+  padding: 1rem 0;
+}
+.direction { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.prompt { font-size: 2.5rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+.answer { font-size: 2rem; color: var(--accent); font-weight: 600; }
+.meta { font-size: .85rem; color: var(--muted); }
+.meta .pos { font-style: italic; }
+
+.actions { padding-top: 1rem; }
+.grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+.grades button { padding: .8rem .2rem; font-size: .9rem; font-weight: 600; }
+.grades small { display: block; font-weight: 400; font-size: .7rem; opacity: .7; margin-top: .15rem; }
+.g-again { color: var(--again); } .g-hard { color: var(--hard); }
+.g-good  { color: var(--good);  } .g-easy { color: var(--easy); }
+
+#view-done { align-items: center; justify-content: center; text-align: center; }
+#view-done button { margin-top: 1.5rem; max-width: 16rem; }

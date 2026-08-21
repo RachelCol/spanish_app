@@ -19,3 +19,6 @@ __pycache__
 
 # Vendored upstream data, re-fetchable via pipeline/fetch.sh
 vendor
+
+# Local preview config
+.claude
