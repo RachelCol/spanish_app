@@ -11,3 +11,11 @@ playwright-report
 # OS
 .DS_Store
 Thumbs.db
+
+# Python tooling for content generation
+.venv
+__pycache__
+*.pyc
+
+# Vendored upstream data, re-fetchable via pipeline/fetch.sh
+vendor
