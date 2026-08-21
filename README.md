@@ -1,4 +1,4 @@
-# puente
+# spanish_app
 
 A Spanish course for someone who already speaks Italian.
 

@@ -1,4 +1,4 @@
-# puente — design
+# spanish_app — design
 
 ## The learner
 
