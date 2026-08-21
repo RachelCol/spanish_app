@@ -56,6 +56,7 @@ export const DEFAULT_SETTINGS = {
   tiers: ['common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
   directions: ['es>it', 'it>es'],
+  autoSpeak: true,
   newPerDay: 15,
   maxSession: 60,
 };

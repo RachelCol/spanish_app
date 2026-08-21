@@ -46,6 +46,11 @@
         <div id="f-directions" class="chips"></div>
       </fieldset>
 
+      <fieldset>
+        <legend>Sound</legend>
+        <div id="f-speech" class="chips"></div>
+      </fieldset>
+
       <label class="row">
         New cards per session
         <input id="f-new" type="number" min="0" max="100" step="5">
@@ -77,9 +82,19 @@
 
     <div class="card">
       <div id="direction" class="direction"></div>
-      <div id="prompt" class="prompt"></div>
-      <div id="answer" class="answer hidden"></div>
+
+      <div class="word-row">
+        <span id="prompt" class="prompt"></span>
+        <button id="say-prompt" class="say" aria-label="Hear this word">▶</button>
+      </div>
+
+      <div id="answer-row" class="word-row hidden">
+        <span id="answer" class="answer"></span>
+        <button id="say-answer" class="say" aria-label="Hear this word">▶</button>
+      </div>
+
       <div id="meta" class="meta hidden"></div>
+      <button id="compare" class="compare hidden">Hear both</button>
     </div>
 
     <div id="reveal-row" class="actions">

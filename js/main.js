@@ -2,6 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
+import { initVoices, available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -24,6 +25,7 @@ async function boot() {
   await refresh();
   renderFilters();
   wire();
+  initVoices();
   requestPersistence();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -75,6 +77,15 @@ function renderFilters() {
   dirs.replaceChildren(...Object.keys(DIRECTIONS).map(d =>
     chip(DIRECTIONS[d].label, DIRECTIONS[d].kind, s.directions.includes(d), on => toggle(s.directions, d, on))));
 
+  const speech = $('#f-speech');
+  if (canSpeak()) {
+    speech.replaceChildren(chip('Say the Spanish on reveal', '', s.autoSpeak,
+      on => { s.autoSpeak = on; }));
+  } else {
+    speech.textContent = 'This browser has no speech support.';
+    speech.className = 'muted small';
+  }
+
   $('#f-new').value = s.newPerDay;
 }
 
@@ -116,8 +127,11 @@ function renderCard() {
   $('#meta').innerHTML =
     `<span class="pos">${item.card.pos}</span> · ${BUCKET_LABEL[item.card.bucket]}`;
 
-  $('#answer').classList.add('hidden');
+  stopSpeech();
+  $('#answer-row').classList.add('hidden');
   $('#meta').classList.add('hidden');
+  $('#compare').classList.add('hidden');
+  $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
 
@@ -128,8 +142,18 @@ function renderCard() {
 function reveal() {
   if (state.revealed) return;
   state.revealed = true;
-  $('#answer').classList.remove('hidden');
+  const card = state.queue[state.index].card;
+  $('#answer-row').classList.remove('hidden');
   $('#meta').classList.remove('hidden');
+
+  // The sound shift is the lesson for pairs that are close but not identical,
+  // so those get a back-to-back playback. Identical and unrelated pairs have
+  // nothing to compare.
+  const teachable = card.bucket === 'near' || card.bucket === 'shifted';
+  $('#compare').classList.toggle('hidden', !(canSpeak() && teachable));
+
+  // Called from a tap or keypress, which is what iOS requires.
+  if (state.settings.autoSpeak && canSpeak()) speak(card.es, 'es');
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
 
@@ -158,6 +182,7 @@ async function applyGrade(g) {
 }
 
 async function finish() {
+  stopSpeech();
   await refresh();
   $('#done-summary').textContent =
     `${state.graded} card${state.graded === 1 ? '' : 's'} reviewed.`;
@@ -218,6 +243,21 @@ function wire() {
     const b = e.target.closest('button[data-g]');
     if (b) applyGrade(Number(b.dataset.g));
   });
+  $('#say-prompt').addEventListener('click', () => {
+    const item = state.queue[state.index];
+    const dir = DIRECTIONS[item.direction];
+    speak(item.card[dir.prompt], dir.prompt);
+  });
+  $('#say-answer').addEventListener('click', () => {
+    const item = state.queue[state.index];
+    const dir = DIRECTIONS[item.direction];
+    speak(item.card[dir.answer], dir.answer);
+  });
+  $('#compare').addEventListener('click', () => {
+    const card = state.queue[state.index].card;
+    compare(card.it, card.es);
+  });
+
   $('#export').addEventListener('click', exportProgress);
   $('#import-btn').addEventListener('click', () => $('#import').click());
   $('#import').addEventListener('change', e => {
