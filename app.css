@@ -147,3 +147,12 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
   color: var(--muted); border-radius: 999px;
 }
 .compare:active { color: var(--accent); border-color: var(--accent); }
+
+/* --- voice pickers --- */
+.voice-row { align-items: center; }
+.voice-control { display: flex; align-items: center; gap: .5rem; }
+.voice-control select {
+  font: inherit; font-size: .9rem; max-width: 11rem;
+  padding: .4rem .5rem; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+}

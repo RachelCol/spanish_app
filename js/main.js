@@ -2,7 +2,8 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
-import { initVoices, available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
+import { initVoices, onVoicesReady, listVoices, setVoice, isNovelty, SAMPLE,
+         available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -26,6 +27,11 @@ async function boot() {
   renderFilters();
   wire();
   initVoices();
+  onVoicesReady(() => {
+    setVoice('es', state.settings.voiceEs);
+    setVoice('it', state.settings.voiceIt);
+    renderVoicePickers();
+  });
   requestPersistence();
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -87,6 +93,67 @@ function renderFilters() {
   }
 
   $('#f-new').value = s.newPerDay;
+}
+
+function renderVoicePickers() {
+  const host = $('#voice-rows');
+  if (!canSpeak()) { host.replaceChildren(); return; }
+
+  const rows = [
+    { which: 'es', label: 'Spanish voice', key: 'voiceEs' },
+    { which: 'it', label: 'Italian voice', key: 'voiceIt' },
+  ].map(({ which, label, key }) => {
+    const groups = listVoices(which);
+    if (!groups.length) return null;
+
+    const row = document.createElement('label');
+    row.className = 'row voice-row';
+    row.append(label);
+
+    const sel = document.createElement('select');
+    for (const [lang, list] of groups) {
+      const g = document.createElement('optgroup');
+      g.label = lang;
+      for (const v of list) {
+        const o = document.createElement('option');
+        o.value = v.name;
+        o.textContent = isNovelty(v) ? v.name + ' (novelty)' : v.name;
+        o.selected = state.settings[key] === v.name;
+        g.append(o);
+      }
+      sel.append(g);
+    }
+    // Nothing stored yet: show what the automatic pick would be.
+    if (!state.settings[key]) {
+      const auto = document.createElement('option');
+      auto.value = '';
+      auto.textContent = 'Automatic';
+      auto.selected = true;
+      sel.prepend(auto);
+    }
+
+    sel.addEventListener('change', async () => {
+      state.settings[key] = sel.value || null;
+      setVoice(which, sel.value || null);
+      await db.setMeta('settings', state.settings);
+      speak(SAMPLE[which], which);
+    });
+
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.className = 'say';
+    play.textContent = '▶';
+    play.setAttribute('aria-label', 'Preview ' + label);
+    play.addEventListener('click', e => { e.preventDefault(); speak(SAMPLE[which], which); });
+
+    const wrap = document.createElement('span');
+    wrap.className = 'voice-control';
+    wrap.append(sel, play);
+    row.append(wrap);
+    return row;
+  }).filter(Boolean);
+
+  host.replaceChildren(...rows);
 }
 
 function toggle(arr, val, on) {
