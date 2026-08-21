@@ -1,0 +1,13 @@
+node_modules
+dist
+.env.local
+.env.*.local
+
+# Test artifacts
+test-results
+playwright-report
+.playwright
+
+# OS
+.DS_Store
+Thumbs.db
