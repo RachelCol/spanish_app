@@ -99,61 +99,74 @@ function renderVoicePickers() {
   const host = $('#voice-rows');
   if (!canSpeak()) { host.replaceChildren(); return; }
 
-  const rows = [
-    { which: 'es', label: 'Spanish voice', key: 'voiceEs' },
-    { which: 'it', label: 'Italian voice', key: 'voiceIt' },
+  const blocks = [
+    { which: 'es', label: 'Spanish', key: 'voiceEs' },
+    { which: 'it', label: 'Italian', key: 'voiceIt' },
   ].map(({ which, label, key }) => {
     const groups = listVoices(which);
     if (!groups.length) return null;
 
-    const row = document.createElement('label');
-    row.className = 'row voice-row';
-    row.append(label);
+    const box = document.createElement('fieldset');
+    const legend = document.createElement('legend');
+    legend.textContent = label;
+    box.append(legend);
 
-    const sel = document.createElement('select');
+    const showAll = state.settings.showAllVoices;
+
     for (const [lang, list] of groups) {
-      const g = document.createElement('optgroup');
-      g.label = lang;
-      for (const v of list) {
-        const o = document.createElement('option');
-        o.value = v.name;
-        o.textContent = isNovelty(v) ? v.name + ' (novelty)' : v.name;
-        o.selected = state.settings[key] === v.name;
-        g.append(o);
+      const shown = showAll ? list : list.filter(v => !isNovelty(v));
+      if (!shown.length) continue;
+
+      const tag = document.createElement('div');
+      tag.className = 'voice-locale';
+      tag.textContent = lang === 'es-ES' ? lang + ' · Spain'
+                      : lang === 'es-MX' ? lang + ' · Latin America'
+                      : lang;
+      box.append(tag);
+
+      const row = document.createElement('div');
+      row.className = 'chips';
+      for (const v of shown) {
+        // One tap does both jobs: hear it, and keep it.
+        const b = chipButton(
+          v.name.replace(/\s*\(.*\)\s*/, ''),
+          isNovelty(v) ? 'novelty' : '',
+          state.settings[key] === v.name,
+          async () => {
+            state.settings[key] = v.name;
+            setVoice(which, v.name);
+            await db.setMeta('settings', state.settings);
+            renderVoicePickers();
+            speak(SAMPLE[which], which);
+          });
+        row.append(b);
       }
-      sel.append(g);
+      box.append(row);
     }
-    // Nothing stored yet: show what the automatic pick would be.
-    if (!state.settings[key]) {
-      const auto = document.createElement('option');
-      auto.value = '';
-      auto.textContent = 'Automatic';
-      auto.selected = true;
-      sel.prepend(auto);
-    }
-
-    sel.addEventListener('change', async () => {
-      state.settings[key] = sel.value || null;
-      setVoice(which, sel.value || null);
-      await db.setMeta('settings', state.settings);
-      speak(SAMPLE[which], which);
-    });
-
-    const play = document.createElement('button');
-    play.type = 'button';
-    play.className = 'say';
-    play.textContent = '▶';
-    play.setAttribute('aria-label', 'Preview ' + label);
-    play.addEventListener('click', e => { e.preventDefault(); speak(SAMPLE[which], which); });
-
-    const wrap = document.createElement('span');
-    wrap.className = 'voice-control';
-    wrap.append(sel, play);
-    row.append(wrap);
-    return row;
+    return box;
   }).filter(Boolean);
 
-  host.replaceChildren(...rows);
+  const more = chipButton('Show novelty voices', '', state.settings.showAllVoices, async () => {
+    state.settings.showAllVoices = !state.settings.showAllVoices;
+    await db.setMeta('settings', state.settings);
+    renderVoicePickers();
+  });
+  const moreRow = document.createElement('div');
+  moreRow.className = 'chips voice-more';
+  moreRow.append(more);
+
+  host.replaceChildren(...blocks, moreRow);
+}
+
+// Like chip(), but the handler owns the pressed state rather than toggling it.
+function chipButton(label, sub, pressed, onClick) {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.type = 'button';
+  b.setAttribute('aria-pressed', String(pressed));
+  b.innerHTML = sub ? `${label}<small>${sub}</small>` : label;
+  b.addEventListener('click', e => { e.preventDefault(); onClick(); });
+  return b;
 }
 
 function toggle(arr, val, on) {

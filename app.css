@@ -156,3 +156,11 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
   padding: .4rem .5rem; border-radius: 8px;
   border: 1px solid var(--line); background: var(--bg); color: var(--ink);
 }
+
+/* --- voice chips --- */
+.voice-locale {
+  font-size: .72rem; color: var(--muted); letter-spacing: .04em;
+  text-transform: uppercase; margin: .6rem 0 .35rem;
+}
+.voice-more { margin: .9rem 0 .5rem; }
+#voice-rows fieldset { margin-bottom: .25rem; }

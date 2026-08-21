@@ -46,16 +46,23 @@
         <div id="f-directions" class="chips"></div>
       </fieldset>
 
-      <fieldset>
-        <legend>Sound</legend>
-        <div id="f-speech" class="chips"></div>
-        <div id="voice-rows"></div>
-      </fieldset>
-
       <label class="row">
         New cards per session
         <input id="f-new" type="number" min="0" max="100" step="5">
       </label>
+    </details>
+
+    <details class="panel">
+      <summary>Voice</summary>
+      <div id="f-speech" class="chips"></div>
+      <div id="voice-rows"></div>
+      <p class="muted small">
+        Only a couple of Spanish voices ship by default and they are the compact
+        ones. macOS has much better versions free to download —
+        <b>System Settings → Accessibility → Spoken Content → System Voice →
+        Manage Voices</b>, then pick a Spanish voice marked Enhanced or Premium.
+        Reload this page afterwards and it will appear here.
+      </p>
     </details>
 
     <details class="panel">
