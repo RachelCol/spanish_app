@@ -54,6 +54,13 @@ export function onVoicesReady(fn) {
   if (ready) fn(); else listeners.push(fn);
 }
 
+// "Paulina (Enhanced)" is a different voice from "Paulina", so the qualifier
+// has to survive into the UI -- collapsing it makes two voices look like one.
+export function voiceParts(voice) {
+  const m = voice.name.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? { base: m[1], qualifier: m[2] } : { base: voice.name, qualifier: '' };
+}
+
 export function isNovelty(voice) {
   return NOVELTY.some(n => voice.name.includes(n));
 }
@@ -64,7 +71,12 @@ export function listVoices(which) {
   const want = which === 'es' ? 'es' : 'it';
   const matches = voices.filter(v => v.lang.toLowerCase().replace('_', '-').startsWith(want));
   const groups = new Map();
+  const seen = new Set();
   for (const v of matches) {
+    // Same voice offered twice -- by identical URI, or under two locale tags.
+    const id = (v.voiceURI || v.name) + '|' + v.lang;
+    if (seen.has(id)) continue;
+    seen.add(id);
     const lang = v.lang.replace('_', '-');
     if (!groups.has(lang)) groups.set(lang, []);
     groups.get(lang).push(v);

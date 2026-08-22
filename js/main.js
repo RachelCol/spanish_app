@@ -2,7 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
-import { initVoices, onVoicesReady, listVoices, setVoice, isNovelty, SAMPLE,
+import { initVoices, onVoicesReady, listVoices, setVoice, isNovelty, voiceParts, SAMPLE,
          differsByAccent, hasAccentPair, compareAccents,
          available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
@@ -126,9 +126,10 @@ function renderVoicePickers() {
       row.className = 'chips';
       for (const v of list) {
         // One tap does both jobs: hear it, and keep it.
+        const parts = voiceParts(v);
         const b = chipButton(
-          v.name.replace(/\s*\(.*\)\s*/, ''),
-          isNovelty(v) ? 'novelty' : '',
+          parts.base,
+          parts.qualifier,
           state.settings[key] === v.name,
           async () => {
             state.settings[key] = v.name;
