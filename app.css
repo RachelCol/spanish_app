@@ -175,3 +175,11 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
   margin: .1rem 0 0; font-size: .8rem; color: var(--muted);
 }
 .accent-note .say { width: 1.7rem; height: 1.7rem; font-size: .6rem; }
+
+/* --- external lookups --- */
+.card-links {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+  margin: 1.25rem 0 0; font-size: .8rem;
+}
+.card-links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+.card-links a:active { color: var(--accent); border-color: var(--accent); }

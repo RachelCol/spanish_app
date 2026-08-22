@@ -195,6 +195,7 @@ function renderCard() {
   $('#meta').classList.add('hidden');
   $('#compare').classList.add('hidden');
   $('#accent-note').classList.add('hidden');
+  $('#card-links').classList.add('hidden');
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -225,6 +226,14 @@ function reveal() {
   const showAccent = canSpeak() && hasAccentPair() && other && differsByAccent(card.es);
   if (showAccent) $('#accent-text').textContent = other.label + ' pronunciation differs';
   $('#accent-note').classList.toggle('hidden', !showAccent);
+
+  // Always look up the Spanish: it is the language being learned, and every
+  // one of these three has a Spanish-Italian mode.
+  const w = encodeURIComponent(card.es);
+  $('#link-wr').href  = `https://www.wordreference.com/esit/${w}`;
+  $('#link-rev').href = `https://context.reverso.net/translation/spanish-italian/${w}`;
+  $('#link-yg').href  = `https://youglish.com/pronounce/${w}/spanish`;
+  $('#card-links').classList.remove('hidden');
 
   // Speak the side that was just turned over -- that is the new information.
   if (state.settings.autoSpeak && canSpeak()) {
