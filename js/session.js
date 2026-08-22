@@ -1,58 +1,28 @@
 // Builds the review queue.
 //
-// The day's plan is every card due today with twenty new cards spread evenly
-// through it. That ratio is the point: with sixty due you meet a new card
-// every fourth card, with twenty due you alternate. Either way finishing the
-// plan clears the backlog, so the due pile cannot quietly outrun you.
-//
-// Once the plan is done, further reviewing alternates new cards with whatever
-// falls due soonest. Working ahead beats grinding, and it keeps some variety
-// in a session that would otherwise be all new words.
+// Two phases. While cards are due today, three of them to every new card, so
+// the backlog always shrinks faster than it grows. Once nothing is due that
+// job is done, and it alternates new cards with whatever falls due soonest --
+// working ahead rather than grinding.
 
 import { isNew, isDue, gradeLetter } from './srs.js';
 
-export const NEW_PER_DAY = 20;
+const DUE_PER_NEW = 3;
 
-// Spreads two lists evenly in proportion to their lengths, rather than
-// alternating -- 60 due and 20 new should come out 3:1, not 1:1 then a tail.
-function interleave(a, b) {
-  const out = [];
-  const total = a.length + b.length;
-  let i = 0, j = 0;
-  for (let n = 0; n < total; n++) {
-    const aShare = a.length ? i / a.length : 1;
-    const bShare = b.length ? j / b.length : 1;
-    if (j < b.length && (i >= a.length || bShare <= aShare)) out.push(b[j++]);
-    else out.push(a[i++]);
-  }
-  return out;
-}
-
-function alternate(a, b) {
-  const out = [];
-  for (let n = 0; n < a.length + b.length; n++) {
-    const pick = n % 2 === 0 ? a : b;
-    const other = n % 2 === 0 ? b : a;
-    if (pick.length) out.push(pick.shift());
-    else if (other.length) out.push(other.shift());
-  }
-  return out;
-}
-
-export function buildQueue(items, settings, now = Date.now(), newToday = 0) {
+export function buildQueue(items, settings, now = Date.now()) {
   const size = settings.sessionSize;
 
   const fresh = items.filter(isNew)
     .sort((a, b) => b.card.zipf - a.card.zipf);          // most frequent first
 
-  // Studying new cards deliberately: no ratio, no cap.
+  // Studying new cards deliberately: no ratio, no interleaving.
   if (settings.newOnly) return fresh.slice(0, size);
 
   const seen = items.filter(i => !isNew(i));
   const due = seen.filter(i => isDue(i, now)).sort((a, b) => a.due - b.due);
   const upcoming = seen.filter(i => !isDue(i, now)).sort((a, b) => a.due - b.due);
 
-  // Reviewing one grade at a time is a drill, not the daily plan: due first,
+  // Reviewing one grade at a time is a drill, not the daily queue: due first,
   // then whatever comes due soonest.
   if (settings.grades && settings.grades.length) {
     const want = new Set(settings.grades);
@@ -60,13 +30,25 @@ export function buildQueue(items, settings, now = Date.now(), newToday = 0) {
     return [...due.filter(match), ...upcoming.filter(match)].slice(0, size);
   }
 
-  const budget = Math.max(0, NEW_PER_DAY - newToday);
-  const plan = interleave(due, fresh.slice(0, budget));
-  if (plan.length >= size) return plan.slice(0, size);
+  const out = [];
+  let d = 0, f = 0, u = 0;
 
-  // Past the plan: half new, half nearest-due.
-  const tail = alternate(fresh.slice(budget), [...upcoming]);
-  return [...plan, ...tail].slice(0, size);
+  // Phase one: clear the backlog, three due to every new.
+  for (let step = 0; out.length < size && d < due.length; step++) {
+    const takeNew = step % (DUE_PER_NEW + 1) === DUE_PER_NEW && f < fresh.length;
+    out.push(takeNew ? fresh[f++] : due[d++]);
+  }
+
+  // Phase two: nothing overdue left, so alternate one for one.
+  let takeNew = true;
+  while (out.length < size) {
+    if (takeNew && f < fresh.length) out.push(fresh[f++]);
+    else if (u < upcoming.length) out.push(upcoming[u++]);
+    else if (f < fresh.length) out.push(fresh[f++]);
+    else break;
+    takeNew = !takeNew;
+  }
+  return out;
 }
 
 export function counts(items, now = Date.now()) {
@@ -81,7 +63,7 @@ export function counts(items, now = Date.now()) {
   return { due, new: fresh, learned, total: items.length };
 }
 
-// Distribution across the letter bands, for the progress view. `null` from
+// Distribution across the letter bands, for the progress view. A null from
 // gradeLetter means the card has never been reviewed.
 export function gradeBreakdown(items) {
   const out = { New: 0, A: 0, B: 0, C: 0, D: 0, E: 0, F: 0 };

@@ -1,7 +1,8 @@
 import { db, requestPersistence } from './db.js';
-import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
-import { buildQueue, counts } from './session.js';
+import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, AGAIN, HARD, GOOD, EASY } from './srs.js';
+import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
+         DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
+import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, speakPair, stop as stopSpeech } from './speech.js';
@@ -13,6 +14,7 @@ const state = {
   items: [],
   settings: { ...DEFAULT_SETTINGS },
   queue: [],
+  reviewsToday: 0,
   index: 0,
   revealed: false,
   graded: 0,
@@ -38,13 +40,27 @@ async function boot() {
   }
 }
 
+// Local midnight, not UTC -- a review at 11pm belongs to that evening.
+function startOfToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.getTime();
+}
+
 async function refresh() {
-  const progress = await db.allProgress();
+  const [progress, today] = await Promise.all([
+    db.allProgress(),
+    db.reviewsSince(startOfToday()),
+  ]);
   state.items = buildItems(state.deck, progress, state.settings);
+  state.reviewsToday = today.length;
+
   const c = counts(state.items);
   $('#c-due').textContent = c.due;
-  $('#c-new').textContent = Math.min(c.new, state.settings.newPerDay);
+  $('#c-new').textContent = c.new;
   $('#c-learned').textContent = c.learned;
+  $('#reviews-today').textContent = state.reviewsToday;
+
   const empty = c.due === 0 && c.new === 0;
   $('#start').classList.toggle('hidden', empty);
   $('#nothing-due').classList.toggle('hidden', !empty);
@@ -92,7 +108,17 @@ function renderFilters() {
     speech.className = 'muted small';
   }
 
-  $('#f-new').value = s.newPerDay;
+  const grades = $('#f-grades');
+  grades.replaceChildren(...GRADES.map(g =>
+    chip(g, gradeRange(g), s.grades.includes(g), on => toggle(s.grades, g, on))),
+    chip('New', 'never seen', s.newOnly, on => { s.newOnly = on; }));
+
+  const size = $('#f-size');
+  size.replaceChildren(...SESSION_SIZES.map(n => {
+    const o = document.createElement('option');
+    o.value = n; o.textContent = n + ' cards'; o.selected = s.sessionSize === n;
+    return o;
+  }));
 }
 
 function renderVoicePickers() {
@@ -166,7 +192,7 @@ async function save() {
 // ---------- review ----------
 
 function show(view) {
-  ['home', 'review', 'done'].forEach(v =>
+  ['home', 'review', 'done', 'progress'].forEach(v =>
     $('#view-' + v).classList.toggle('hidden', v !== view));
 }
 
@@ -335,8 +361,18 @@ async function applyGrade(g) {
   if (!state.revealed) return;
   const item = state.queue[state.index];
   const { card, ...bare } = item;
+  const wasNew = bare.reps === 0;
   const next = grade(bare, g);
   await db.putProgress(next);
+
+  // wasNew is what makes the daily new-card budget countable after the fact;
+  // reps has already moved on by the time anything reads this back.
+  await db.logReview({
+    ts: Date.now(), key: bare.key, cardId: bare.cardId,
+    direction: bare.direction, bucket: bare.bucket,
+    grade: g, wasNew, interval: next.interval,
+  });
+  state.reviewsToday++;
   state.graded++;
 
   // A lapsed card comes back at the end of this session rather than vanishing
@@ -356,16 +392,116 @@ async function finish() {
   show('done');
 }
 
+// ---------- progress ----------
+
+const GRADE_ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'New'];
+
+function bar(label, sub, value, max, cls, text) {
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  const name = document.createElement('span');
+  name.className = 'bar-label';
+  name.textContent = label;
+  const track = document.createElement('div');
+  track.className = 'bar-track';
+  const fill = document.createElement('div');
+  fill.className = 'bar-fill ' + cls;
+  fill.style.width = max ? (100 * value / max) + '%' : '0';
+  track.append(fill);
+  const n = document.createElement('span');
+  n.className = 'bar-value';
+  n.textContent = text !== undefined ? text : value;
+  if (sub) name.title = sub;
+  row.append(name, track, n);
+  return row;
+}
+
+async function openProgress() {
+  show('progress');
+
+  const dist = gradeBreakdown(state.items);
+
+  // Scale the letters against each other, not against New. Early on New
+  // outnumbers everything by a hundred to one, and sharing a scale with it
+  // flattens every bar you actually want to read.
+  const letterMax = Math.max(1, ...GRADES.map(g => dist[g]));
+  const rows = GRADES.map(g => bar(g, gradeRange(g), dist[g], letterMax, 'g-' + g.toLowerCase()));
+
+  // New keeps its place in the chart but sits outside the scale -- drawn full
+  // length and striped, so it reads as "all of these, not to scale" rather
+  // than as a bar a hundred times longer than the rest.
+  rows.push(bar('New', 'never reviewed', 1, 1, 'g-new', String(dist.New)));
+
+  const learned = GRADES.reduce((s, g) => s + dist[g], 0);
+  const note = document.createElement('p');
+  note.className = 'muted small chart-note';
+  note.textContent = learned
+    ? `${learned} of ${learned + dist.New} cards started`
+    : 'Nothing reviewed yet';
+  $('#grade-chart').replaceChildren(...rows, note);
+
+  // Proportion, not count: the question is how far into each bucket you are,
+  // and the buckets are wildly different sizes.
+  const buckets = ['identical', 'near', 'shifted', 'distinct'];
+  const bRows = buckets.map(b => {
+    const mine = state.items.filter(i => i.card.bucket === b);
+    const done = mine.filter(i => gradeLetter(i) !== null).length;
+    return { b, done, total: mine.length };
+  }).filter(r => r.total);
+
+  $('#bucket-chart').replaceChildren(...bRows.map(r =>
+    bar(BUCKET_LABEL[r.b], null, r.done, r.total, 'g-b', `${r.done} / ${r.total}`)));
+
+  renderDays(await db.allReviews());
+}
+
+function renderDays(reviews, days = 30) {
+  const byDay = new Map();
+  for (const r of reviews) {
+    const d = new Date(r.ts);
+    d.setHours(0, 0, 0, 0);
+    byDay.set(d.getTime(), (byDay.get(d.getTime()) || 0) + 1);
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const cols = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const t = today.getTime() - i * 86400000;
+    cols.push({ t, n: byDay.get(t) || 0 });
+  }
+  const peak = Math.max(1, ...cols.map(c => c.n));
+
+  $('#day-chart').replaceChildren(...cols.map(c => {
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    const fill = document.createElement('div');
+    fill.className = 'day-fill';
+    fill.style.height = (100 * c.n / peak) + '%';
+    if (!c.n) fill.classList.add('empty');
+    col.title = new Date(c.t).toDateString() + ' — ' + c.n + ' reviews';
+    col.append(fill);
+    return col;
+  }));
+
+  const active = cols.filter(c => c.n).length;
+  const total = cols.reduce((s, c) => s + c.n, 0);
+  $('#day-summary').textContent = total
+    ? `${total} reviews over ${active} day${active === 1 ? '' : 's'} · busiest ${peak}`
+    : 'No reviews recorded yet.';
+}
+
 // ---------- backup ----------
 
 async function exportProgress() {
-  const progress = await db.allProgress();
+  const [progress, reviews] = await Promise.all([db.allProgress(), db.allReviews()]);
   const payload = {
     app: 'spanish_app',
-    version: 1,
+    version: 2,
     exported: new Date().toISOString(),
     settings: state.settings,
     progress,
+    reviews,
   };
   const blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
   const a = document.createElement('a');
@@ -373,7 +509,7 @@ async function exportProgress() {
   a.download = `spanish-progress-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
-  $('#backup-msg').textContent = `Exported ${progress.length} items.`;
+  $('#backup-msg').textContent = `Exported ${progress.length} cards and ${reviews.length} reviews.`;
 }
 
 async function importProgress(file) {
@@ -383,13 +519,16 @@ async function importProgress(file) {
       throw new Error('not a progress file');
     }
     await db.putMany(data.progress);
+    if (Array.isArray(data.reviews)) await db.putReviews(data.reviews);
     if (data.settings) {
       state.settings = { ...DEFAULT_SETTINGS, ...data.settings };
       await db.setMeta('settings', state.settings);
       renderFilters();
     }
     await refresh();
-    $('#backup-msg').textContent = `Imported ${data.progress.length} items.`;
+    const n = Array.isArray(data.reviews) ? data.reviews.length : 0;
+    $('#backup-msg').textContent =
+      `Imported ${data.progress.length} cards` + (n ? ` and ${n} reviews.` : '.');
   } catch (err) {
     $('#backup-msg').textContent = 'Could not read that file: ' + err.message;
   }
@@ -402,10 +541,12 @@ function wire() {
   $('#reveal').addEventListener('click', reveal);
   $('#quit').addEventListener('click', finish);
   $('#back-home').addEventListener('click', () => show('home'));
-  $('#f-new').addEventListener('change', e => {
-    state.settings.newPerDay = Math.max(0, Number(e.target.value) || 0);
+  $('#f-size').addEventListener('change', e => {
+    state.settings.sessionSize = Number(e.target.value) || 15;
     save();
   });
+  $('#open-progress').addEventListener('click', openProgress);
+  $('#close-progress').addEventListener('click', () => show('home'));
   $('#grade-row').addEventListener('click', e => {
     const b = e.target.closest('button[data-g]');
     if (b) applyGrade(Number(b.dataset.g));

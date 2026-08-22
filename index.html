@@ -22,8 +22,14 @@
     <div class="counts">
       <div class="count"><b id="c-due">–</b><span>due</span></div>
       <div class="count"><b id="c-new">–</b><span>new</span></div>
+      <div class="count"><b id="reviews-today">–</b><span>today</span></div>
       <div class="count"><b id="c-learned">–</b><span>learned</span></div>
     </div>
+
+    <label class="row session-size">
+      Cards this session
+      <select id="f-size"></select>
+    </label>
 
     <button id="start" class="primary">Start review</button>
     <p id="nothing-due" class="muted hidden">Nothing due. Add new cards below, or come back tomorrow.</p>
@@ -46,11 +52,22 @@
         <div id="f-directions" class="chips"></div>
       </fieldset>
 
+      <fieldset>
+        <legend>Drill one grade</legend>
+        <div id="f-grades" class="chips"></div>
+        <p class="muted small">
+          Leave all off for the normal mixed session. Turning one on reviews
+          only those cards, due first, then whatever comes due soonest.
+        </p>
+      </fieldset>
+
       <label class="row">
         New cards per session
         <input id="f-new" type="number" min="0" max="100" step="5">
       </label>
     </details>
+
+    <button id="open-progress" class="secondary">Progress</button>
 
     <details class="panel">
       <summary>Voice</summary>
@@ -71,6 +88,24 @@
       </div>
       <p id="backup-msg" class="muted small"></p>
     </details>
+  </section>
+
+  <!-- Progress -->
+  <section id="view-progress" class="view hidden">
+    <header class="review-bar">
+      <button id="close-progress" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Progress</h2>
+    </header>
+
+    <h3 class="section-label">By grade</h3>
+    <div id="grade-chart" class="grade-chart"></div>
+
+    <h3 class="section-label">By closeness to Italian</h3>
+    <div id="bucket-chart" class="bucket-chart"></div>
+
+    <h3 class="section-label">Reviews per day</h3>
+    <div id="day-chart" class="day-chart"></div>
+    <p id="day-summary" class="muted small"></p>
   </section>
 
   <!-- Review -->

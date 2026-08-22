@@ -199,3 +199,55 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
 .example-it { margin: .2rem 0 0; font-size: .92rem; color: var(--muted); }
 .example-credit { margin: .8rem 0 0; font-size: .7rem; color: var(--muted); text-align: center; }
 .example-credit a { color: inherit; }
+
+/* --- session size --- */
+.session-size { padding: 0 0 1rem; }
+.session-size select {
+  font: inherit; font-size: .95rem; padding: .5rem .6rem;
+  border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink);
+}
+
+button.secondary {
+  width: 100%; margin-top: .75rem; font-weight: 600;
+  background: var(--surface); color: var(--ink);
+}
+
+/* --- progress --- */
+.progress-title { margin: 0; font-size: 1.15rem; }
+.section-label {
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--muted); font-weight: 600; margin: 1.6rem 0 .6rem;
+}
+
+.bar-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
+.bar-label { width: 8.5rem; font-size: .85rem; flex: none; }
+.bar-value { width: 2.6rem; text-align: right; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar-track { flex: 1; height: 1.1rem; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; min-width: 2px; transition: width .3s ease; }
+
+/* A well known, F barely -- warm as it gets worse */
+.g-a { background: #2f855a; }
+.g-b { background: #559a52; }
+.g-c { background: #a0a03c; }
+.g-d { background: #c98a2e; }
+.g-e { background: #cc6b33; }
+.g-f { background: #c0392b; }
+.g-new {
+  /* Striped, to signal this bar is not on the same scale as the letters. */
+  background: repeating-linear-gradient(
+    -45deg, var(--line), var(--line) 5px, transparent 5px, transparent 10px);
+  border: 1px solid var(--line);
+}
+
+.day-chart {
+  display: flex; align-items: flex-end; gap: 2px;
+  height: 6rem; padding: .4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.day-col { flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.day-fill { width: 100%; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 2px; }
+.day-fill.empty { background: var(--line); }
+
+.chart-note { margin: .7rem 0 0; text-align: center; }
+.bar-value { min-width: 2.6rem; width: auto; white-space: nowrap; }
