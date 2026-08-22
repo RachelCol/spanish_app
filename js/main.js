@@ -23,7 +23,31 @@ const state = {
 
 // ---------- boot ----------
 
+const DAY = 86400000;
+const BACKUP_NAG_DAYS = 14;
+
+function fatal(msg) {
+  const el = document.querySelector('#fatal');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  document.querySelector('#view-home').classList.add('hidden');
+}
+
 async function boot() {
+  try {
+    await start();
+  } catch (err) {
+    // A blocked upgrade never settles on its own, so it has to be reported
+    // rather than left as a blank screen.
+    fatal(err && err.message === 'DB_BLOCKED'
+      ? 'This app is open in another tab or window running an older version. '
+        + 'Close the others, then reload this page.'
+      : 'Could not start: ' + (err && err.message ? err.message : err));
+    throw err;
+  }
+}
+
+async function start() {
   state.deck = await loadDeck();
   const saved = await db.getMeta('settings');
   if (saved) state.settings = { ...DEFAULT_SETTINGS, ...saved };
@@ -49,9 +73,10 @@ function startOfToday() {
 }
 
 async function refresh() {
-  const [progress, today] = await Promise.all([
+  const [progress, today, lastBackup] = await Promise.all([
     db.allProgress(),
     db.reviewsSince(startOfToday()),
+    db.getMeta('lastBackup'),
   ]);
   state.items = buildItems(state.deck, progress, state.settings);
   state.reviewsToday = today.length;
@@ -61,6 +86,8 @@ async function refresh() {
   $('#c-new').textContent = c.new;
   $('#c-learned').textContent = c.learned;
   $('#reviews-today').textContent = state.reviewsToday;
+
+  renderBackupState(lastBackup, c.learned);
 
   // Three different empty states that used to look identical. Filtering every
   // card out is a mistake to be told about, not a quiet "come back tomorrow".
@@ -533,6 +560,27 @@ function renderDays(reviews, days = 30) {
     : 'No reviews recorded yet.';
 }
 
+// Export is the only thing standing between an iOS storage eviction and
+// starting over, and it only works if it actually gets done. Nagging is
+// limited to when there is progress worth losing.
+function renderBackupState(lastBackup, learned) {
+  const warn = $('#backup-warning');
+  const when = $('#backup-when');
+  const days = lastBackup ? Math.floor((Date.now() - lastBackup) / DAY) : null;
+
+  when.textContent = lastBackup
+    ? `Last backup: ${days === 0 ? 'today' : days === 1 ? 'yesterday' : days + ' days ago'}.`
+    : 'Never backed up.';
+
+  const stale = learned > 0 && (lastBackup === undefined || days >= BACKUP_NAG_DAYS);
+  warn.classList.toggle('hidden', !stale);
+  if (stale) {
+    warn.textContent = lastBackup
+      ? `Last backed up ${days} days ago — export again under Backup.`
+      : `${learned} cards in progress and no backup yet. Export under Backup.`;
+  }
+}
+
 // ---------- backup ----------
 
 async function exportProgress() {
@@ -551,6 +599,8 @@ async function exportProgress() {
   a.download = `spanish-progress-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(a.href);
+  await db.setMeta('lastBackup', Date.now());
+  await refresh();
   $('#backup-msg').textContent = `Exported ${progress.length} cards and ${reviews.length} reviews.`;
 }
 
@@ -628,4 +678,4 @@ function wire() {
   });
 }
 
-boot();
+boot().catch(() => {});

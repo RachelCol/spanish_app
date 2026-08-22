@@ -29,7 +29,16 @@ function open() {
         s.createIndex('ts', 'ts');
       }
     };
-    req.onsuccess = () => resolve(req.result);
+    // Another tab holding an older version blocks the upgrade, and the open
+    // request then never settles -- which looks like a blank, broken app.
+    req.onblocked = () => reject(new Error('DB_BLOCKED'));
+    req.onsuccess = () => {
+      const db = req.result;
+      // Symmetrically: if a newer tab wants to upgrade, get out of its way
+      // rather than being the tab that blocks it.
+      db.onversionchange = () => db.close();
+      resolve(db);
+    };
     req.onerror = () => reject(req.error);
   });
   return dbp;

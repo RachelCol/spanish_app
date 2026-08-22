@@ -15,6 +15,8 @@
 
 <main id="app">
 
+  <p id="fatal" class="fatal hidden"></p>
+
   <!-- Home -->
   <section id="view-home" class="view">
     <h1>Spanish <span class="from">from</span> Italian</h1>
@@ -30,6 +32,8 @@
       Cards this session
       <select id="f-size"></select>
     </label>
+
+    <p id="backup-warning" class="backup-warning hidden"></p>
 
     <button id="start" class="primary">Start review</button>
     <p id="nothing-due" class="muted hidden">Nothing due. Add new cards below, or come back tomorrow.</p>
@@ -87,6 +91,7 @@
         <input id="import" type="file" accept="application/json" hidden>
       </div>
       <p id="backup-msg" class="muted small"></p>
+      <p id="backup-when" class="muted small"></p>
     </details>
   </section>
 

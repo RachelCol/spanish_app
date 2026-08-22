@@ -253,3 +253,15 @@ button.secondary {
 .bar-value { min-width: 2.6rem; width: auto; white-space: nowrap; }
 
 .day-fill.overdue { background: var(--again); }
+
+/* --- failure and backup notices --- */
+.fatal {
+  background: var(--again); color: #fff;
+  padding: .9rem 1rem; border-radius: var(--radius);
+  margin: 0 0 1rem; font-size: .9rem; line-height: 1.45;
+}
+.backup-warning {
+  margin: 0 0 .9rem; padding: .6rem .8rem; font-size: .82rem;
+  border: 1px solid var(--hard); border-radius: var(--radius);
+  color: var(--hard); text-align: center;
+}
