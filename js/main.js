@@ -24,6 +24,7 @@ const state = {
 // ---------- boot ----------
 
 const DAY = 86400000;
+const DIRECTIONS_COUNT = Object.keys(DIRECTIONS).length;
 const BACKUP_NAG_DAYS = 14;
 
 function fatal(msg) {
@@ -350,16 +351,32 @@ function reveal() {
   });
 }
 
-// Bold whatever in the sentence came from this word. Matching on a prefix
-// rather than the exact form is deliberate: `hermano` should light up
-// `hermanos`, and `trabajar` should light up `trabajo`, without needing the
-// lemmatizer at runtime.
-function highlight(sentence, lemma) {
+// Bold whatever in the sentence came from this word. A prefix match handles
+// the regular cases -- `hermano` lighting up `hermanos` -- without needing a
+// lemmatizer in the browser. It cannot handle irregular verbs, where no prefix
+// of `ver` appears in `vemos` or `vio`, so for verbs the conjugation table is
+// consulted as well; those forms are already on the device.
+function verbForms(card, conj) {
+  const entry = conj && conj[card.es];
+  if (!entry) return null;
+  const out = new Set();
+  for (const tense of ['present', 'near', 'preterite', 'imperfect', 'perfect']) {
+    for (const form of (entry[tense] && entry[tense].es) || []) {
+      // "he visto" and "voy a ver" carry the meaning in their last word; the
+      // auxiliary would light up half the sentences on the card.
+      const parts = form.split(/\s+/);
+      out.add(parts[parts.length - 1].toLowerCase());
+    }
+  }
+  return out;
+}
+
+function highlight(sentence, lemma, forms) {
   const stem = lemma.slice(0, Math.max(4, lemma.length - 2)).toLowerCase();
   const frag = document.createDocumentFragment();
   for (const part of sentence.split(/(\s+)/)) {
     const bare = part.toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
-    if (bare.length >= stem.length && bare.startsWith(stem)) {
+    if ((forms && forms.has(bare)) || (bare.length >= stem.length && bare.startsWith(stem))) {
       const b = document.createElement('b');
       b.textContent = part;
       frag.append(b);
@@ -378,13 +395,14 @@ async function toggleExamples() {
   }
   const card = state.queue[state.index].card;
   const rows = (await loadSentences())[card.es] || [];
+  const forms = card.pos.startsWith('vb') ? verbForms(card, await loadConjugations()) : null;
   panel.replaceChildren(...rows.map(r => {
     const block = document.createElement('div');
     block.className = 'example';
 
     const es = document.createElement('p');
     es.className = 'example-es';
-    es.append(highlight(r.es, card.es));
+    es.append(highlight(r.es, card.es, forms));
     if (canSpeak()) {
       const play = document.createElement('button');
       play.type = 'button';
@@ -580,9 +598,13 @@ async function openProgress() {
   const learned = GRADES.reduce((s, g) => s + dist[g], 0);
   const note = document.createElement('p');
   note.className = 'muted small chart-note';
-  note.textContent = learned
+  // These counts follow the Deck filters, so drilling verbs makes the totals
+  // look wrong unless it says so.
+  const whole = state.deck.length * DIRECTIONS_COUNT;
+  const partial = state.items.length < whole ? ' · current Deck filters only' : '';
+  note.textContent = (learned
     ? `${learned} of ${learned + dist.New} cards started`
-    : 'Nothing reviewed yet';
+    : 'Nothing reviewed yet') + partial;
   $('#grade-chart').replaceChildren(...rows, note);
 
   renderForecast(state.items);
