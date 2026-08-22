@@ -3,6 +3,7 @@ import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
 import { initVoices, onVoicesReady, listVoices, setVoice, isNovelty, SAMPLE,
+         differsByAccent, hasAccentPair, compareAccents,
          available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
@@ -111,11 +112,8 @@ function renderVoicePickers() {
     legend.textContent = label;
     box.append(legend);
 
-    const showAll = state.settings.showAllVoices;
-
     for (const [lang, list] of groups) {
-      const shown = showAll ? list : list.filter(v => !isNovelty(v));
-      if (!shown.length) continue;
+      if (!list.length) continue;
 
       const tag = document.createElement('div');
       tag.className = 'voice-locale';
@@ -126,7 +124,7 @@ function renderVoicePickers() {
 
       const row = document.createElement('div');
       row.className = 'chips';
-      for (const v of shown) {
+      for (const v of list) {
         // One tap does both jobs: hear it, and keep it.
         const b = chipButton(
           v.name.replace(/\s*\(.*\)\s*/, ''),
@@ -146,16 +144,7 @@ function renderVoicePickers() {
     return box;
   }).filter(Boolean);
 
-  const more = chipButton('Show novelty voices', '', state.settings.showAllVoices, async () => {
-    state.settings.showAllVoices = !state.settings.showAllVoices;
-    await db.setMeta('settings', state.settings);
-    renderVoicePickers();
-  });
-  const moreRow = document.createElement('div');
-  moreRow.className = 'chips voice-more';
-  moreRow.append(more);
-
-  host.replaceChildren(...blocks, moreRow);
+  host.replaceChildren(...blocks);
 }
 
 // Like chip(), but the handler owns the pressed state rather than toggling it.
@@ -211,6 +200,7 @@ function renderCard() {
   $('#answer-row').classList.add('hidden');
   $('#meta').classList.add('hidden');
   $('#compare').classList.add('hidden');
+  $('#accents').classList.add('hidden');
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -233,6 +223,11 @@ function reveal() {
   $('#compare').classList.toggle('hidden', !(canSpeak() && teachable));
 
   // Called from a tap or keypress, which is what iOS requires.
+  // Offered only on the ~1 in 5 words the accents actually pronounce
+  // differently; everywhere else it would just play the same thing twice.
+  $('#accents').classList.toggle('hidden',
+    !(canSpeak() && hasAccentPair() && differsByAccent(card.es)));
+
   if (state.settings.autoSpeak && canSpeak()) speak(card.es, 'es');
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
@@ -332,6 +327,9 @@ function wire() {
     const item = state.queue[state.index];
     const dir = DIRECTIONS[item.direction];
     speak(item.card[dir.answer], dir.answer);
+  });
+  $('#accents').addEventListener('click', () => {
+    compareAccents(state.queue[state.index].card.es);
   });
   $('#compare').addEventListener('click', () => {
     const card = state.queue[state.index].card;

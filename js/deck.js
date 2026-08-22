@@ -59,7 +59,6 @@ export const DEFAULT_SETTINGS = {
   autoSpeak: true,
   voiceEs: null,   // voice name; null = pick a sensible default
   voiceIt: null,
-  showAllVoices: false,
   newPerDay: 15,
   maxSession: 60,
 };

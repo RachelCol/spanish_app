@@ -19,8 +19,8 @@ export const SAMPLE = {
   it: 'Buongiorno, come stai?',
 };
 
-// macOS and iOS ship a set of novelty voices that are fine for a laugh and bad
-// for learning pronunciation. They still get listed -- just not first.
+// macOS and iOS ship a set of novelty voices -- fine for a laugh, useless as a
+// pronunciation model. They are excluded from the picker outright.
 const NOVELTY = ['Eddy', 'Flo', 'Grandma', 'Grandpa', 'Reed', 'Rocko', 'Sandy',
                  'Shelley', 'Bubbles', 'Jester', 'Superstar', 'Wobble', 'Bells'];
 
@@ -69,8 +69,10 @@ export function listVoices(which) {
     if (!groups.has(lang)) groups.set(lang, []);
     groups.get(lang).push(v);
   }
-  for (const list of groups.values()) {
-    list.sort((a, b) => (isNovelty(a) - isNovelty(b)) || a.name.localeCompare(b.name));
+  for (const [lang, list] of [...groups]) {
+    const usable = list.filter(v => !isNovelty(v));
+    if (usable.length) groups.set(lang, usable.sort((a, b) => a.name.localeCompare(b.name)));
+    else groups.delete(lang);
   }
   // Latin American locales ahead of Spain, matching what this deck teaches.
   const order = which === 'es' ? ['es-MX', 'es-US', 'es-419', 'es-AR', 'es-CO', 'es-CL', 'es-ES'] : ['it-IT'];
@@ -140,6 +142,52 @@ export async function compare(it, es) {
   await utter(it, LANG.it, 0.85);
   await new Promise(r => setTimeout(r, 320));
   await utter(es, LANG.es, 0.85);
+}
+
+// The Spain/Latin America split comes down to one rule: c before e or i, and
+// z, are [s] across Latin America and unvoiced th across most of Spain. Four
+// words in five are unaffected, so this is only ever offered where it applies.
+const SESEO = /(c[ei]|z)/i;
+
+export function differsByAccent(word) {
+  return SESEO.test(word);
+}
+
+function voiceForLocale(locale) {
+  const want = locale.toLowerCase();
+  const pool = voices.filter(v => v.lang.toLowerCase().replace('_', '-') === want && !isNovelty(v));
+  for (const name of PREFERRED) {
+    const hit = pool.find(v => v.name.includes(name));
+    if (hit) return hit;
+  }
+  return pool[0] || null;
+}
+
+export function hasAccentPair() {
+  return Boolean(voiceForLocale('es-MX') && voiceForLocale('es-ES'));
+}
+
+function utterVoice(text, voice, rate) {
+  return new Promise(resolve => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = voice;
+    u.lang = voice.lang;
+    u.rate = rate;
+    u.onend = resolve;
+    u.onerror = resolve;
+    speechSynthesis.speak(u);
+  });
+}
+
+// Latin America first: that is the target, and the Spain version lands as the
+// variation rather than the model.
+export async function compareAccents(word) {
+  const mx = voiceForLocale('es-MX'), es = voiceForLocale('es-ES');
+  if (!mx || !es) return;
+  speechSynthesis.cancel();
+  await utterVoice(word, mx, 0.8);
+  await new Promise(r => setTimeout(r, 340));
+  await utterVoice(word, es, 0.8);
 }
 
 export function stop() {

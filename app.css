@@ -164,3 +164,6 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
 }
 .voice-more { margin: .9rem 0 .5rem; }
 #voice-rows fieldset { margin-bottom: .25rem; }
+
+.compare-row { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin-top: .5rem; }
+.compare-row .compare { margin-top: 0; }
