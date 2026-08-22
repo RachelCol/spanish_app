@@ -169,3 +169,9 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
 .compare-row .compare { margin-top: 0; }
 
 .voice-note { display: flex; align-items: center; gap: .5rem; margin-top: .9rem; }
+
+.accent-note {
+  display: flex; align-items: center; justify-content: center; gap: .45rem;
+  margin: .1rem 0 0; font-size: .8rem; color: var(--muted);
+}
+.accent-note .say { width: 1.7rem; height: 1.7rem; font-size: .6rem; }

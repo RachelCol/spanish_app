@@ -3,7 +3,7 @@ import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
-         differsByAccent, hasAccentPair, compareAccents,
+         differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
@@ -194,7 +194,7 @@ function renderCard() {
   $('#answer-row').classList.add('hidden');
   $('#meta').classList.add('hidden');
   $('#compare').classList.add('hidden');
-  $('#accents').classList.add('hidden');
+  $('#accent-note').classList.add('hidden');
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -219,10 +219,18 @@ function reveal() {
   // Called from a tap or keypress, which is what iOS requires.
   // Offered only on the ~1 in 5 words the accents actually pronounce
   // differently; everywhere else it would just play the same thing twice.
-  $('#accents').classList.toggle('hidden',
-    !(canSpeak() && hasAccentPair() && differsByAccent(card.es)));
+  // The accent difference is a footnote on the word, not a headline action,
+  // so it sits with the part-of-speech line rather than beside "Hear both".
+  const other = otherAccent();
+  const showAccent = canSpeak() && hasAccentPair() && other && differsByAccent(card.es);
+  if (showAccent) $('#accent-text').textContent = other.label + ' pronunciation differs';
+  $('#accent-note').classList.toggle('hidden', !showAccent);
 
-  if (state.settings.autoSpeak && canSpeak()) speak(card.es, 'es');
+  // Speak the side that was just turned over -- that is the new information.
+  if (state.settings.autoSpeak && canSpeak()) {
+    const dir = DIRECTIONS[state.queue[state.index].direction];
+    speak(card[dir.answer], dir.answer);
+  }
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
 
@@ -323,7 +331,7 @@ function wire() {
     speak(item.card[dir.answer], dir.answer);
   });
   $('#accents').addEventListener('click', () => {
-    compareAccents(state.queue[state.index].card.es);
+    speakOtherAccent(state.queue[state.index].card.es);
   });
   $('#compare').addEventListener('click', () => {
     const card = state.queue[state.index].card;

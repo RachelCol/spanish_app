@@ -158,15 +158,20 @@ export function differsByAccent(word) {
   return SESEO.test(word);
 }
 
-// Always Latin America then Spain, whichever accent is set: this demonstrates
-// the difference rather than reflecting a preference.
-export async function compareAccents(word) {
-  const mx = bestVoice('es-MX'), es = bestVoice('es-ES');
-  if (!mx || !es) return;
+// The accent being learned is already what cards speak, so the useful offer is
+// the other one on its own -- playing both would just repeat what was heard a
+// second earlier.
+export function otherAccent() {
+  return ACCENTS.find(a => a.locale !== accent) || null;
+}
+
+export function speakOtherAccent(word) {
+  const other = otherAccent();
+  if (!other) return Promise.resolve();
+  const v = bestVoice(other.locale);
+  if (!v) return Promise.resolve();
   speechSynthesis.cancel();
-  await utter(word, mx, 'es-MX', 0.8);
-  await new Promise(r => setTimeout(r, 340));
-  await utter(word, es, 'es-ES', 0.8);
+  return utter(word, v, other.locale, 0.8);
 }
 
 export function stop() {
