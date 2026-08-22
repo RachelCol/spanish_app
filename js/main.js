@@ -467,8 +467,8 @@ const TENSES = [
     note: 'Plans, without needing the future tense at all — like "going to eat".' },
   { key: 'preterite', es: 'Pretérito Indefinido', en: 'Preterite',
     note: 'Completed actions at a specific moment.',
-    warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho mangiato" is ' +
-          '"ayer comí" — not the perfect below.' },
+    warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho mangiato" ' +
+          'is "ayer comí" — not the perfect below.' },
   { key: 'imperfect', es: 'Pretérito Imperfecto', en: 'Imperfect',
     note: 'Ongoing, repeated or background actions in the past. Same job as the imperfetto.' },
   { key: 'perfect', es: 'Pretérito Perfecto', en: 'Present perfect',
@@ -487,13 +487,6 @@ async function openConjugation() {
   $('#conj-title').textContent = card.es;
   const body = $('#conj-body');
   body.replaceChildren();
-
-  if (data.it_verb) {
-    const sub = document.createElement('p');
-    sub.className = 'muted small conj-sub';
-    sub.textContent = 'against Italian ' + data.it_verb;
-    body.append(sub);
-  }
 
   for (const t of TENSES) {
     const rows = data[t.key];
@@ -534,11 +527,7 @@ async function openConjugation() {
         esCell.classList.add('speakable');
       }
 
-      const itCell = document.createElement('span');
-      itCell.className = 'conj-it';
-      itCell.textContent = rows.it ? rows.it[i] : '';
-
-      row.append(p, esCell, itCell);
+      row.append(p, esCell);
       table.append(row);
     });
     body.append(table);

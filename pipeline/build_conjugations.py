@@ -4,22 +4,30 @@ Five tenses only, chosen for what gets someone speaking rather than for
 completeness: present, the ir + a + infinitive near future, preterite,
 imperfect, and present perfect.
 
-The Italian column is the point. Two rows deliberately show the same Italian
-form -- `ho parlato` sits opposite both `hablé` and `he hablado` -- because
-that collision IS the lesson: one Italian past maps onto two Spanish ones, and
-choosing between them is the single most frequent mistake available to an
-Italian speaker. Pairing the preterite with `parlai` instead would be formally
-tidy and would teach the wrong habit, since the passato remoto is not what
-modern Italian actually uses.
+Spanish only. An Italian column was tempting -- and it is where the contrast
+between the preterite and the perfect shows up most clearly -- but a card can
+carry several Italian senses, and conjugating just one of them next to the
+Spanish asserts a one-to-one mapping that is not there. `tener` glosses to both
+avere and dovere; putting `ho` beside `tengo` would teach that as fact.
+
+The contrast survives as prose in the tense notes, which talk about how Italian
+behaves without claiming any particular verb is the equivalent.
 """
 import json, sys, re
 from verbecc import CompleteConjugator, LangCodeISO639_1 as L
 from wordfreq import zipf_frequency
 
 ES_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos']
-IT_SLOTS = ['io', 'tu', 'lui', 'noi', 'voi', 'loro']
 
-IT_INFINITIVE = re.compile(r'(are|ere|ire|rre)$')
+# Corrections to what verbecc returns. Kept tiny and explicit: check_conjugations.py
+# verifies nineteen hard irregulars against forms written out by hand, and this
+# is everything that came back wrong.
+#
+# haber third person is `hay` in the library -- right for the impersonal "there
+# is", wrong for the auxiliary paradigm this table shows.
+OVERRIDES = {
+    ('haber', 'present', 2): 'ha',
+}
 
 
 def _pick(word, lang):
@@ -55,7 +63,6 @@ def build():
     deck = json.load(open('data/deck.json'))
     verbs = [c for c in deck if c['pos'].startswith('vb')]
     es = CompleteConjugator(L.es)
-    it = CompleteConjugator(L.it)
 
     # "voy a hablar" -- built here rather than looked up, since it is a
     # construction rather than a tense.
@@ -78,20 +85,9 @@ def build():
             'perfect':  {'es': forms(e, 'indicativo', 'pretérito-perfecto-compuesto', ES_SLOTS, 'es')},
         }
 
-        # The Italian column needs an Italian infinitive to conjugate.
-        ital = next((s for s in card['senses'] if IT_INFINITIVE.search(s) and ' ' not in s), None)
-        if ital:
-            try:
-                i = json.loads(it.conjugate(ital).to_json())
-                entry['it_verb'] = ital
-                entry['present']['it']   = forms(i, 'indicativo', 'presente', IT_SLOTS, 'it')
-                entry['near']['it']      = forms(i, 'indicativo', 'futuro', IT_SLOTS, 'it')
-                entry['imperfect']['it'] = forms(i, 'indicativo', 'imperfetto', IT_SLOTS, 'it')
-                pp = forms(i, 'indicativo', 'passato-prossimo', IT_SLOTS, 'it')
-                entry['preterite']['it'] = pp      # deliberately the same form
-                entry['perfect']['it']   = pp      # as the row above
-            except Exception:
-                pass
+        for (verb, tense, idx), form in OVERRIDES.items():
+            if verb == card['es'] and entry.get(tense, {}).get('es'):
+                entry[tense]['es'][idx] = form
 
         if entry['present']['es']:
             out[card['es']] = entry
@@ -105,8 +101,6 @@ if __name__ == '__main__':
               ensure_ascii=False, separators=(',', ':'))
     print(f"verbs conjugated: {len(data)}  (skipped {len(skipped)})")
     print(f"data/conjugations.json: {os.path.getsize('data/conjugations.json')/1024:.0f} KB")
-    with_it = sum(1 for v in data.values() if 'it_verb' in v)
-    print(f"with an Italian column: {with_it}")
     d = data.get('hablar') or next(iter(data.values()))
     for k in ('present','near','preterite','imperfect','perfect'):
-        print(f"\n  {k}\n    ES {d[k]['es']}\n    IT {d[k].get('it')}")
+        print(f"  {k:10s} {d[k]['es']}")

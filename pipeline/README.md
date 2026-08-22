@@ -24,6 +24,12 @@ python3 -m venv .venv
    dictionary doubles as the citation-form test, which is how the spine gets
    filtered to lemmas without a lemmatizer.
 
+5. `build_conjugations.py` -- five tenses per verb from verbecc. Run
+   `check_conjugations.py` after it: verbecc conjugates from templates for
+   verbs it knows and guesses with a model for ones it does not, so the
+   irregulars are where it would be wrong quietly. The check asserts nineteen
+   of them against forms written out by hand.
+
 ## Two things that are not obvious
 
 **Cross-language frequency only means something after pairing.** Comparing the

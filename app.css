@@ -282,7 +282,7 @@ button.secondary {
 }
 .conj-table { margin-bottom: .5rem; }
 .conj-row {
-  display: grid; grid-template-columns: 4.6rem 1fr 1fr;
+  display: grid; grid-template-columns: 5.4rem 1fr;
   gap: .5rem; align-items: baseline;
   padding: .3rem 0; border-bottom: 1px solid var(--line);
 }
@@ -290,6 +290,5 @@ button.secondary {
 .conj-es { font-weight: 600; }
 .conj-es.speakable { cursor: pointer; }
 .conj-es.speakable:active { color: var(--accent); }
-.conj-it { font-size: .9rem; color: var(--muted); }
 .conj-row.spain-only .conj-pron::after { content: ' ·es'; opacity: .55; }
 .conj-row.spain-only { opacity: .62; }
