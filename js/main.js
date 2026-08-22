@@ -4,7 +4,7 @@ import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORD
 import { buildQueue, counts } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
-         available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
+         available as canSpeak, speak, speakPair, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -245,10 +245,12 @@ function reveal() {
     }
   });
 
-  // Speak the side that was just turned over -- that is the new information.
+  // Both sides, prompt first. Turning the card over is the moment the pair
+  // exists as a pair, and hearing it in reading order is what makes the
+  // sound difference land.
   if (state.settings.autoSpeak && canSpeak()) {
     const dir = DIRECTIONS[state.queue[state.index].direction];
-    speak(card[dir.answer], dir.answer);
+    speakPair(card[dir.prompt], dir.prompt, card[dir.answer], dir.answer);
   }
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
@@ -423,8 +425,9 @@ function wire() {
   });
   $('#examples-btn').addEventListener('click', toggleExamples);
   $('#compare').addEventListener('click', () => {
-    const card = state.queue[state.index].card;
-    compare(card.it, card.es);
+    const item = state.queue[state.index];
+    const dir = DIRECTIONS[item.direction];
+    speakPair(item.card[dir.prompt], dir.prompt, item.card[dir.answer], dir.answer);
   });
 
   $('#export').addEventListener('click', exportProgress);

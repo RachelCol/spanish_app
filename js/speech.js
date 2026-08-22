@@ -139,14 +139,16 @@ export function speak(text, which, { rate = 0.9 } = {}) {
   return utter(text, bestVoice(locale), locale, rate);
 }
 
-// Italian first, then Spanish. The familiar word sets up the ear for what
-// changed in the unfamiliar one.
-export async function compare(it, es) {
+// Plays two words in order. The caller decides the order, because it follows
+// the direction of the card: the side being read leads, and the side being
+// recalled answers it.
+export async function speakPair(first, firstWhich, second, secondWhich) {
   if (!available()) return;
   speechSynthesis.cancel();
-  await utter(it, bestVoice('it-IT'), 'it-IT', 0.85);
+  const fl = localeFor(firstWhich), sl = localeFor(secondWhich);
+  await utter(first, bestVoice(fl), fl, 0.85);
   await new Promise(r => setTimeout(r, 320));
-  await utter(es, bestVoice(accent), accent, 0.85);
+  await utter(second, bestVoice(sl), sl, 0.85);
 }
 
 // The Spain/Latin America split comes down to one rule: c before e or i, and
