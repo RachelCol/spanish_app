@@ -23,3 +23,6 @@ vendor
 # Local preview config
 .claude
 _t
+
+# verbecc writes a log wherever it runs
+verbecc.log

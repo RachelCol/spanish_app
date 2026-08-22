@@ -270,3 +270,26 @@ button.secondary {
 .answers { display: flex; flex-direction: column; align-items: center; gap: .25rem; }
 .answers .answer { font-size: 1.9rem; }
 .answers .word-row:not(:first-child) .answer { font-size: 1.4rem; opacity: .85; }
+
+/* --- conjugation --- */
+.conj-sub { margin: 0 0 .5rem; }
+.conj-note { margin: 0 0 .5rem; }
+.conj-warn {
+  margin: 0 0 .6rem; padding: .55rem .7rem;
+  border-left: 3px solid var(--hard); border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--hard) 8%, transparent);
+  font-size: .82rem; line-height: 1.45; color: var(--ink);
+}
+.conj-table { margin-bottom: .5rem; }
+.conj-row {
+  display: grid; grid-template-columns: 4.6rem 1fr 1fr;
+  gap: .5rem; align-items: baseline;
+  padding: .3rem 0; border-bottom: 1px solid var(--line);
+}
+.conj-pron { font-size: .78rem; color: var(--muted); }
+.conj-es { font-weight: 600; }
+.conj-es.speakable { cursor: pointer; }
+.conj-es.speakable:active { color: var(--accent); }
+.conj-it { font-size: .9rem; color: var(--muted); }
+.conj-row.spain-only .conj-pron::after { content: ' ·es'; opacity: .55; }
+.conj-row.spain-only { opacity: .62; }

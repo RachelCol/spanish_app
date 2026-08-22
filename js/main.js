@@ -1,7 +1,7 @@
 import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
+import { loadDeck, loadSentences, loadConjugations, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          POS_LABEL, posGroup, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
@@ -234,7 +234,7 @@ async function save() {
 // ---------- review ----------
 
 function show(view) {
-  ['home', 'review', 'done', 'progress'].forEach(v =>
+  ['home', 'review', 'done', 'progress', 'conj'].forEach(v =>
     $('#view-' + v).classList.toggle('hidden', v !== view));
 }
 
@@ -264,6 +264,7 @@ function renderCard() {
   $('#accent-note').classList.add('hidden');
   $('#card-links').classList.add('hidden');
   $('#examples-btn').classList.add('hidden');
+  $('#conj-btn').classList.add('hidden');
   $('#examples').classList.add('hidden');
   $('#examples').replaceChildren();
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
@@ -320,6 +321,14 @@ function reveal() {
   $('#link-rev').href = `https://context.reverso.net/translation/spanish-italian/${w}`;
   $('#link-yg').href  = `https://youglish.com/pronounce/${w}/spanish`;
   $('#card-links').classList.remove('hidden');
+
+  if (card.pos.startsWith('vb')) {
+    loadConjugations().then(all => {
+      if (state.queue[state.index] && state.queue[state.index].card.es === card.es) {
+        $('#conj-btn').classList.toggle('hidden', !all[card.es]);
+      }
+    });
+  }
 
   loadSentences().then(all => {
     // The card may have moved on while the file was loading.
@@ -443,6 +452,100 @@ async function finish() {
   $('#done-summary').textContent =
     `${state.graded} card${state.graded === 1 ? '' : 's'} reviewed.`;
   show('done');
+}
+
+// ---------- conjugation ----------
+//
+// Five tenses, not the full fifteen. These are the ones that get someone
+// speaking: what is happening, what is going to happen, and the three ways of
+// talking about the past that Spanish actually uses day to day.
+
+const TENSES = [
+  { key: 'present', es: 'Presente de Indicativo', en: 'Present',
+    note: 'Current actions, facts and daily habits. Start here.' },
+  { key: 'near', es: 'Ir + a + Infinitivo', en: 'Near future',
+    note: 'Plans, without needing the future tense at all — like "going to eat".' },
+  { key: 'preterite', es: 'Pretérito Indefinido', en: 'Preterite',
+    note: 'Completed actions at a specific moment.',
+    warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho mangiato" is ' +
+          '"ayer comí" — not the perfect below.' },
+  { key: 'imperfect', es: 'Pretérito Imperfecto', en: 'Imperfect',
+    note: 'Ongoing, repeated or background actions in the past. Same job as the imperfetto.' },
+  { key: 'perfect', es: 'Pretérito Perfecto', en: 'Present perfect',
+    note: 'haber plus a past participle, for the recent past still connected to now.',
+    warn: 'Identical in form to the passato prossimo, and much rarer in Latin ' +
+          'America. When in doubt, use the preterite.' },
+];
+
+const PRONOUNS = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'];
+
+async function openConjugation() {
+  const card = state.queue[state.index].card;
+  const data = (await loadConjugations())[card.es];
+  if (!data) return;
+
+  $('#conj-title').textContent = card.es;
+  const body = $('#conj-body');
+  body.replaceChildren();
+
+  if (data.it_verb) {
+    const sub = document.createElement('p');
+    sub.className = 'muted small conj-sub';
+    sub.textContent = 'against Italian ' + data.it_verb;
+    body.append(sub);
+  }
+
+  for (const t of TENSES) {
+    const rows = data[t.key];
+    if (!rows || !rows.es) continue;
+
+    const h = document.createElement('h3');
+    h.className = 'section-label';
+    h.textContent = t.en + ' · ' + t.es;
+    body.append(h);
+
+    const note = document.createElement('p');
+    note.className = 'muted small conj-note';
+    note.textContent = t.note;
+    body.append(note);
+
+    if (t.warn) {
+      const w = document.createElement('p');
+      w.className = 'conj-warn';
+      w.textContent = t.warn;
+      body.append(w);
+    }
+
+    const table = document.createElement('div');
+    table.className = 'conj-table';
+    PRONOUNS.forEach((pr, i) => {
+      const row = document.createElement('div');
+      row.className = 'conj-row' + (pr === 'vosotros' ? ' spain-only' : '');
+
+      const p = document.createElement('span');
+      p.className = 'conj-pron';
+      p.textContent = pr;
+
+      const esCell = document.createElement('span');
+      esCell.className = 'conj-es';
+      esCell.textContent = rows.es[i];
+      if (canSpeak()) {
+        esCell.addEventListener('click', () => speak(rows.es[i], 'es'));
+        esCell.classList.add('speakable');
+      }
+
+      const itCell = document.createElement('span');
+      itCell.className = 'conj-it';
+      itCell.textContent = rows.it ? rows.it[i] : '';
+
+      row.append(p, esCell, itCell);
+      table.append(row);
+    });
+    body.append(table);
+  }
+
+  show('conj');
+  window.scrollTo(0, 0);
 }
 
 // ---------- progress ----------
@@ -668,6 +771,8 @@ function wire() {
     speakOtherAccent(state.queue[state.index].card.es);
   });
   $('#examples-btn').addEventListener('click', toggleExamples);
+  $('#conj-btn').addEventListener('click', openConjugation);
+  $('#close-conj').addEventListener('click', () => show('review'));
 
   $('#export').addEventListener('click', exportProgress);
   $('#import-btn').addEventListener('click', () => $('#import').click());

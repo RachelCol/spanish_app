@@ -67,6 +67,15 @@ export async function loadSentences() {
   return sentenceCache;
 }
 
+let conjCache = null;
+
+export async function loadConjugations() {
+  if (conjCache) return conjCache;
+  const res = await fetch('data/conjugations.json');
+  conjCache = res.ok ? await res.json() : {};
+  return conjCache;
+}
+
 export function itemKey(cardId, direction) {
   return direction + '|' + cardId;
 }
