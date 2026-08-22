@@ -57,8 +57,7 @@ export const DEFAULT_SETTINGS = {
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
   directions: ['es>it', 'it>es'],
   autoSpeak: true,
-  voiceEs: null,   // voice name; null = pick a sensible default
-  voiceIt: null,
+  accent: 'es-MX',   // locale, not a voice name -- see speech.js
   newPerDay: 15,
   maxSession: 60,
 };

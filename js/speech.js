@@ -1,44 +1,52 @@
-// Pronunciation via the built-in speech synthesiser.
+// Pronunciation via the platform speech synthesiser.
 //
 // No audio files and no network: macOS and iOS both ship offline Spanish and
 // Italian voices, so this keeps working on a plane alongside the rest of the
-// app. Voice quality varies by platform and there is nothing to be done about
-// that, but es-MX and it-IT are reliably present on Apple devices.
+// app.
+//
+// What the user picks is an ACCENT, not a voice. Voice names differ between a
+// Mac and a phone -- and change when better ones are installed -- so storing
+// `es-MX` and resolving the best available voice for it each time survives
+// moving between devices, which storing "Paulina" does not.
 //
 // iOS will not speak unless the first utterance originates in a user gesture.
-// Everything here is triggered from a tap or a keypress for that reason -- do
-// not move autoSpeak onto a timer or it will silently do nothing on a phone.
+// Everything here is triggered from a tap or a keypress for that reason.
 
-const LANG = { es: 'es-MX', it: 'it-IT' };
+export const ACCENTS = [
+  { locale: 'es-MX', label: 'Latin America' },
+  { locale: 'es-ES', label: 'Spain' },
+];
 
-// Sample lines for previewing a voice. The Spanish one is chosen to expose the
-// single clearest accent tell: `ciudad` and `Zaragoza` are [s] in Latin
-// America and [θ] in most of Spain.
 export const SAMPLE = {
   es: 'La ciudad de Zaragoza.',
   it: 'Buongiorno, come stai?',
 };
 
-// macOS and iOS ship a set of novelty voices -- fine for a laugh, useless as a
-// pronunciation model. They are excluded from the picker outright.
+// Novelty voices are fine for a laugh and useless as a pronunciation model.
 const NOVELTY = ['Eddy', 'Flo', 'Grandma', 'Grandpa', 'Reed', 'Rocko', 'Sandy',
                  'Shelley', 'Bubbles', 'Jester', 'Superstar', 'Wobble', 'Bells'];
 
-const chosen = { es: null, it: null };
+// Apple ships the same voice at several qualities. Higher is better.
+const QUALITY = [
+  [/premium/i, 3],
+  [/enhanced/i, 2],
+  [/siri/i, 2],
+];
 
-// macOS ships a pile of novelty voices (Grandma, Rocko, Bubbles) that sort
-// ahead of the good ones. Prefer the standard voices by name, then fall back
-// to whatever matches the language.
-const PREFERRED = ['Paulina', 'Mónica', 'Monica', 'Alice', 'Luciana', 'Juan', 'Diego'];
+const NAMED = ['Paulina', 'Mónica', 'Monica', 'Alice', 'Luciana', 'Juan', 'Diego'];
 
 let voices = [];
 let ready = false;
-
+let accent = 'es-MX';
 const listeners = [];
+
+export function available() {
+  return typeof speechSynthesis !== 'undefined';
+}
 
 export function initVoices() {
   const load = () => {
-    voices = speechSynthesis.getVoices();
+    voices = dedupe(speechSynthesis.getVoices());
     ready = voices.length > 0;
     if (ready) listeners.splice(0).forEach(fn => fn());
   };
@@ -48,158 +56,117 @@ export function initVoices() {
   }
 }
 
-// The voice list arrives asynchronously on most browsers, so anything that
-// renders it has to wait rather than read an empty array once.
 export function onVoicesReady(fn) {
   if (ready) fn(); else listeners.push(fn);
 }
 
-// "Paulina (Enhanced)" is a different voice from "Paulina", so the qualifier
-// has to survive into the UI -- collapsing it makes two voices look like one.
-export function voiceParts(voice) {
-  const m = voice.name.match(/^(.*?)\s*\((.*)\)\s*$/);
-  return m ? { base: m[1], qualifier: m[2] } : { base: voice.name, qualifier: '' };
-}
-
-export function isNovelty(voice) {
-  return NOVELTY.some(n => voice.name.includes(n));
-}
-
-// Grouped by locale, because the Spain/Latin America split is the distinction
-// that matters here. Better voices sort first inside each group.
-export function listVoices(which) {
-  const want = which === 'es' ? 'es' : 'it';
-  const matches = voices.filter(v => v.lang.toLowerCase().replace('_', '-').startsWith(want));
-  const groups = new Map();
+// Some platforms hand back the same entry more than once, sometimes with a
+// different voiceURI on each copy -- so the name and locale are the identity
+// that actually holds.
+function dedupe(list) {
   const seen = new Set();
-  for (const v of matches) {
-    // Same voice offered twice -- by identical URI, or under two locale tags.
-    const id = (v.voiceURI || v.name) + '|' + v.lang;
-    if (seen.has(id)) continue;
+  return list.filter(v => {
+    const id = v.name + '|' + v.lang.toLowerCase().replace('_', '-');
+    if (seen.has(id)) return false;
     seen.add(id);
-    const lang = v.lang.replace('_', '-');
-    if (!groups.has(lang)) groups.set(lang, []);
-    groups.get(lang).push(v);
-  }
-  for (const [lang, list] of [...groups]) {
-    const usable = list.filter(v => !isNovelty(v));
-    if (usable.length) groups.set(lang, usable.sort((a, b) => a.name.localeCompare(b.name)));
-    else groups.delete(lang);
-  }
-  // Latin American locales ahead of Spain, matching what this deck teaches.
-  const order = which === 'es' ? ['es-MX', 'es-US', 'es-419', 'es-AR', 'es-CO', 'es-CL', 'es-ES'] : ['it-IT'];
-  return [...groups.entries()].sort((a, b) => {
-    const ia = order.indexOf(a[0]), ib = order.indexOf(b[0]);
-    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+    return true;
   });
 }
 
-export function setVoice(which, name) {
-  chosen[which] = name || null;
+function isNovelty(v) {
+  return NOVELTY.some(n => v.name.includes(n));
 }
 
-export function getVoice(which) {
-  return chosen[which];
+function score(v) {
+  let s = 0;
+  for (const [re, points] of QUALITY) if (re.test(v.name)) s = Math.max(s, points);
+  if (NAMED.some(n => v.name.includes(n))) s += 1;
+  if (v.localService) s += 0.5;    // offline beats network for a plane
+  return s;
 }
 
-export function available() {
-  return typeof speechSynthesis !== 'undefined';
+// The best installed voice for a locale, or the closest language match.
+export function bestVoice(locale) {
+  const want = locale.toLowerCase();
+  const lang = want.slice(0, 2);
+  const usable = voices.filter(v => !isNovelty(v));
+  const norm = v => v.lang.toLowerCase().replace('_', '-');
+  const pool = usable.filter(v => norm(v) === want);
+  const fallback = usable.filter(v => norm(v).startsWith(lang));
+  const chosen = (pool.length ? pool : fallback).sort((a, b) => score(b) - score(a));
+  return chosen[0] || null;
 }
 
-function pickVoice(lang) {
-  const want = lang.slice(0, 2);
-  // An explicit choice wins, but only while that voice still exists -- the
-  // list differs between a Mac and a phone, so a stored name can go stale.
-  const override = chosen[want];
-  if (override) {
-    const hit = voices.find(v => v.name === override);
-    if (hit) return hit;
-  }
-  const matches = voices.filter(v => v.lang.toLowerCase().replace('_', '-').startsWith(want));
-  if (!matches.length) return null;
-  const exact = matches.filter(v => v.lang.toLowerCase().replace('_', '-') === lang.toLowerCase());
-  const pool = exact.length ? exact : matches;
-  for (const name of PREFERRED) {
-    const hit = pool.find(v => v.name.includes(name));
-    if (hit) return hit;
-  }
-  return pool.find(v => v.localService) || pool[0];
+export function describeVoice(locale) {
+  const v = bestVoice(locale);
+  if (!v) return null;
+  const m = v.name.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? { name: m[1], quality: m[2] } : { name: v.name, quality: '' };
 }
 
-// Resolves when the utterance finishes, so callers can chain two languages.
-function utter(text, lang, rate) {
+export function setAccent(locale) {
+  if (locale) accent = locale;
+}
+
+export function getAccent() {
+  return accent;
+}
+
+export function hasAccentPair() {
+  return Boolean(bestVoice('es-MX') && bestVoice('es-ES'));
+}
+
+function utter(text, voice, lang, rate) {
   return new Promise(resolve => {
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang;
+    if (voice) u.voice = voice;
+    u.lang = voice ? voice.lang : lang;
     u.rate = rate;
-    const v = pickVoice(lang);
-    if (v) u.voice = v;
     u.onend = resolve;
-    u.onerror = resolve;   // never leave a chain hanging
+    u.onerror = resolve;      // never leave a chain hanging
     speechSynthesis.speak(u);
   });
+}
+
+function localeFor(which) {
+  return which === 'it' ? 'it-IT' : accent;
 }
 
 export function speak(text, which, { rate = 0.9 } = {}) {
   if (!available() || !text) return Promise.resolve();
   speechSynthesis.cancel();
-  return utter(text, LANG[which] || which, rate);
+  const locale = localeFor(which);
+  return utter(text, bestVoice(locale), locale, rate);
 }
 
-// Italian first, then Spanish, with a beat between them. The order matters:
-// the familiar word sets up the ear for what changed in the unfamiliar one.
+// Italian first, then Spanish. The familiar word sets up the ear for what
+// changed in the unfamiliar one.
 export async function compare(it, es) {
   if (!available()) return;
   speechSynthesis.cancel();
-  await utter(it, LANG.it, 0.85);
+  await utter(it, bestVoice('it-IT'), 'it-IT', 0.85);
   await new Promise(r => setTimeout(r, 320));
-  await utter(es, LANG.es, 0.85);
+  await utter(es, bestVoice(accent), accent, 0.85);
 }
 
 // The Spain/Latin America split comes down to one rule: c before e or i, and
 // z, are [s] across Latin America and unvoiced th across most of Spain. Four
-// words in five are unaffected, so this is only ever offered where it applies.
+// words in five are unaffected, so this is only offered where it applies.
 const SESEO = /(c[ei]|z)/i;
 
 export function differsByAccent(word) {
   return SESEO.test(word);
 }
 
-function voiceForLocale(locale) {
-  const want = locale.toLowerCase();
-  const pool = voices.filter(v => v.lang.toLowerCase().replace('_', '-') === want && !isNovelty(v));
-  for (const name of PREFERRED) {
-    const hit = pool.find(v => v.name.includes(name));
-    if (hit) return hit;
-  }
-  return pool[0] || null;
-}
-
-export function hasAccentPair() {
-  return Boolean(voiceForLocale('es-MX') && voiceForLocale('es-ES'));
-}
-
-function utterVoice(text, voice, rate) {
-  return new Promise(resolve => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.voice = voice;
-    u.lang = voice.lang;
-    u.rate = rate;
-    u.onend = resolve;
-    u.onerror = resolve;
-    speechSynthesis.speak(u);
-  });
-}
-
-// Latin America first: that is the target, and the Spain version lands as the
-// variation rather than the model.
+// Always Latin America then Spain, whichever accent is set: this demonstrates
+// the difference rather than reflecting a preference.
 export async function compareAccents(word) {
-  const mx = voiceForLocale('es-MX'), es = voiceForLocale('es-ES');
+  const mx = bestVoice('es-MX'), es = bestVoice('es-ES');
   if (!mx || !es) return;
   speechSynthesis.cancel();
-  await utterVoice(word, mx, 0.8);
+  await utter(word, mx, 'es-MX', 0.8);
   await new Promise(r => setTimeout(r, 340));
-  await utterVoice(word, es, 0.8);
+  await utter(word, es, 'es-ES', 0.8);
 }
 
 export function stop() {

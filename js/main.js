@@ -2,7 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
-import { initVoices, onVoicesReady, listVoices, setVoice, isNovelty, voiceParts, SAMPLE,
+import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, compareAccents,
          available as canSpeak, speak, compare, stop as stopSpeech } from './speech.js';
 
@@ -29,8 +29,7 @@ async function boot() {
   wire();
   initVoices();
   onVoicesReady(() => {
-    setVoice('es', state.settings.voiceEs);
-    setVoice('it', state.settings.voiceIt);
+    setAccent(state.settings.accent);
     renderVoicePickers();
   });
   requestPersistence();
@@ -100,52 +99,46 @@ function renderVoicePickers() {
   const host = $('#voice-rows');
   if (!canSpeak()) { host.replaceChildren(); return; }
 
-  const blocks = [
-    { which: 'es', label: 'Spanish', key: 'voiceEs' },
-    { which: 'it', label: 'Italian', key: 'voiceIt' },
-  ].map(({ which, label, key }) => {
-    const groups = listVoices(which);
-    if (!groups.length) return null;
+  const box = document.createElement('fieldset');
+  const legend = document.createElement('legend');
+  legend.textContent = 'Spanish accent';
+  box.append(legend);
 
-    const box = document.createElement('fieldset');
-    const legend = document.createElement('legend');
-    legend.textContent = label;
-    box.append(legend);
+  const row = document.createElement('div');
+  row.className = 'chips';
+  for (const { locale, label } of ACCENTS) {
+    const v = describeVoice(locale);
+    if (!v) continue;
+    row.append(chipButton(
+      label,
+      v.quality ? `${v.name} · ${v.quality}` : v.name,
+      state.settings.accent === locale,
+      async () => {
+        state.settings.accent = locale;
+        setAccent(locale);
+        await db.setMeta('settings', state.settings);
+        renderVoicePickers();
+        speak(SAMPLE.es, 'es');
+      }));
+  }
+  box.append(row);
 
-    for (const [lang, list] of groups) {
-      if (!list.length) continue;
+  const it = describeVoice('it-IT');
+  const note = document.createElement('p');
+  note.className = 'muted small voice-note';
+  note.textContent = it
+    ? `Italian uses ${it.name}${it.quality ? ' (' + it.quality + ')' : ''}.`
+    : 'No Italian voice is installed.';
+  const play = document.createElement('button');
+  play.type = 'button';
+  play.className = 'say';
+  play.textContent = '▶';
+  play.setAttribute('aria-label', 'Preview the Italian voice');
+  play.addEventListener('click', e => { e.preventDefault(); speak(SAMPLE.it, 'it'); });
+  note.append(' ');
+  note.append(play);
 
-      const tag = document.createElement('div');
-      tag.className = 'voice-locale';
-      tag.textContent = lang === 'es-ES' ? lang + ' · Spain'
-                      : lang === 'es-MX' ? lang + ' · Latin America'
-                      : lang;
-      box.append(tag);
-
-      const row = document.createElement('div');
-      row.className = 'chips';
-      for (const v of list) {
-        // One tap does both jobs: hear it, and keep it.
-        const parts = voiceParts(v);
-        const b = chipButton(
-          parts.base,
-          parts.qualifier,
-          state.settings[key] === v.name,
-          async () => {
-            state.settings[key] = v.name;
-            setVoice(which, v.name);
-            await db.setMeta('settings', state.settings);
-            renderVoicePickers();
-            speak(SAMPLE[which], which);
-          });
-        row.append(b);
-      }
-      box.append(row);
-    }
-    return box;
-  }).filter(Boolean);
-
-  host.replaceChildren(...blocks);
+  host.replaceChildren(box, note);
 }
 
 // Like chip(), but the handler owns the pressed state rather than toggling it.
