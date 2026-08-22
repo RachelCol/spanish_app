@@ -27,6 +27,12 @@ And deliberately skips everything that carries over intact.
 
 Early. See [docs/spec.md](docs/spec.md) for the design.
 
+## Data
+
+Vocabulary pairs come from [Apertium](https://github.com/apertium/apertium-spa-ita),
+frequency from [wordfreq](https://pypi.org/project/wordfreq/), and example
+sentences from [Tatoeba](https://tatoeba.org) under CC BY 2.0 FR.
+
 ## Stack
 
 Static site — Svelte + Vite, PWA for offline phone use, deployed to GitHub

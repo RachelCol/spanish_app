@@ -1,6 +1,6 @@
 import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
+import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER, DEFAULT_SETTINGS } from './deck.js';
 import { buildQueue, counts } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
@@ -196,6 +196,9 @@ function renderCard() {
   $('#compare').classList.add('hidden');
   $('#accent-note').classList.add('hidden');
   $('#card-links').classList.add('hidden');
+  $('#examples-btn').classList.add('hidden');
+  $('#examples').classList.add('hidden');
+  $('#examples').replaceChildren();
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -235,6 +238,13 @@ function reveal() {
   $('#link-yg').href  = `https://youglish.com/pronounce/${w}/spanish`;
   $('#card-links').classList.remove('hidden');
 
+  loadSentences().then(all => {
+    // The card may have moved on while the file was loading.
+    if (state.queue[state.index] && state.queue[state.index].card.es === card.es) {
+      $('#examples-btn').classList.toggle('hidden', !(all[card.es] || []).length);
+    }
+  });
+
   // Speak the side that was just turned over -- that is the new information.
   if (state.settings.autoSpeak && canSpeak()) {
     const dir = DIRECTIONS[state.queue[state.index].direction];
@@ -248,6 +258,75 @@ function reveal() {
   [AGAIN, HARD, GOOD, EASY].forEach(g => {
     $(`#grade-row button[data-g="${g}"] small`).textContent = intervalLabel(item, g);
   });
+}
+
+// Bold whatever in the sentence came from this word. Matching on a prefix
+// rather than the exact form is deliberate: `hermano` should light up
+// `hermanos`, and `trabajar` should light up `trabajo`, without needing the
+// lemmatizer at runtime.
+function highlight(sentence, lemma) {
+  const stem = lemma.slice(0, Math.max(4, lemma.length - 2)).toLowerCase();
+  const frag = document.createDocumentFragment();
+  for (const part of sentence.split(/(\s+)/)) {
+    const bare = part.toLowerCase().replace(/[^a-záéíóúüñ]/gi, '');
+    if (bare.length >= stem.length && bare.startsWith(stem)) {
+      const b = document.createElement('b');
+      b.textContent = part;
+      frag.append(b);
+    } else {
+      frag.append(part);
+    }
+  }
+  return frag;
+}
+
+async function toggleExamples() {
+  const panel = $('#examples');
+  if (!panel.classList.contains('hidden')) {
+    panel.classList.add('hidden');
+    return;
+  }
+  const card = state.queue[state.index].card;
+  const rows = (await loadSentences())[card.es] || [];
+  panel.replaceChildren(...rows.map(r => {
+    const block = document.createElement('div');
+    block.className = 'example';
+
+    const es = document.createElement('p');
+    es.className = 'example-es';
+    es.append(highlight(r.es, card.es));
+    if (canSpeak()) {
+      const play = document.createElement('button');
+      play.type = 'button';
+      play.className = 'say';
+      play.textContent = '▶';
+      play.setAttribute('aria-label', 'Hear this sentence');
+      play.addEventListener('click', e => { e.preventDefault(); speak(r.es, 'es', { rate: 0.85 }); });
+      es.append(' ');
+      es.append(play);
+    }
+
+    const it = document.createElement('p');
+    it.className = 'example-it';
+    it.textContent = r.it;
+
+    block.append(es, it);
+    return block;
+  }), credit());
+  panel.classList.remove('hidden');
+}
+
+// CC BY 2.0 FR asks for attribution wherever the sentences are shown.
+function credit() {
+  const p = document.createElement('p');
+  p.className = 'example-credit';
+  const a = document.createElement('a');
+  a.href = 'https://tatoeba.org';
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = 'Tatoeba';
+  p.append('Sentences from ', a, ' · CC BY 2.0 FR');
+  return p;
 }
 
 async function applyGrade(g) {
@@ -342,6 +421,7 @@ function wire() {
   $('#accents').addEventListener('click', () => {
     speakOtherAccent(state.queue[state.index].card.es);
   });
+  $('#examples-btn').addEventListener('click', toggleExamples);
   $('#compare').addEventListener('click', () => {
     const card = state.queue[state.index].card;
     compare(card.it, card.es);

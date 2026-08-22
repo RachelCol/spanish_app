@@ -15,7 +15,10 @@ python3 -m venv .venv
 
 1. `frequency.py` — Spanish frequency spine from wordfreq, banded into tiers,
    with the top-200 closed-class layer cut. Writes `data/frequency_es.json`.
-2. `pairs.py` — Spanish→Italian lemma pairs from Apertium. Membership in this
+2. `build_sentences.py` -- example sentences from Tatoeba, matched to deck
+   words by lemma and scored so short sentences built from common words win.
+   Needs `spacy` and the `es_core_news_md` model. Writes `data/sentences.json`.
+3. `pairs.py` — Spanish→Italian lemma pairs from Apertium. Membership in this
    dictionary doubles as the citation-form test, which is how the spine gets
    filtered to lemmas without a lemmatizer.
 

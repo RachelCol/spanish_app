@@ -32,6 +32,18 @@ export async function loadDeck() {
   return deckCache;
 }
 
+// 365 KB of example sentences, fetched the first time they are asked for
+// rather than on boot. The service worker precaches the file, so this still
+// resolves offline.
+let sentenceCache = null;
+
+export async function loadSentences() {
+  if (sentenceCache) return sentenceCache;
+  const res = await fetch('data/sentences.json');
+  sentenceCache = res.ok ? await res.json() : {};
+  return sentenceCache;
+}
+
 export function itemKey(cardId, direction) {
   return direction + '|' + cardId;
 }
