@@ -86,3 +86,38 @@ export function intervalLabel(item, g) {
   if (next.interval < 365) return Math.round(next.interval / 30) + 'mo';
   return (next.interval / 365).toFixed(1) + 'y';
 }
+
+// --- letter grades -------------------------------------------------------
+//
+// Grade by scheduling distance rather than by past accuracy. The interval is
+// the scheduler's own estimate of how long this will stay known, so it answers
+// "how well do I know this now" -- whereas a lapse count answers "how much
+// trouble did this give me", which is a different question and keeps punishing
+// a word long after it has been learned.
+
+export const GRADES = ['A', 'B', 'C', 'D', 'E', 'F'];
+
+const BANDS = [
+  ['A', 90, Infinity],
+  ['B', 31, 90],
+  ['C', 11, 31],
+  ['D', 4, 11],
+  ['E', 1, 4],
+  ['F', 0, 1],
+];
+
+export function gradeLetter(item) {
+  if (isNew(item)) return null;          // Not Yet Learned
+  const d = item.interval;
+  for (const [letter, lo, hi] of BANDS) {
+    if (d >= lo && d < hi) return letter;
+  }
+  return 'F';
+}
+
+export function gradeRange(letter) {
+  const b = BANDS.find(x => x[0] === letter);
+  if (!b) return '';
+  if (b[2] === Infinity) return '90d+';
+  return b[1] === 0 ? 'under 1d' : `${b[1]}\u2013${b[2]}d`;
+}

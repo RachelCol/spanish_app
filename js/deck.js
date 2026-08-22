@@ -70,6 +70,9 @@ export const DEFAULT_SETTINGS = {
   directions: ['es>it', 'it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js
-  newPerDay: 15,
-  maxSession: 60,
+  sessionSize: 15,   // cards per sitting; the daily plan is separate
+  grades: [],        // empty = the normal mixed queue, not a grade drill
+  newOnly: false,
 };
+
+export const SESSION_SIZES = [5, 10, 15, 20, 30, 40, 60];

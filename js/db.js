@@ -5,7 +5,7 @@
 // settings.js is the real backstop.
 
 const DB_NAME = 'spanish_app';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbp = null;
 
@@ -20,6 +20,13 @@ function open() {
       }
       if (!db.objectStoreNames.contains('meta')) {
         db.createObjectStore('meta', { keyPath: 'key' });
+      }
+      // One row per grade pressed, ever. The progress view needs history, and
+      // history cannot be reconstructed after the fact -- an aggregate says
+      // where a card is now, never how it got there.
+      if (!db.objectStoreNames.contains('reviews')) {
+        const s = db.createObjectStore('reviews', { keyPath: 'id', autoIncrement: true });
+        s.createIndex('ts', 'ts');
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -50,6 +57,21 @@ export const db = {
   },
   clearProgress() {
     return tx('progress', 'readwrite', s => s.clear());
+  },
+  logReview(rec) {
+    return tx('reviews', 'readwrite', s => s.add(rec));
+  },
+  allReviews() {
+    return tx('reviews', 'readonly', s => s.getAll());
+  },
+  reviewsSince(ts) {
+    return tx('reviews', 'readonly', s => s.index('ts').getAll(IDBKeyRange.lowerBound(ts)));
+  },
+  putReviews(rows) {
+    return tx('reviews', 'readwrite', s => { rows.forEach(r => s.put(r)); });
+  },
+  clearReviews() {
+    return tx('reviews', 'readwrite', s => s.clear());
   },
   getMeta(key) {
     return tx('meta', 'readonly', s => s.get(key)).then(r => (r ? r.value : undefined));
