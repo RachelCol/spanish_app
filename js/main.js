@@ -6,7 +6,7 @@ import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORD
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
-         available as canSpeak, speak, speakPair, stop as stopSpeech } from './speech.js';
+         available as canSpeak, speak, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -254,14 +254,13 @@ function renderCard() {
 
   $('#direction').textContent = dir.label;
   $('#prompt').textContent = item.card[dir.prompt];
-  $('#answer').textContent = item.card[dir.answer];
   $('#meta').innerHTML =
     `<span class="pos">${item.card.pos}</span> · ${BUCKET_LABEL[item.card.bucket]}`;
 
   stopSpeech();
-  $('#answer-row').classList.add('hidden');
+  $('#answers').classList.add('hidden');
+  $('#answers').replaceChildren();
   $('#meta').classList.add('hidden');
-  $('#compare').classList.add('hidden');
   $('#accent-note').classList.add('hidden');
   $('#card-links').classList.add('hidden');
   $('#examples-btn').classList.add('hidden');
@@ -278,21 +277,37 @@ function renderCard() {
 function reveal() {
   if (state.revealed) return;
   state.revealed = true;
-  const card = state.queue[state.index].card;
-  $('#answer-row').classList.remove('hidden');
+  const item = state.queue[state.index];
+  const card = item.card;
+  const dir = DIRECTIONS[item.direction];
+
+  // Going to Italian, show every sense Apertium distinguishes: where a Spanish
+  // word does not map one-to-one, that is the useful information, and one
+  // gloss would hide it. Going to Spanish there is only ever one answer.
+  const words = dir.answer === 'it' ? (card.senses || [card.it]) : [card.es];
+  $('#answers').replaceChildren(...words.map(w => {
+    const row = document.createElement('div');
+    row.className = 'word-row';
+    const span = document.createElement('span');
+    span.className = 'answer';
+    span.textContent = w;
+    row.append(span);
+    if (canSpeak()) {
+      const play = document.createElement('button');
+      play.type = 'button';
+      play.className = 'say';
+      play.textContent = '▶';
+      play.setAttribute('aria-label', 'Hear ' + w);
+      play.addEventListener('click', e => { e.preventDefault(); speak(w, dir.answer); });
+      row.append(play);
+    }
+    return row;
+  }));
+  $('#answers').classList.remove('hidden');
   $('#meta').classList.remove('hidden');
 
-  // The sound shift is the lesson for pairs that are close but not identical,
-  // so those get a back-to-back playback. Identical and unrelated pairs have
-  // nothing to compare.
-  const teachable = card.bucket === 'near' || card.bucket === 'shifted';
-  $('#compare').classList.toggle('hidden', !(canSpeak() && teachable));
-
-  // Called from a tap or keypress, which is what iOS requires.
-  // Offered only on the ~1 in 5 words the accents actually pronounce
-  // differently; everywhere else it would just play the same thing twice.
-  // The accent difference is a footnote on the word, not a headline action,
-  // so it sits with the part-of-speech line rather than beside "Hear both".
+  // A footnote on the word rather than a headline action, and only on the
+  // ~1 in 5 words the two accents actually pronounce differently.
   const other = otherAccent();
   const showAccent = canSpeak() && hasAccentPair() && other && differsByAccent(card.es);
   if (showAccent) $('#accent-text').textContent = other.label + ' pronunciation differs';
@@ -313,18 +328,14 @@ function reveal() {
     }
   });
 
-  // Both sides, prompt first. Turning the card over is the moment the pair
-  // exists as a pair, and hearing it in reading order is what makes the
-  // sound difference land.
-  if (state.settings.autoSpeak && canSpeak()) {
-    const dir = DIRECTIONS[state.queue[state.index].direction];
-    speakPair(card[dir.prompt], dir.prompt, card[dir.answer], dir.answer);
-  }
+  // Only the Spanish. With several Italian senses on screen, reading them all
+  // aloud is noise -- and the Italian is the side already known. Each sense
+  // has its own button for the pairs that sound nearly identical.
+  if (state.settings.autoSpeak && canSpeak()) speak(card.es, 'es');
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
 
   // Show what each button costs before it is pressed.
-  const item = state.queue[state.index];
   [AGAIN, HARD, GOOD, EASY].forEach(g => {
     $(`#grade-row button[data-g="${g}"] small`).textContent = intervalLabel(item, g);
   });
@@ -653,20 +664,10 @@ function wire() {
     const dir = DIRECTIONS[item.direction];
     speak(item.card[dir.prompt], dir.prompt);
   });
-  $('#say-answer').addEventListener('click', () => {
-    const item = state.queue[state.index];
-    const dir = DIRECTIONS[item.direction];
-    speak(item.card[dir.answer], dir.answer);
-  });
   $('#accents').addEventListener('click', () => {
     speakOtherAccent(state.queue[state.index].card.es);
   });
   $('#examples-btn').addEventListener('click', toggleExamples);
-  $('#compare').addEventListener('click', () => {
-    const item = state.queue[state.index];
-    const dir = DIRECTIONS[item.direction];
-    speakPair(item.card[dir.prompt], dir.prompt, item.card[dir.answer], dir.answer);
-  });
 
   $('#export').addEventListener('click', exportProgress);
   $('#import-btn').addEventListener('click', () => $('#import').click());

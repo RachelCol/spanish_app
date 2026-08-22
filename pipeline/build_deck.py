@@ -20,6 +20,7 @@ def build():
             "id": c["es"],          # Spanish lemma is unique in the pair set
             "es": c["es"],
             "it": c["it"],
+            "senses": c["senses"],
             "pos": c["pos"],
             "bucket": c["bucket"],
             "tier": c["tier"],

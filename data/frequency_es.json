@@ -1,16 +1,711 @@
 [
  {
+  "es": "no",
+  "zipf_es": 7.16,
+  "tier": "core"
+ },
+ {
+  "es": "es",
+  "zipf_es": 7.02,
+  "tier": "core"
+ },
+ {
+  "es": "como",
+  "zipf_es": 6.73,
+  "tier": "core"
+ },
+ {
+  "es": "más",
+  "zipf_es": 6.63,
+  "tier": "core"
+ },
+ {
+  "es": "pero",
+  "zipf_es": 6.57,
+  "tier": "core"
+ },
+ {
+  "es": "todo",
+  "zipf_es": 6.35,
+  "tier": "core"
+ },
+ {
+  "es": "ya",
+  "zipf_es": 6.33,
+  "tier": "core"
+ },
+ {
+  "es": "ha",
+  "zipf_es": 6.3,
+  "tier": "core"
+ },
+ {
+  "es": "cuando",
+  "zipf_es": 6.29,
+  "tier": "core"
+ },
+ {
+  "es": "ser",
+  "zipf_es": 6.27,
+  "tier": "core"
+ },
+ {
+  "es": "son",
+  "zipf_es": 6.26,
+  "tier": "core"
+ },
+ {
+  "es": "está",
+  "zipf_es": 6.22,
+  "tier": "core"
+ },
+ {
+  "es": "fue",
+  "zipf_es": 6.22,
+  "tier": "core"
+ },
+ {
+  "es": "muy",
+  "zipf_es": 6.21,
+  "tier": "core"
+ },
+ {
+  "es": "sobre",
+  "zipf_es": 6.19,
+  "tier": "core"
+ },
+ {
+  "es": "también",
+  "zipf_es": 6.19,
+  "tier": "core"
+ },
+ {
+  "es": "todos",
+  "zipf_es": 6.19,
+  "tier": "core"
+ },
+ {
+  "es": "tiene",
+  "zipf_es": 6.15,
+  "tier": "core"
+ },
+ {
+  "es": "porque",
+  "zipf_es": 6.14,
+  "tier": "core"
+ },
+ {
+  "es": "así",
+  "zipf_es": 6.12,
+  "tier": "core"
+ },
+ {
+  "es": "años",
+  "zipf_es": 6.12,
+  "tier": "core"
+ },
+ {
+  "es": "dos",
+  "zipf_es": 6.12,
+  "tier": "core"
+ },
+ {
+  "es": "bien",
+  "zipf_es": 6.11,
+  "tier": "core"
+ },
+ {
+  "es": "entre",
+  "zipf_es": 6.11,
+  "tier": "core"
+ },
+ {
+  "es": "puede",
+  "zipf_es": 6.11,
+  "tier": "core"
+ },
+ {
+  "es": "desde",
+  "zipf_es": 6.1,
+  "tier": "core"
+ },
+ {
+  "es": "hasta",
+  "zipf_es": 6.09,
+  "tier": "core"
+ },
+ {
+  "es": "hacer",
+  "zipf_es": 6.07,
+  "tier": "core"
+ },
+ {
+  "es": "ahora",
+  "zipf_es": 6.05,
+  "tier": "core"
+ },
+ {
+  "es": "era",
+  "zipf_es": 6.05,
+  "tier": "core"
+ },
+ {
+  "es": "vez",
+  "zipf_es": 6.04,
+  "tier": "core"
+ },
+ {
+  "es": "hace",
+  "zipf_es": 6.03,
+  "tier": "core"
+ },
+ {
+  "es": "nada",
+  "zipf_es": 6.02,
+  "tier": "core"
+ },
+ {
+  "es": "donde",
+  "zipf_es": 6.01,
+  "tier": "core"
+ },
+ {
+  "es": "parte",
+  "zipf_es": 6.0,
+  "tier": "core"
+ },
+ {
+  "es": "solo",
+  "zipf_es": 6.0,
+  "tier": "core"
+ },
+ {
+  "es": "algo",
+  "zipf_es": 5.99,
+  "tier": "common"
+ },
+ {
+  "es": "tiempo",
+  "zipf_es": 5.97,
+  "tier": "common"
+ },
+ {
+  "es": "día",
+  "zipf_es": 5.96,
+  "tier": "common"
+ },
+ {
+  "es": "uno",
+  "zipf_es": 5.96,
+  "tier": "common"
+ },
+ {
+  "es": "mejor",
+  "zipf_es": 5.95,
+  "tier": "common"
+ },
+ {
+  "es": "mucho",
+  "zipf_es": 5.95,
+  "tier": "common"
+ },
+ {
+  "es": "tan",
+  "zipf_es": 5.95,
+  "tier": "common"
+ },
+ {
+  "es": "ver",
+  "zipf_es": 5.95,
+  "tier": "common"
+ },
+ {
+  "es": "vida",
+  "zipf_es": 5.95,
+  "tier": "common"
+ },
+ {
+  "es": "han",
+  "zipf_es": 5.93,
+  "tier": "common"
+ },
+ {
+  "es": "mismo",
+  "zipf_es": 5.93,
+  "tier": "common"
+ },
+ {
+  "es": "siempre",
+  "zipf_es": 5.93,
+  "tier": "common"
+ },
+ {
+  "es": "tengo",
+  "zipf_es": 5.91,
+  "tier": "common"
+ },
+ {
+  "es": "cada",
+  "zipf_es": 5.9,
+  "tier": "common"
+ },
+ {
+  "es": "después",
+  "zipf_es": 5.9,
+  "tier": "common"
+ },
+ {
+  "es": "están",
+  "zipf_es": 5.9,
+  "tier": "common"
+ },
+ {
+  "es": "gente",
+  "zipf_es": 5.9,
+  "tier": "common"
+ },
+ {
+  "es": "estado",
+  "zipf_es": 5.89,
+  "tier": "common"
+ },
+ {
+  "es": "estoy",
+  "zipf_es": 5.89,
+  "tier": "common"
+ },
+ {
+  "es": "mundo",
+  "zipf_es": 5.89,
+  "tier": "common"
+ },
+ {
+  "es": "va",
+  "zipf_es": 5.89,
+  "tier": "common"
+ },
+ {
+  "es": "año",
+  "zipf_es": 5.88,
+  "tier": "common"
+ },
+ {
+  "es": "mas",
+  "zipf_es": 5.87,
+  "tier": "common"
+ },
+ {
+  "es": "otro",
+  "zipf_es": 5.87,
+  "tier": "common"
+ },
+ {
+  "es": "otros",
+  "zipf_es": 5.87,
+  "tier": "common"
+ },
+ {
+  "es": "gracias",
+  "zipf_es": 5.86,
+  "tier": "common"
+ },
+ {
+  "es": "otra",
+  "zipf_es": 5.86,
+  "tier": "common"
+ },
+ {
+  "es": "cosas",
+  "zipf_es": 5.85,
+  "tier": "common"
+ },
+ {
+  "es": "menos",
+  "zipf_es": 5.84,
+  "tier": "common"
+ },
+ {
+  "es": "nunca",
+  "zipf_es": 5.84,
+  "tier": "common"
+ },
+ {
+  "es": "personas",
+  "zipf_es": 5.84,
+  "tier": "common"
+ },
+ {
+  "es": "tanto",
+  "zipf_es": 5.84,
+  "tier": "common"
+ },
+ {
+  "es": "antes",
+  "zipf_es": 5.82,
+  "tier": "common"
+ },
+ {
+  "es": "poco",
+  "zipf_es": 5.82,
+  "tier": "common"
+ },
+ {
+  "es": "sea",
+  "zipf_es": 5.82,
+  "tier": "common"
+ },
+ {
+  "es": "había",
+  "zipf_es": 5.81,
+  "tier": "common"
+ },
+ {
+  "es": "tener",
+  "zipf_es": 5.81,
+  "tier": "common"
+ },
+ {
+  "es": "trabajo",
+  "zipf_es": 5.81,
+  "tier": "common"
+ },
+ {
+  "es": "durante",
+  "zipf_es": 5.8,
+  "tier": "common"
+ },
+ {
+  "es": "lugar",
+  "zipf_es": 5.8,
+  "tier": "common"
+ },
+ {
+  "es": "creo",
+  "zipf_es": 5.79,
+  "tier": "common"
+ },
+ {
+  "es": "hecho",
+  "zipf_es": 5.79,
+  "tier": "common"
+ },
+ {
+  "es": "quiero",
+  "zipf_es": 5.79,
+  "tier": "common"
+ },
+ {
+  "es": "aunque",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "contra",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "cuenta",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "decir",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "gobierno",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "país",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "soy",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "todas",
+  "zipf_es": 5.78,
+  "tier": "common"
+ },
+ {
+  "es": "casa",
+  "zipf_es": 5.77,
+  "tier": "common"
+ },
+ {
+  "es": "forma",
+  "zipf_es": 5.77,
+  "tier": "common"
+ },
+ {
+  "es": "he",
+  "zipf_es": 5.77,
+  "tier": "common"
+ },
+ {
+  "es": "nuevo",
+  "zipf_es": 5.77,
+  "tier": "common"
+ },
+ {
+  "es": "sido",
+  "zipf_es": 5.77,
+  "tier": "common"
+ },
+ {
+  "es": "aquí",
+  "zipf_es": 5.75,
+  "tier": "common"
+ },
+ {
+  "es": "sí",
+  "zipf_es": 5.75,
+  "tier": "common"
+ },
+ {
+  "es": "estaba",
+  "zipf_es": 5.74,
+  "tier": "common"
+ },
+ {
+  "es": "estar",
+  "zipf_es": 5.74,
+  "tier": "common"
+ },
+ {
+  "es": "hoy",
+  "zipf_es": 5.74,
+  "tier": "common"
+ },
+ {
+  "es": "tienen",
+  "zipf_es": 5.74,
+  "tier": "common"
+ },
+ {
+  "es": "alguien",
+  "zipf_es": 5.73,
+  "tier": "common"
+ },
+ {
+  "es": "dice",
+  "zipf_es": 5.73,
+  "tier": "common"
+ },
+ {
+  "es": "toda",
+  "zipf_es": 5.72,
+  "tier": "common"
+ },
+ {
+  "es": "tres",
+  "zipf_es": 5.72,
+  "tier": "common"
+ },
+ {
+  "es": "voy",
+  "zipf_es": 5.72,
+  "tier": "common"
+ },
+ {
+  "es": "caso",
+  "zipf_es": 5.71,
+  "tier": "common"
+ },
+ {
+  "es": "días",
+  "zipf_es": 5.71,
+  "tier": "common"
+ },
+ {
+  "es": "momento",
+  "zipf_es": 5.71,
+  "tier": "common"
+ },
+ {
+  "es": "bueno",
+  "zipf_es": 5.7,
+  "tier": "common"
+ },
+ {
+  "es": "ciudad",
+  "zipf_es": 5.7,
+  "tier": "common"
+ },
+ {
+  "es": "luego",
+  "zipf_es": 5.69,
+  "tier": "common"
+ },
+ {
+  "es": "nacional",
+  "zipf_es": 5.69,
+  "tier": "common"
+ },
+ {
+  "es": "parece",
+  "zipf_es": 5.69,
+  "tier": "common"
+ },
+ {
+  "es": "poder",
+  "zipf_es": 5.68,
+  "tier": "common"
+ },
+ {
+  "es": "pueden",
+  "zipf_es": 5.68,
+  "tier": "common"
+ },
+ {
+  "es": "pues",
+  "zipf_es": 5.68,
+  "tier": "common"
+ },
+ {
+  "es": "verdad",
+  "zipf_es": 5.68,
+  "tier": "common"
+ },
+ {
+  "es": "historia",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "mientras",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "nadie",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "nueva",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "otras",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "primera",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "veces",
+  "zipf_es": 5.67,
+  "tier": "common"
+ },
+ {
+  "es": "muchos",
+  "zipf_es": 5.66,
+  "tier": "common"
+ },
+ {
+  "es": "debe",
+  "zipf_es": 5.65,
+  "tier": "common"
+ },
+ {
+  "es": "dijo",
+  "zipf_es": 5.65,
+  "tier": "common"
+ },
+ {
+  "es": "entonces",
+  "zipf_es": 5.65,
+  "tier": "common"
+ },
+ {
+  "es": "ir",
+  "zipf_es": 5.65,
+  "tier": "common"
+ },
+ {
+  "es": "tipo",
+  "zipf_es": 5.65,
+  "tier": "common"
+ },
+ {
+  "es": "algunos",
+  "zipf_es": 5.64,
+  "tier": "common"
+ },
+ {
+  "es": "general",
+  "zipf_es": 5.64,
+  "tier": "common"
+ },
+ {
+  "es": "mayor",
+  "zipf_es": 5.64,
+  "tier": "common"
+ },
+ {
+  "es": "tal",
+  "zipf_es": 5.64,
+  "tier": "common"
+ },
+ {
+  "es": "además",
+  "zipf_es": 5.63,
+  "tier": "common"
+ },
+ {
+  "es": "mal",
+  "zipf_es": 5.62,
+  "tier": "common"
+ },
+ {
+  "es": "muchas",
+  "zipf_es": 5.62,
+  "tier": "common"
+ },
+ {
+  "es": "según",
+  "zipf_es": 5.62,
+  "tier": "common"
+ },
+ {
+  "es": "acuerdo",
+  "zipf_es": 5.61,
+  "tier": "common"
+ },
+ {
+  "es": "cualquier",
+  "zipf_es": 5.61,
+  "tier": "common"
+ },
+ {
+  "es": "dios",
+  "zipf_es": 5.61,
+  "tier": "common"
+ },
+ {
+  "es": "fueron",
+  "zipf_es": 5.61,
+  "tier": "common"
+ },
+ {
   "es": "manera",
   "zipf_es": 5.61,
   "tier": "common"
  },
  {
   "es": "nombre",
-  "zipf_es": 5.61,
-  "tier": "common"
- },
- {
-  "es": "unos",
   "zipf_es": 5.61,
   "tier": "common"
  },
@@ -47,6 +742,11 @@
  {
   "es": "sino",
   "zipf_es": 5.59,
+  "tier": "common"
+ },
+ {
+  "es": "da",
+  "zipf_es": 5.58,
   "tier": "common"
  },
  {
@@ -111,11 +811,6 @@
  },
  {
   "es": "noche",
-  "zipf_es": 5.55,
-  "tier": "common"
- },
- {
-  "es": "nosotros",
   "zipf_es": 5.55,
   "tier": "common"
  },
@@ -190,16 +885,6 @@
   "tier": "common"
  },
  {
-  "es": "aún",
-  "zipf_es": 5.52,
-  "tier": "common"
- },
- {
-  "es": "buen",
-  "zipf_es": 5.52,
-  "tier": "common"
- },
- {
   "es": "podemos",
   "zipf_es": 5.52,
   "tier": "common"
@@ -217,11 +902,6 @@
  {
   "es": "tenía",
   "zipf_es": 5.51,
-  "tier": "common"
- },
- {
-  "es": "esos",
-  "zipf_es": 5.5,
   "tier": "common"
  },
  {
@@ -271,6 +951,11 @@
  },
  {
   "es": "saber",
+  "zipf_es": 5.49,
+  "tier": "common"
+ },
+ {
+  "es": "sé",
   "zipf_es": 5.49,
   "tier": "common"
  },
@@ -390,6 +1075,11 @@
   "tier": "common"
  },
  {
+  "es": "ti",
+  "zipf_es": 5.46,
+  "tier": "common"
+ },
+ {
   "es": "algunas",
   "zipf_es": 5.45,
   "tier": "common"
@@ -446,11 +1136,6 @@
  },
  {
   "es": "hombres",
-  "zipf_es": 5.44,
-  "tier": "common"
- },
- {
-  "es": "nuestros",
   "zipf_es": 5.44,
   "tier": "common"
  },
@@ -530,11 +1215,6 @@
   "tier": "common"
  },
  {
-  "es": "algún",
-  "zipf_es": 5.41,
-  "tier": "common"
- },
- {
   "es": "amor",
   "zipf_es": 5.41,
   "tier": "common"
@@ -605,7 +1285,7 @@
   "tier": "common"
  },
  {
-  "es": "esas",
+  "es": "mí",
   "zipf_es": 5.39,
   "tier": "common"
  },
@@ -720,11 +1400,6 @@
   "tier": "common"
  },
  {
-  "es": "quién",
-  "zipf_es": 5.37,
-  "tier": "common"
- },
- {
   "es": "razón",
   "zipf_es": 5.37,
   "tier": "common"
@@ -796,11 +1471,6 @@
  },
  {
   "es": "segundo",
-  "zipf_es": 5.35,
-  "tier": "common"
- },
- {
-  "es": "unas",
   "zipf_es": 5.35,
   "tier": "common"
  },
@@ -960,17 +1630,7 @@
   "tier": "common"
  },
  {
-  "es": "usted",
-  "zipf_es": 5.31,
-  "tier": "common"
- },
- {
   "es": "largo",
-  "zipf_es": 5.3,
-  "tier": "common"
- },
- {
-  "es": "ningún",
   "zipf_es": 5.3,
   "tier": "common"
  },
@@ -1235,6 +1895,11 @@
   "tier": "common"
  },
  {
+  "es": "ve",
+  "zipf_es": 5.26,
+  "tier": "common"
+ },
+ {
   "es": "vivir",
   "zipf_es": 5.26,
   "tier": "common"
@@ -1271,11 +1936,6 @@
  },
  {
   "es": "población",
-  "zipf_es": 5.25,
-  "tier": "common"
- },
- {
-  "es": "quienes",
   "zipf_es": 5.25,
   "tier": "common"
  },
@@ -1540,11 +2200,6 @@
   "tier": "common"
  },
  {
-  "es": "nuestras",
-  "zipf_es": 5.21,
-  "tier": "common"
- },
- {
   "es": "pesar",
   "zipf_es": 5.21,
   "tier": "common"
@@ -1621,6 +2276,11 @@
  },
  {
   "es": "propia",
+  "zipf_es": 5.2,
+  "tier": "common"
+ },
+ {
+  "es": "vi",
   "zipf_es": 5.2,
   "tier": "common"
  },
@@ -1835,11 +2495,6 @@
   "tier": "common"
  },
  {
-  "es": "dónde",
-  "zipf_es": 5.16,
-  "tier": "common"
- },
- {
   "es": "hacerlo",
   "zipf_es": 5.16,
   "tier": "common"
@@ -1900,27 +2555,12 @@
   "tier": "common"
  },
  {
-  "es": "aun",
-  "zipf_es": 5.15,
-  "tier": "common"
- },
- {
   "es": "cargo",
   "zipf_es": 5.15,
   "tier": "common"
  },
  {
   "es": "comida",
-  "zipf_es": 5.15,
-  "tier": "common"
- },
- {
-  "es": "cuales",
-  "zipf_es": 5.15,
-  "tier": "common"
- },
- {
-  "es": "ellas",
   "zipf_es": 5.15,
   "tier": "common"
  },
@@ -1976,11 +2616,6 @@
  },
  {
   "es": "siglo",
-  "zipf_es": 5.15,
-  "tier": "common"
- },
- {
-  "es": "ustedes",
   "zipf_es": 5.15,
   "tier": "common"
  },
@@ -2330,6 +2965,11 @@
   "tier": "common"
  },
  {
+  "es": "of",
+  "zipf_es": 5.1,
+  "tier": "common"
+ },
+ {
   "es": "popular",
   "zipf_es": 5.1,
   "tier": "common"
@@ -2360,7 +3000,7 @@
   "tier": "common"
  },
  {
-  "es": "aquellos",
+  "es": "ah",
   "zipf_es": 5.09,
   "tier": "common"
  },
@@ -2571,6 +3211,16 @@
  },
  {
   "es": "estilo",
+  "zipf_es": 5.07,
+  "tier": "common"
+ },
+ {
+  "es": "ex",
+  "zipf_es": 5.07,
+  "tier": "common"
+ },
+ {
+  "es": "in",
   "zipf_es": 5.07,
   "tier": "common"
  },
@@ -3215,11 +3865,6 @@
   "tier": "common"
  },
  {
-  "es": "cuál",
-  "zipf_es": 5.0,
-  "tier": "common"
- },
- {
   "es": "facebook",
   "zipf_es": 5.0,
   "tier": "common"
@@ -3340,6 +3985,11 @@
   "tier": "useful"
  },
  {
+  "es": "pp",
+  "zipf_es": 4.99,
+  "tier": "useful"
+ },
+ {
   "es": "pudo",
   "zipf_es": 4.99,
   "tier": "useful"
@@ -3386,6 +4036,11 @@
  },
  {
   "es": "darle",
+  "zipf_es": 4.98,
+  "tier": "useful"
+ },
+ {
+  "es": "di",
   "zipf_es": 4.98,
   "tier": "useful"
  },
@@ -3585,6 +4240,11 @@
   "tier": "useful"
  },
  {
+  "es": "sr",
+  "zipf_es": 4.97,
+  "tier": "useful"
+ },
+ {
   "es": "tenían",
   "zipf_es": 4.97,
   "tier": "useful"
@@ -3655,6 +4315,11 @@
   "tier": "useful"
  },
  {
+  "es": "ii",
+  "zipf_es": 4.96,
+  "tier": "useful"
+ },
+ {
   "es": "importancia",
   "zipf_es": 4.96,
   "tier": "useful"
@@ -3681,6 +4346,11 @@
  },
  {
   "es": "premio",
+  "zipf_es": 4.96,
+  "tier": "useful"
+ },
+ {
+  "es": "re",
   "zipf_es": 4.96,
   "tier": "useful"
  },
@@ -3970,6 +4640,11 @@
   "tier": "useful"
  },
  {
+  "es": "fe",
+  "zipf_es": 4.93,
+  "tier": "useful"
+ },
+ {
   "es": "ganas",
   "zipf_es": 4.93,
   "tier": "useful"
@@ -4225,6 +4900,11 @@
   "tier": "useful"
  },
  {
+  "es": "dr",
+  "zipf_es": 4.91,
+  "tier": "useful"
+ },
+ {
   "es": "edición",
   "zipf_es": 4.91,
   "tier": "useful"
@@ -4426,6 +5106,11 @@
  },
  {
   "es": "territorio",
+  "zipf_es": 4.9,
+  "tier": "useful"
+ },
+ {
+  "es": "to",
   "zipf_es": 4.9,
   "tier": "useful"
  },
@@ -4720,11 +5405,6 @@
   "tier": "useful"
  },
  {
-  "es": "aquel",
-  "zipf_es": 4.87,
-  "tier": "useful"
- },
- {
   "es": "conozco",
   "zipf_es": 4.87,
   "tier": "useful"
@@ -4791,6 +5471,11 @@
  },
  {
   "es": "santo",
+  "zipf_es": 4.87,
+  "tier": "useful"
+ },
+ {
+  "es": "tv",
   "zipf_es": 4.87,
   "tier": "useful"
  },
@@ -4966,11 +5651,6 @@
  },
  {
   "es": "creen",
-  "zipf_es": 4.85,
-  "tier": "useful"
- },
- {
-  "es": "cuyo",
   "zipf_es": 4.85,
   "tier": "useful"
  },
@@ -5475,6 +6155,11 @@
   "tier": "useful"
  },
  {
+  "es": "eh",
+  "zipf_es": 4.81,
+  "tier": "useful"
+ },
+ {
   "es": "estación",
   "zipf_es": 4.81,
   "tier": "useful"
@@ -5895,11 +6580,6 @@
   "tier": "useful"
  },
  {
-  "es": "tercer",
-  "zipf_es": 4.79,
-  "tier": "useful"
- },
- {
   "es": "tierras",
   "zipf_es": 4.79,
   "tier": "useful"
@@ -6126,11 +6806,6 @@
  },
  {
   "es": "culo",
-  "zipf_es": 4.77,
-  "tier": "useful"
- },
- {
-  "es": "cuya",
   "zipf_es": 4.77,
   "tier": "useful"
  },
@@ -6445,6 +7120,11 @@
   "tier": "useful"
  },
  {
+  "es": "ay",
+  "zipf_es": 4.75,
+  "tier": "useful"
+ },
+ {
   "es": "cadena",
   "zipf_es": 4.75,
   "tier": "useful"
@@ -6586,11 +7266,6 @@
  },
  {
   "es": "corto",
-  "zipf_es": 4.74,
-  "tier": "useful"
- },
- {
-  "es": "cuánto",
   "zipf_es": 4.74,
   "tier": "useful"
  },
@@ -6746,11 +7421,6 @@
  },
  {
   "es": "construir",
-  "zipf_es": 4.73,
-  "tier": "useful"
- },
- {
-  "es": "cuándo",
   "zipf_es": 4.73,
   "tier": "useful"
  },
@@ -6975,6 +7645,11 @@
   "tier": "useful"
  },
  {
+  "es": "ok",
+  "zipf_es": 4.72,
+  "tier": "useful"
+ },
+ {
   "es": "pedido",
   "zipf_es": 4.72,
   "tier": "useful"
@@ -7165,11 +7840,6 @@
   "tier": "useful"
  },
  {
-  "es": "mío",
-  "zipf_es": 4.71,
-  "tier": "useful"
- },
- {
   "es": "necesidades",
   "zipf_es": 4.71,
   "tier": "useful"
@@ -7186,6 +7856,16 @@
  },
  {
   "es": "objetivos",
+  "zipf_es": 4.71,
+  "tier": "useful"
+ },
+ {
+  "es": "oh",
+  "zipf_es": 4.71,
+  "tier": "useful"
+ },
+ {
+  "es": "pa",
   "zipf_es": 4.71,
   "tier": "useful"
  },
@@ -7735,11 +8415,6 @@
   "tier": "useful"
  },
  {
-  "es": "aquella",
-  "zipf_es": 4.68,
-  "tier": "useful"
- },
- {
   "es": "audiencia",
   "zipf_es": 4.68,
   "tier": "useful"
@@ -8035,6 +8710,11 @@
   "tier": "useful"
  },
  {
+  "es": "km",
+  "zipf_es": 4.67,
+  "tier": "useful"
+ },
+ {
   "es": "letras",
   "zipf_es": 4.67,
   "tier": "useful"
@@ -8071,11 +8751,6 @@
  },
  {
   "es": "médicos",
-  "zipf_es": 4.67,
-  "tier": "useful"
- },
- {
-  "es": "mía",
   "zipf_es": 4.67,
   "tier": "useful"
  },
@@ -8145,17 +8820,17 @@
   "tier": "useful"
  },
  {
-  "es": "tuyo",
-  "zipf_es": 4.67,
-  "tier": "useful"
- },
- {
   "es": "técnico",
   "zipf_es": 4.67,
   "tier": "useful"
  },
  {
   "es": "agentes",
+  "zipf_es": 4.66,
+  "tier": "useful"
+ },
+ {
+  "es": "as",
   "zipf_es": 4.66,
   "tier": "useful"
  },
@@ -8261,6 +8936,11 @@
  },
  {
   "es": "new",
+  "zipf_es": 4.66,
+  "tier": "useful"
+ },
+ {
+  "es": "on",
   "zipf_es": 4.66,
   "tier": "useful"
  },
@@ -8616,6 +9296,11 @@
  },
  {
   "es": "discusión",
+  "zipf_es": 4.64,
+  "tier": "useful"
+ },
+ {
+  "es": "do",
   "zipf_es": 4.64,
   "tier": "useful"
  },
@@ -9915,6 +10600,11 @@
   "tier": "useful"
  },
  {
+  "es": "cm",
+  "zipf_es": 4.58,
+  "tier": "useful"
+ },
+ {
   "es": "colectivo",
   "zipf_es": 4.58,
   "tier": "useful"
@@ -10330,11 +11020,6 @@
   "tier": "useful"
  },
  {
-  "es": "vosotros",
-  "zipf_es": 4.57,
-  "tier": "useful"
- },
- {
   "es": "actuación",
   "zipf_es": 4.56,
   "tier": "useful"
@@ -10460,6 +11145,11 @@
   "tier": "useful"
  },
  {
+  "es": "iv",
+  "zipf_es": 4.56,
+  "tier": "useful"
+ },
+ {
   "es": "jardín",
   "zipf_es": 4.56,
   "tier": "useful"
@@ -10560,6 +11250,11 @@
   "tier": "useful"
  },
  {
+  "es": "xd",
+  "zipf_es": 4.56,
+  "tier": "useful"
+ },
+ {
   "es": "agricultura",
   "zipf_es": 4.55,
   "tier": "useful"
@@ -10576,11 +11271,6 @@
  },
  {
   "es": "amplio",
-  "zipf_es": 4.55,
-  "tier": "useful"
- },
- {
-  "es": "aquellas",
   "zipf_es": 4.55,
   "tier": "useful"
  },
@@ -10605,6 +11295,11 @@
   "tier": "useful"
  },
  {
+  "es": "by",
+  "zipf_es": 4.55,
+  "tier": "useful"
+ },
+ {
   "es": "caminar",
   "zipf_es": 4.55,
   "tier": "useful"
@@ -10621,6 +11316,11 @@
  },
  {
   "es": "cientos",
+  "zipf_es": 4.55,
+  "tier": "useful"
+ },
+ {
+  "es": "co",
   "zipf_es": 4.55,
   "tier": "useful"
  },
@@ -10820,17 +11520,17 @@
   "tier": "useful"
  },
  {
-  "es": "suyo",
-  "zipf_es": 4.55,
-  "tier": "useful"
- },
- {
   "es": "temperatura",
   "zipf_es": 4.55,
   "tier": "useful"
  },
  {
   "es": "tono",
+  "zipf_es": 4.55,
+  "tier": "useful"
+ },
+ {
+  "es": "us",
   "zipf_es": 4.55,
   "tier": "useful"
  },
@@ -10926,6 +11626,11 @@
  },
  {
   "es": "estadio",
+  "zipf_es": 4.54,
+  "tier": "useful"
+ },
+ {
+  "es": "et",
   "zipf_es": 4.54,
   "tier": "useful"
  },
@@ -11235,6 +11940,11 @@
   "tier": "useful"
  },
  {
+  "es": "mm",
+  "zipf_es": 4.53,
+  "tier": "useful"
+ },
+ {
   "es": "máxima",
   "zipf_es": 4.53,
   "tier": "useful"
@@ -11440,11 +12150,6 @@
   "tier": "useful"
  },
  {
-  "es": "cuáles",
-  "zipf_es": 4.52,
-  "tier": "useful"
- },
- {
   "es": "cámaras",
   "zipf_es": 4.52,
   "tier": "useful"
@@ -11466,6 +12171,11 @@
  },
  {
   "es": "demuestra",
+  "zipf_es": 4.52,
+  "tier": "useful"
+ },
+ {
+  "es": "ed",
   "zipf_es": 4.52,
   "tier": "useful"
  },
@@ -11621,11 +12331,6 @@
  },
  {
   "es": "anoche",
-  "zipf_es": 4.51,
-  "tier": "useful"
- },
- {
-  "es": "aquello",
   "zipf_es": 4.51,
   "tier": "useful"
  },
@@ -12305,6 +13010,11 @@
   "tier": "extended"
  },
  {
+  "es": "is",
+  "zipf_es": 4.49,
+  "tier": "extended"
+ },
+ {
   "es": "jueces",
   "zipf_es": 4.49,
   "tier": "extended"
@@ -12575,6 +13285,11 @@
   "tier": "extended"
  },
  {
+  "es": "ja",
+  "zipf_es": 4.48,
+  "tier": "extended"
+ },
+ {
   "es": "juro",
   "zipf_es": 4.48,
   "tier": "extended"
@@ -12706,6 +13421,11 @@
  },
  {
   "es": "utilizan",
+  "zipf_es": 4.48,
+  "tier": "extended"
+ },
+ {
+  "es": "vs",
   "zipf_es": 4.48,
   "tier": "extended"
  },
@@ -12900,11 +13620,6 @@
   "tier": "extended"
  },
  {
-  "es": "tuya",
-  "zipf_es": 4.47,
-  "tier": "extended"
- },
- {
   "es": "ubicación",
   "zipf_es": 4.47,
   "tier": "extended"
@@ -13041,6 +13756,11 @@
  },
  {
   "es": "duele",
+  "zipf_es": 4.46,
+  "tier": "extended"
+ },
+ {
+  "es": "dé",
   "zipf_es": 4.46,
   "tier": "extended"
  },
@@ -13235,6 +13955,11 @@
   "tier": "extended"
  },
  {
+  "es": "am",
+  "zipf_es": 4.45,
+  "tier": "extended"
+ },
+ {
   "es": "aparentemente",
   "zipf_es": 4.45,
   "tier": "extended"
@@ -13311,6 +14036,11 @@
  },
  {
   "es": "inició",
+  "zipf_es": 4.45,
+  "tier": "extended"
+ },
+ {
+  "es": "it",
   "zipf_es": 4.45,
   "tier": "extended"
  },
@@ -13605,6 +14335,11 @@
   "tier": "extended"
  },
  {
+  "es": "ma",
+  "zipf_es": 4.44,
+  "tier": "extended"
+ },
+ {
   "es": "manda",
   "zipf_es": 4.44,
   "tier": "extended"
@@ -13780,6 +14515,11 @@
   "tier": "extended"
  },
  {
+  "es": "an",
+  "zipf_es": 4.43,
+  "tier": "extended"
+ },
+ {
   "es": "armada",
   "zipf_es": 4.43,
   "tier": "extended"
@@ -13950,7 +14690,17 @@
   "tier": "extended"
  },
  {
+  "es": "my",
+  "zipf_es": 4.43,
+  "tier": "extended"
+ },
+ {
   "es": "ocupa",
+  "zipf_es": 4.43,
+  "tier": "extended"
+ },
+ {
+  "es": "pc",
   "zipf_es": 4.43,
   "tier": "extended"
  },
@@ -14046,6 +14796,11 @@
  },
  {
   "es": "toman",
+  "zipf_es": 4.43,
+  "tier": "extended"
+ },
+ {
+  "es": "ue",
   "zipf_es": 4.43,
   "tier": "extended"
  },
@@ -14365,17 +15120,17 @@
   "tier": "extended"
  },
  {
+  "es": "so",
+  "zipf_es": 4.42,
+  "tier": "extended"
+ },
+ {
   "es": "sueldo",
   "zipf_es": 4.42,
   "tier": "extended"
  },
  {
   "es": "superiores",
-  "zipf_es": 4.42,
-  "tier": "extended"
- },
- {
-  "es": "suya",
   "zipf_es": 4.42,
   "tier": "extended"
  },
@@ -14456,11 +15211,6 @@
  },
  {
   "es": "cumplimiento",
-  "zipf_es": 4.41,
-  "tier": "extended"
- },
- {
-  "es": "cuántos",
   "zipf_es": 4.41,
   "tier": "extended"
  },
@@ -15005,6 +15755,11 @@
   "tier": "extended"
  },
  {
+  "es": "pm",
+  "zipf_es": 4.4,
+  "tier": "extended"
+ },
+ {
   "es": "presidencial",
   "zipf_es": 4.4,
   "tier": "extended"
@@ -15295,6 +16050,11 @@
   "tier": "extended"
  },
  {
+  "es": "na",
+  "zipf_es": 4.39,
+  "tier": "extended"
+ },
+ {
   "es": "nave",
   "zipf_es": 4.39,
   "tier": "extended"
@@ -15465,6 +16225,11 @@
   "tier": "extended"
  },
  {
+  "es": "xx",
+  "zipf_es": 4.39,
+  "tier": "extended"
+ },
+ {
   "es": "afirmó",
   "zipf_es": 4.38,
   "tier": "extended"
@@ -15515,6 +16280,11 @@
   "tier": "extended"
  },
  {
+  "es": "cc",
+  "zipf_es": 4.38,
+  "tier": "extended"
+ },
+ {
   "es": "combustible",
   "zipf_es": 4.38,
   "tier": "extended"
@@ -15561,6 +16331,11 @@
  },
  {
   "es": "débil",
+  "zipf_es": 4.38,
+  "tier": "extended"
+ },
+ {
+  "es": "ee",
   "zipf_es": 4.38,
   "tier": "extended"
  },
@@ -16555,6 +17330,11 @@
   "tier": "extended"
  },
  {
+  "es": "ud",
+  "zipf_es": 4.36,
+  "tier": "extended"
+ },
+ {
   "es": "une",
   "zipf_es": 4.36,
   "tier": "extended"
@@ -17096,6 +17876,11 @@
  },
  {
   "es": "gabinete",
+  "zipf_es": 4.34,
+  "tier": "extended"
+ },
+ {
+  "es": "go",
   "zipf_es": 4.34,
   "tier": "extended"
  },
@@ -17645,6 +18430,11 @@
   "tier": "extended"
  },
  {
+  "es": "up",
+  "zipf_es": 4.33,
+  "tier": "extended"
+ },
+ {
   "es": "urbana",
   "zipf_es": 4.33,
   "tier": "extended"
@@ -17716,11 +18506,6 @@
  },
  {
   "es": "cultivo",
-  "zipf_es": 4.32,
-  "tier": "extended"
- },
- {
-  "es": "cuántas",
   "zipf_es": 4.32,
   "tier": "extended"
  },
@@ -17991,6 +18776,11 @@
  },
  {
   "es": "tribunales",
+  "zipf_es": 4.32,
+  "tier": "extended"
+ },
+ {
+  "es": "uu",
   "zipf_es": 4.32,
   "tier": "extended"
  },
@@ -18321,11 +19111,6 @@
  },
  {
   "es": "quinta",
-  "zipf_es": 4.31,
-  "tier": "extended"
- },
- {
-  "es": "quiénes",
   "zipf_es": 4.31,
   "tier": "extended"
  },
@@ -19155,6 +19940,11 @@
   "tier": "extended"
  },
  {
+  "es": "ta",
+  "zipf_es": 4.29,
+  "tier": "extended"
+ },
+ {
   "es": "termino",
   "zipf_es": 4.29,
   "tier": "extended"
@@ -19171,6 +19961,11 @@
  },
  {
   "es": "tomas",
+  "zipf_es": 4.29,
+  "tier": "extended"
+ },
+ {
+  "es": "té",
   "zipf_es": 4.29,
   "tier": "extended"
  },
@@ -19426,6 +20221,11 @@
  },
  {
   "es": "mover",
+  "zipf_es": 4.28,
+  "tier": "extended"
+ },
+ {
+  "es": "mr",
   "zipf_es": 4.28,
   "tier": "extended"
  },
@@ -19860,11 +20660,6 @@
   "tier": "extended"
  },
  {
-  "es": "nosotras",
-  "zipf_es": 4.27,
-  "tier": "extended"
- },
- {
   "es": "notable",
   "zipf_es": 4.27,
   "tier": "extended"
@@ -19950,6 +20745,11 @@
   "tier": "extended"
  },
  {
+  "es": "sa",
+  "zipf_es": 4.27,
+  "tier": "extended"
+ },
+ {
   "es": "suspensión",
   "zipf_es": 4.27,
   "tier": "extended"
@@ -19986,6 +20786,11 @@
  },
  {
   "es": "víctor",
+  "zipf_es": 4.27,
+  "tier": "extended"
+ },
+ {
+  "es": "we",
   "zipf_es": 4.27,
   "tier": "extended"
  },
@@ -20510,6 +21315,11 @@
   "tier": "extended"
  },
  {
+  "es": "ca",
+  "zipf_es": 4.25,
+  "tier": "extended"
+ },
+ {
   "es": "captura",
   "zipf_es": 4.25,
   "tier": "extended"
@@ -20521,6 +21331,11 @@
  },
  {
   "es": "carreteras",
+  "zipf_es": 4.25,
+  "tier": "extended"
+ },
+ {
+  "es": "cd",
   "zipf_es": 4.25,
   "tier": "extended"
  },
@@ -21175,6 +21990,11 @@
   "tier": "extended"
  },
  {
+  "es": "op",
+  "zipf_es": 4.24,
+  "tier": "extended"
+ },
+ {
   "es": "perdieron",
   "zipf_es": 4.24,
   "tier": "extended"
@@ -21585,6 +22405,11 @@
   "tier": "extended"
  },
  {
+  "es": "kg",
+  "zipf_es": 4.23,
+  "tier": "extended"
+ },
+ {
   "es": "ladrones",
   "zipf_es": 4.23,
   "tier": "extended"
@@ -21646,6 +22471,11 @@
  },
  {
   "es": "olvida",
+  "zipf_es": 4.23,
+  "tier": "extended"
+ },
+ {
+  "es": "or",
   "zipf_es": 4.23,
   "tier": "extended"
  },
@@ -22280,6 +23110,11 @@
   "tier": "extended"
  },
  {
+  "es": "xi",
+  "zipf_es": 4.22,
+  "tier": "extended"
+ },
+ {
   "es": "alcanzó",
   "zipf_es": 4.21,
   "tier": "extended"
@@ -22321,6 +23156,11 @@
  },
  {
   "es": "añadir",
+  "zipf_es": 4.21,
+  "tier": "extended"
+ },
+ {
+  "es": "be",
   "zipf_es": 4.21,
   "tier": "extended"
  },
@@ -22521,6 +23361,11 @@
  },
  {
   "es": "músicos",
+  "zipf_es": 4.21,
+  "tier": "extended"
+ },
+ {
+  "es": "nº",
   "zipf_es": 4.21,
   "tier": "extended"
  },
@@ -22751,6 +23596,16 @@
  },
  {
   "es": "asalto",
+  "zipf_es": 4.2,
+  "tier": "extended"
+ },
+ {
+  "es": "at",
+  "zipf_es": 4.2,
+  "tier": "extended"
+ },
+ {
+  "es": "av",
   "zipf_es": 4.2,
   "tier": "extended"
  },
@@ -23605,6 +24460,11 @@
   "tier": "extended"
  },
  {
+  "es": "po",
+  "zipf_es": 4.19,
+  "tier": "extended"
+ },
+ {
   "es": "preocupado",
   "zipf_es": 4.19,
   "tier": "extended"
@@ -23981,6 +24841,11 @@
  },
  {
   "es": "extranjeras",
+  "zipf_es": 4.18,
+  "tier": "extended"
+ },
+ {
+  "es": "fa",
   "zipf_es": 4.18,
   "tier": "extended"
  },
@@ -24740,6 +25605,11 @@
   "tier": "extended"
  },
  {
+  "es": "st",
+  "zipf_es": 4.17,
+  "tier": "extended"
+ },
+ {
   "es": "star",
   "zipf_es": 4.17,
   "tier": "extended"
@@ -25230,6 +26100,11 @@
   "tier": "extended"
  },
  {
+  "es": "tí",
+  "zipf_es": 4.16,
+  "tier": "extended"
+ },
+ {
   "es": "volverá",
   "zipf_es": 4.16,
   "tier": "extended"
@@ -25256,6 +26131,11 @@
  },
  {
   "es": "acoso",
+  "zipf_es": 4.15,
+  "tier": "extended"
+ },
+ {
+  "es": "ad",
   "zipf_es": 4.15,
   "tier": "extended"
  },
@@ -26070,6 +26950,11 @@
   "tier": "extended"
  },
  {
+  "es": "li",
+  "zipf_es": 4.14,
+  "tier": "extended"
+ },
+ {
   "es": "llamaron",
   "zipf_es": 4.14,
   "tier": "extended"
@@ -26360,6 +27245,11 @@
   "tier": "extended"
  },
  {
+  "es": "bs",
+  "zipf_es": 4.13,
+  "tier": "extended"
+ },
+ {
   "es": "can",
   "zipf_es": 4.13,
   "tier": "extended"
@@ -26461,6 +27351,11 @@
  },
  {
   "es": "doctrina",
+  "zipf_es": 4.13,
+  "tier": "extended"
+ },
+ {
+  "es": "du",
   "zipf_es": 4.13,
   "tier": "extended"
  },
@@ -26860,6 +27755,11 @@
   "tier": "extended"
  },
  {
+  "es": "ai",
+  "zipf_es": 4.12,
+  "tier": "extended"
+ },
+ {
   "es": "aliento",
   "zipf_es": 4.12,
   "tier": "extended"
@@ -26971,6 +27871,11 @@
  },
  {
   "es": "custodia",
+  "zipf_es": 4.12,
+  "tier": "extended"
+ },
+ {
+  "es": "dc",
   "zipf_es": 4.12,
   "tier": "extended"
  },
@@ -27695,6 +28600,11 @@
   "tier": "extended"
  },
  {
+  "es": "mg",
+  "zipf_es": 4.11,
+  "tier": "extended"
+ },
+ {
   "es": "montar",
   "zipf_es": 4.11,
   "tier": "extended"
@@ -28200,6 +29110,11 @@
   "tier": "extended"
  },
  {
+  "es": "eu",
+  "zipf_es": 4.1,
+  "tier": "extended"
+ },
+ {
   "es": "experimento",
   "zipf_es": 4.1,
   "tier": "extended"
@@ -28241,6 +29156,11 @@
  },
  {
   "es": "hungría",
+  "zipf_es": 4.1,
+  "tier": "extended"
+ },
+ {
+  "es": "ia",
   "zipf_es": 4.1,
   "tier": "extended"
  },
@@ -28491,6 +29411,11 @@
  },
  {
   "es": "tomamos",
+  "zipf_es": 4.1,
+  "tier": "extended"
+ },
+ {
+  "es": "uh",
   "zipf_es": 4.1,
   "tier": "extended"
  },
@@ -29905,6 +30830,11 @@
   "tier": "extended"
  },
  {
+  "es": "fi",
+  "zipf_es": 4.07,
+  "tier": "extended"
+ },
+ {
   "es": "fibra",
   "zipf_es": 4.07,
   "tier": "extended"
@@ -29966,6 +30896,11 @@
  },
  {
   "es": "jalisco",
+  "zipf_es": 4.07,
+  "tier": "extended"
+ },
+ {
+  "es": "jo",
   "zipf_es": 4.07,
   "tier": "extended"
  },
@@ -30455,6 +31390,11 @@
   "tier": "extended"
  },
  {
+  "es": "id",
+  "zipf_es": 4.06,
+  "tier": "extended"
+ },
+ {
   "es": "implementar",
   "zipf_es": 4.06,
   "tier": "extended"
@@ -30491,6 +31431,11 @@
  },
  {
   "es": "invito",
+  "zipf_es": 4.06,
+  "tier": "extended"
+ },
+ {
+  "es": "ip",
   "zipf_es": 4.06,
   "tier": "extended"
  },
@@ -30635,6 +31580,11 @@
   "tier": "extended"
  },
  {
+  "es": "rt",
+  "zipf_es": 4.06,
+  "tier": "extended"
+ },
+ {
   "es": "ruinas",
   "zipf_es": 4.06,
   "tier": "extended"
@@ -30721,6 +31671,11 @@
  },
  {
   "es": "utilizó",
+  "zipf_es": 4.06,
+  "tier": "extended"
+ },
+ {
+  "es": "xv",
   "zipf_es": 4.06,
   "tier": "extended"
  },
@@ -31315,6 +32270,11 @@
   "tier": "extended"
  },
  {
+  "es": "ss",
+  "zipf_es": 4.05,
+  "tier": "extended"
+ },
+ {
   "es": "sucia",
   "zipf_es": 4.05,
   "tier": "extended"
@@ -31625,6 +32585,11 @@
   "tier": "extended"
  },
  {
+  "es": "ej",
+  "zipf_es": 4.04,
+  "tier": "extended"
+ },
+ {
   "es": "emisiones",
   "zipf_es": 4.04,
   "tier": "extended"
@@ -31716,6 +32681,11 @@
  },
  {
   "es": "fantástico",
+  "zipf_es": 4.04,
+  "tier": "extended"
+ },
+ {
+  "es": "fc",
   "zipf_es": 4.04,
   "tier": "extended"
  },
@@ -31886,6 +32856,11 @@
  },
  {
   "es": "parroquia",
+  "zipf_es": 4.04,
+  "tier": "extended"
+ },
+ {
+  "es": "pe",
   "zipf_es": 4.04,
   "tier": "extended"
  },
@@ -32590,6 +33565,11 @@
   "tier": "extended"
  },
  {
+  "es": "ac",
+  "zipf_es": 4.02,
+  "tier": "extended"
+ },
+ {
   "es": "accesible",
   "zipf_es": 4.02,
   "tier": "extended"
@@ -32780,6 +33760,11 @@
   "tier": "extended"
  },
  {
+  "es": "cv",
+  "zipf_es": 4.02,
+  "tier": "extended"
+ },
+ {
   "es": "defendiendo",
   "zipf_es": 4.02,
   "tier": "extended"
@@ -32896,6 +33881,11 @@
  },
  {
   "es": "italianos",
+  "zipf_es": 4.02,
+  "tier": "extended"
+ },
+ {
+  "es": "ix",
   "zipf_es": 4.02,
   "tier": "extended"
  },
@@ -33550,6 +34540,11 @@
   "tier": "extended"
  },
  {
+  "es": "pr",
+  "zipf_es": 4.01,
+  "tier": "extended"
+ },
+ {
   "es": "practica",
   "zipf_es": 4.01,
   "tier": "extended"
@@ -34010,6 +35005,11 @@
   "tier": "extended"
  },
  {
+  "es": "df",
+  "zipf_es": 4.0,
+  "tier": "extended"
+ },
+ {
   "es": "dimos",
   "zipf_es": 4.0,
   "tier": "extended"
@@ -34046,6 +35046,11 @@
  },
  {
   "es": "elevada",
+  "zipf_es": 4.0,
+  "tier": "extended"
+ },
+ {
+  "es": "em",
   "zipf_es": 4.0,
   "tier": "extended"
  },
@@ -34156,6 +35161,11 @@
  },
  {
   "es": "homosexuales",
+  "zipf_es": 4.0,
+  "tier": "extended"
+ },
+ {
+  "es": "il",
   "zipf_es": 4.0,
   "tier": "extended"
  },
@@ -34760,6 +35770,11 @@
   "tier": "long_tail"
  },
  {
+  "es": "dj",
+  "zipf_es": 3.99,
+  "tier": "long_tail"
+ },
+ {
   "es": "donaciones",
   "zipf_es": 3.99,
   "tier": "long_tail"
@@ -34996,6 +36011,11 @@
  },
  {
   "es": "promueve",
+  "zipf_es": 3.99,
+  "tier": "long_tail"
+ },
+ {
+  "es": "ps",
   "zipf_es": 3.99,
   "tier": "long_tail"
  },
@@ -35440,6 +36460,11 @@
   "tier": "long_tail"
  },
  {
+  "es": "fm",
+  "zipf_es": 3.98,
+  "tier": "long_tail"
+ },
+ {
   "es": "frenar",
   "zipf_es": 3.98,
   "tier": "long_tail"
@@ -35470,6 +36495,11 @@
   "tier": "long_tail"
  },
  {
+  "es": "hd",
+  "zipf_es": 3.98,
+  "tier": "long_tail"
+ },
+ {
   "es": "importaciones",
   "zipf_es": 3.98,
   "tier": "long_tail"
@@ -35486,6 +36516,11 @@
  },
  {
   "es": "intentaron",
+  "zipf_es": 3.98,
+  "tier": "long_tail"
+ },
+ {
+  "es": "je",
   "zipf_es": 3.98,
   "tier": "long_tail"
  },
@@ -35551,6 +36586,11 @@
  },
  {
   "es": "miró",
+  "zipf_es": 3.98,
+  "tier": "long_tail"
+ },
+ {
+  "es": "mo",
   "zipf_es": 3.98,
   "tier": "long_tail"
  },
@@ -35801,6 +36841,11 @@
  },
  {
   "es": "alimentar",
+  "zipf_es": 3.97,
+  "tier": "long_tail"
+ },
+ {
+  "es": "ar",
   "zipf_es": 3.97,
   "tier": "long_tail"
  },
@@ -36151,6 +37196,11 @@
  },
  {
   "es": "jerusalén",
+  "zipf_es": 3.97,
+  "tier": "long_tail"
+ },
+ {
+  "es": "jr",
   "zipf_es": 3.97,
   "tier": "long_tail"
  },
@@ -36590,6 +37640,11 @@
   "tier": "long_tail"
  },
  {
+  "es": "bo",
+  "zipf_es": 3.96,
+  "tier": "long_tail"
+ },
+ {
   "es": "bono",
   "zipf_es": 3.96,
   "tier": "long_tail"
@@ -36821,6 +37876,11 @@
  },
  {
   "es": "extenso",
+  "zipf_es": 3.96,
+  "tier": "long_tail"
+ },
+ {
+  "es": "fb",
   "zipf_es": 3.96,
   "tier": "long_tail"
  },
@@ -37320,7 +38380,17 @@
   "tier": "long_tail"
  },
  {
+  "es": "ap",
+  "zipf_es": 3.95,
+  "tier": "long_tail"
+ },
+ {
   "es": "arrancar",
+  "zipf_es": 3.95,
+  "tier": "long_tail"
+ },
+ {
+  "es": "au",
   "zipf_es": 3.95,
   "tier": "long_tail"
  },

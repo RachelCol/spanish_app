@@ -11,9 +11,28 @@ while one common in both is probably already yours.
 """
 from wordfreq import top_n_list, zipf_frequency
 
-# The closed-class layer. Italian hands these over essentially intact, so they
-# are noise in a deck built for this learner.
-FUNCTION_CUTOFF = 200
+# Cutting the top 200 by rank was too blunt: it took `ser`, `estar`, `tener`,
+# `hacer`, `ir`, `decir`, `ver`, `poder`, `casa`, `día` and seventy more with
+# it -- the most useful words in the language. What actually needs excluding is
+# the closed class plus forms that are not citation forms at all.
+FUNCTION_WORDS = set("""
+el la los las un una unos unas lo al del
+de a en con por para sin
+y e o u que ni si
+yo tu tú él ella usted nosotros nosotras vosotros vosotras ellos ellas ustedes
+me te se nos os le les mi mis su sus nuestro nuestra nuestros nuestras
+mío mía tuyo tuya suyo suya
+este esta esto estos estas ese esa eso esos esas aquel aquella aquello
+aquellos aquellas
+qué quién quiénes cuál cuáles cómo dónde adónde cuándo cuánto cuánta
+cuántos cuántas cuyo cuya quien quienes cual cuales
+""".split())
+
+# Apertium lists these, but they are contractions, apocopated forms, conjugated
+# forms or superseded spellings -- not words to put on a card.
+NOT_LEMMAS = set("""
+hay sólo aún aun gran primer buen algún ningún tercer
+""".split())
 
 TIERS = [
     ("core",      6.0, 9.0),
@@ -33,10 +52,10 @@ def tier_for(z):
 
 def build(n=8000):
     forms = top_n_list("es", n)
-    skip = set(forms[:FUNCTION_CUTOFF])
+    skip = FUNCTION_WORDS | NOT_LEMMAS
     out = []
     for w in forms:
-        if w in skip or not w.isalpha() or len(w) < 3:
+        if w in skip or not w.isalpha() or len(w) < 2:
             continue
         z_es = zipf_frequency(w, "es")
         tier = tier_for(z_es)
