@@ -1,5 +1,6 @@
 import { db, requestPersistence } from './db.js';
-import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, AGAIN, HARD, GOOD, EASY } from './srs.js';
+import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
+         AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
@@ -61,9 +62,18 @@ async function refresh() {
   $('#c-learned').textContent = c.learned;
   $('#reviews-today').textContent = state.reviewsToday;
 
-  const empty = c.due === 0 && c.new === 0;
-  $('#start').classList.toggle('hidden', empty);
-  $('#nothing-due').classList.toggle('hidden', !empty);
+  // Three different empty states that used to look identical. Filtering every
+  // card out is a mistake to be told about, not a quiet "come back tomorrow".
+  const queued = buildQueue(state.items, state.settings).length;
+  $('#start').classList.toggle('hidden', queued === 0);
+  $('#nothing-due').classList.toggle('hidden', queued !== 0);
+  if (queued === 0) {
+    $('#nothing-due').textContent = state.items.length === 0
+      ? 'No cards match your Deck filters. Turn a frequency band, closeness or direction back on.'
+      : state.settings.grades.length
+        ? 'No cards in that grade yet. Clear the grade drill under Deck.'
+        : 'Nothing left in this deck. Widen the filters under Deck to add more.';
+  }
 }
 
 // ---------- filters ----------
@@ -440,19 +450,51 @@ async function openProgress() {
     : 'Nothing reviewed yet';
   $('#grade-chart').replaceChildren(...rows, note);
 
-  // Proportion, not count: the question is how far into each bucket you are,
-  // and the buckets are wildly different sizes.
-  const buckets = ['identical', 'near', 'shifted', 'distinct'];
-  const bRows = buckets.map(b => {
-    const mine = state.items.filter(i => i.card.bucket === b);
-    const done = mine.filter(i => gradeLetter(i) !== null).length;
-    return { b, done, total: mine.length };
-  }).filter(r => r.total);
-
-  $('#bucket-chart').replaceChildren(...bRows.map(r =>
-    bar(BUCKET_LABEL[r.b], null, r.done, r.total, 'g-b', `${r.done} / ${r.total}`)));
+  renderForecast(state.items);
 
   renderDays(await db.allReviews());
+}
+
+// What is coming, rather than what has happened. Overdue collapses into the
+// first column, because "how big is the hole I am in" is one number, not a
+// history lesson.
+function renderForecast(items, days = 30) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const start = today.getTime();
+
+  const cols = Array.from({ length: days }, (_, i) => ({ i, n: 0 }));
+  let overdue = 0, beyond = 0;
+  for (const it of items) {
+    if (isNewItem(it)) continue;
+    const d = Math.floor((it.due - start) / 86400000);
+    if (d < 0) overdue++;
+    else if (d < days) cols[d].n++;
+    else beyond++;
+  }
+  cols[0].n += overdue;
+
+  const peak = Math.max(1, ...cols.map(c => c.n));
+  $('#forecast-chart').replaceChildren(...cols.map(c => {
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    const fill = document.createElement('div');
+    fill.className = 'day-fill';
+    fill.style.height = (100 * c.n / peak) + '%';
+    if (!c.n) fill.classList.add('empty');
+    if (c.i === 0 && overdue) fill.classList.add('overdue');
+    const when = c.i === 0 ? 'today' : `in ${c.i} day${c.i === 1 ? '' : 's'}`;
+    col.title = `${when} — ${c.n} due`;
+    col.append(fill);
+    return col;
+  }));
+
+  const total = cols.reduce((s, c) => s + c.n, 0);
+  $('#forecast-summary').textContent = total || beyond
+    ? `${total} due in the next ${days} days` +
+      (overdue ? ` · ${overdue} overdue` : '') +
+      (beyond ? ` · ${beyond} further out` : '')
+    : 'Nothing scheduled yet.';
 }
 
 function renderDays(reviews, days = 30) {

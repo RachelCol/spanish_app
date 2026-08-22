@@ -251,3 +251,5 @@ button.secondary {
 
 .chart-note { margin: .7rem 0 0; text-align: center; }
 .bar-value { min-width: 2.6rem; width: auto; white-space: nowrap; }
+
+.day-fill.overdue { background: var(--again); }
