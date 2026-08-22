@@ -22,6 +22,19 @@ export const BUCKET_LABEL = {
 
 export const TIER_ORDER = ['common', 'useful', 'extended', 'long_tail'];
 
+// Apertium's tags, grouped the way a learner thinks about them. vbmod is a
+// single modal verb, which does not deserve a category of its own.
+export const POS_LABEL = {
+  n: 'Nouns',
+  vblex: 'Verbs',
+  adj: 'Adjectives',
+  adv: 'Adverbs',
+};
+
+export function posGroup(pos) {
+  return pos === 'vbmod' ? 'vblex' : pos;
+}
+
 let deckCache = null;
 
 export async function loadDeck() {
@@ -55,6 +68,7 @@ export function buildItems(deck, progressList, settings) {
   for (const card of deck) {
     if (!settings.tiers.includes(card.tier)) continue;
     if (!settings.buckets.includes(card.bucket)) continue;
+    if (!settings.pos.includes(posGroup(card.pos))) continue;
     for (const dir of settings.directions) {
       const key = itemKey(card.id, dir);
       const item = stored.get(key) || newItem(key, card.id, dir, card.bucket);
@@ -67,6 +81,7 @@ export function buildItems(deck, progressList, settings) {
 export const DEFAULT_SETTINGS = {
   tiers: ['common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
+  pos: ['n', 'vblex', 'adj', 'adv'],
   directions: ['es>it', 'it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js

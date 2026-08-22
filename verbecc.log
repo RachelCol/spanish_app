@@ -1,0 +1,35 @@
+2026-08-22 08:15:23,228 - verbecc - INFO - verbs.py:29 - loaded verbecc config: VerbeccConfig(version=1, ENABLE_ML_PREDICTION=True, JSBEAUTIFIER_ENABLE=True, JSBEAUTIFIER_OPTS=JSBeautifierOpts(brace_style='expand', break_chained_methods=False, comma_first=False, e4x=False, end_with_newline=False, indent_char=' ', indent_empty_lines=False, indent_inner_html=False, indent_scripts='normal', indent_size=4, jslint_happy=False, keep_array_indentation=False, max_preserve_newlines=-1, preserve_newlines=False, space_before_conditional=True, unescape_strings=False, wrap_line_length=80), JSON_OPTS=JSONOpts(allow_nan=False, sort_keys=True, ensure_ascii=False, indent=4))
+2026-08-22 08:15:23,278 - verbecc - WARNING - model_utils.py:60 - Exception loading model data/models/trained_model-es.zip: [Errno 2] No such file or directory: '/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/data/models/trained_model-es.zip'
+Traceback (most recent call last):
+  File "/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/src/mlconjug/model_utils.py", line 50, in load_model
+    with ZipFile(f) as zf:
+         ^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/zipfile.py", line 1284, in __init__
+    self.fp = io.open(file, filemode)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/data/models/trained_model-es.zip'
+2026-08-22 08:15:23,280 - verbecc - INFO - predictor.py:23 - Could not load existing model, training new model...
+2026-08-22 08:15:44,925 - verbecc - INFO - model_utils.py:35 - Saved model pickle filename trained_model-es.pickle to zip filename data/models/trained_model-es.zip.
+2026-08-22 08:15:44,931 - verbecc - INFO - predictor.py:27 - Model training complete. Model saved to data/models/trained_model-es.zip.
+2026-08-22 08:15:45,275 - verbecc - INFO - verbs.py:29 - loaded verbecc config: VerbeccConfig(version=1, ENABLE_ML_PREDICTION=True, JSBEAUTIFIER_ENABLE=True, JSBEAUTIFIER_OPTS=JSBeautifierOpts(brace_style='expand', break_chained_methods=False, comma_first=False, e4x=False, end_with_newline=False, indent_char=' ', indent_empty_lines=False, indent_inner_html=False, indent_scripts='normal', indent_size=4, jslint_happy=False, keep_array_indentation=False, max_preserve_newlines=-1, preserve_newlines=False, space_before_conditional=True, unescape_strings=False, wrap_line_length=80), JSON_OPTS=JSONOpts(allow_nan=False, sort_keys=True, ensure_ascii=False, indent=4))
+2026-08-22 08:15:45,313 - verbecc - WARNING - model_utils.py:60 - Exception loading model data/models/trained_model-it.zip: [Errno 2] No such file or directory: '/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/data/models/trained_model-it.zip'
+Traceback (most recent call last):
+  File "/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/src/mlconjug/model_utils.py", line 50, in load_model
+    with ZipFile(f) as zf:
+         ^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/zipfile.py", line 1284, in __init__
+    self.fp = io.open(file, filemode)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/rachelcoleman/Documents/GitHub/spanish_app/.venv/lib/python3.11/site-packages/verbecc/data/models/trained_model-it.zip'
+2026-08-22 08:15:45,314 - verbecc - INFO - predictor.py:23 - Could not load existing model, training new model...
+2026-08-22 08:18:06,767 - verbecc - INFO - model_utils.py:35 - Saved model pickle filename trained_model-it.pickle to zip filename data/models/trained_model-it.zip.
+2026-08-22 08:18:06,772 - verbecc - INFO - predictor.py:27 - Model training complete. Model saved to data/models/trained_model-it.zip.
+2026-08-22 08:18:22,342 - verbecc - INFO - verbs.py:29 - loaded verbecc config: VerbeccConfig(version=1, ENABLE_ML_PREDICTION=True, JSBEAUTIFIER_ENABLE=True, JSBEAUTIFIER_OPTS=JSBeautifierOpts(brace_style='expand', break_chained_methods=False, comma_first=False, e4x=False, end_with_newline=False, indent_char=' ', indent_empty_lines=False, indent_inner_html=False, indent_scripts='normal', indent_size=4, jslint_happy=False, keep_array_indentation=False, max_preserve_newlines=-1, preserve_newlines=False, space_before_conditional=True, unescape_strings=False, wrap_line_length=80), JSON_OPTS=JSONOpts(allow_nan=False, sort_keys=True, ensure_ascii=False, indent=4))
+2026-08-22 08:18:22,504 - verbecc - INFO - model_utils.py:54 - Loaded model pickle (filename=trained_model-es.pickle) from zip file (filename=data/models/trained_model-es.zip)
+2026-08-22 08:18:22,504 - verbecc - INFO - predictor.py:21 - Loaded existing model from zip file.
+2026-08-22 08:18:32,565 - verbecc - INFO - verbs.py:29 - loaded verbecc config: VerbeccConfig(version=1, ENABLE_ML_PREDICTION=True, JSBEAUTIFIER_ENABLE=True, JSBEAUTIFIER_OPTS=JSBeautifierOpts(brace_style='expand', break_chained_methods=False, comma_first=False, e4x=False, end_with_newline=False, indent_char=' ', indent_empty_lines=False, indent_inner_html=False, indent_scripts='normal', indent_size=4, jslint_happy=False, keep_array_indentation=False, max_preserve_newlines=-1, preserve_newlines=False, space_before_conditional=True, unescape_strings=False, wrap_line_length=80), JSON_OPTS=JSONOpts(allow_nan=False, sort_keys=True, ensure_ascii=False, indent=4))
+2026-08-22 08:18:32,720 - verbecc - INFO - model_utils.py:54 - Loaded model pickle (filename=trained_model-es.pickle) from zip file (filename=data/models/trained_model-es.zip)
+2026-08-22 08:18:32,720 - verbecc - INFO - predictor.py:21 - Loaded existing model from zip file.
+2026-08-22 08:18:33,088 - verbecc - INFO - verbs.py:29 - loaded verbecc config: VerbeccConfig(version=1, ENABLE_ML_PREDICTION=True, JSBEAUTIFIER_ENABLE=True, JSBEAUTIFIER_OPTS=JSBeautifierOpts(brace_style='expand', break_chained_methods=False, comma_first=False, e4x=False, end_with_newline=False, indent_char=' ', indent_empty_lines=False, indent_inner_html=False, indent_scripts='normal', indent_size=4, jslint_happy=False, keep_array_indentation=False, max_preserve_newlines=-1, preserve_newlines=False, space_before_conditional=True, unescape_strings=False, wrap_line_length=80), JSON_OPTS=JSONOpts(allow_nan=False, sort_keys=True, ensure_ascii=False, indent=4))
+2026-08-22 08:18:33,227 - verbecc - INFO - model_utils.py:54 - Loaded model pickle (filename=trained_model-it.pickle) from zip file (filename=data/models/trained_model-it.zip)
+2026-08-22 08:18:33,228 - verbecc - INFO - predictor.py:21 - Loaded existing model from zip file.

@@ -2,7 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, loadSentences, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
-         DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
+         POS_LABEL, posGroup, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
@@ -131,6 +131,11 @@ function renderFilters() {
   const buckets = $('#f-buckets');
   buckets.replaceChildren(...Object.keys(BUCKET_LABEL).map(b =>
     chip(BUCKET_LABEL[b], countBy('bucket', b), s.buckets.includes(b), on => toggle(s.buckets, b, on))));
+
+  const pos = $('#f-pos');
+  pos.replaceChildren(...Object.keys(POS_LABEL).map(p =>
+    chip(POS_LABEL[p], state.deck.filter(c => posGroup(c.pos) === p).length,
+         s.pos.includes(p), on => toggle(s.pos, p, on))));
 
   const dirs = $('#f-directions');
   dirs.replaceChildren(...Object.keys(DIRECTIONS).map(d =>
