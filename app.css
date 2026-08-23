@@ -369,3 +369,25 @@ button.secondary {
   margin: 0 0 .6rem; font-size: .82rem; line-height: 1.45; color: var(--muted);
   padding-left: .7rem; border-left: 2px solid var(--line);
 }
+
+/* --- present tense on the card --- */
+.present-table {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;          /* singulars down the left, plurals right */
+  gap: .1rem 1.6rem;
+  justify-content: center;
+  margin: .7rem 0 0;
+}
+.present-form {
+  font-size: .95rem; color: var(--muted); text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.present-form u {
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  color: var(--ink); font-weight: 600;
+}
+.present-form.speakable { cursor: pointer; }
+.present-form.speakable:active { color: var(--accent); }

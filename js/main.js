@@ -272,8 +272,8 @@ function renderCard() {
   $('#card-links').classList.add('hidden');
   $('#examples-btn').classList.add('hidden');
   $('#conj-btn').classList.add('hidden');
-  $('#stem-note').classList.add('hidden');
-  $('#stem-note').replaceChildren();
+  $('#present-table').classList.add('hidden');
+  $('#present-table').replaceChildren();
   $('#examples').classList.add('hidden');
   $('#examples').replaceChildren();
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
@@ -357,7 +357,7 @@ function reveal() {
       if (!state.queue[state.index] || state.queue[state.index].card.es !== card.es) return;
       const entry = all.verbs[card.es];
       $('#conj-btn').classList.toggle('hidden', !entry);
-      renderStemNote(entry && entry.stem);
+      renderPresentTable(entry);
     });
   }
 
@@ -504,37 +504,45 @@ async function finish() {
   show('done');
 }
 
-// A verb that changes its stem is worth knowing about before the conjugation
-// panel is opened, because the change is what makes the whole paradigm
-// unpredictable. The example is the third person: `tiene` shows tener's e->ie
-// where `tengo` hides it behind a quirk of the first person, which is then
-// listed separately when it is not explained by the change.
-function renderStemNote(stem) {
-  const el = $('#stem-note');
-  if (!stem) { el.classList.add('hidden'); return; }
-
-  const parts = [];
-  if (stem.change) {
-    const b = document.createElement('b');
-    b.textContent = stem.change;
-    parts.push(b, document.createTextNode(' ' + stem.example));
-  }
-  if (stem.yo) {
-    if (parts.length) parts.push(document.createTextNode(' · '));
-    parts.push(document.createTextNode('yo '));
-    const y = document.createElement('b');
-    y.textContent = stem.yo;
-    parts.push(y);
-  }
-  el.replaceChildren(...parts);
-  el.classList.remove('hidden');
-}
-
-// ---------- conjugation ----------
+// The present tense on the card itself, in two columns. It replaces the
+// "e→ie" note that used to sit here: the note described the change, whereas
+// the paradigm shows it, and the underlines make the boot pattern -- yo, tú,
+// él, ellos changing while nosotros and vosotros do not -- visible at a
+// glance rather than stated in shorthand.
 //
-// Five tenses, not the full fifteen. These are the ones that get someone
-// speaking: what is happening, what is going to happen, and the three ways of
-// talking about the past that Spanish actually uses day to day.
+// Marks are computed in the pipeline, against what a regular verb of the same
+// ending would produce. They are absent for suppletive verbs, where nearly
+// every letter differs and highlighting all of it says nothing.
+function renderPresentTable(entry) {
+  const host = $('#present-table');
+  if (!entry || !entry.present) { host.classList.add('hidden'); return; }
+
+  const forms = entry.present;
+  const marks = entry.marks || [];
+
+  host.replaceChildren(...forms.map((form, i) => {
+    const cell = document.createElement('span');
+    cell.className = 'present-form';
+
+    const spans = marks[i] || [];
+    let last = 0;
+    for (const [a, b] of spans) {
+      if (a > last) cell.append(form.slice(last, a));
+      const mark = document.createElement('u');
+      mark.textContent = form.slice(a, b);
+      cell.append(mark);
+      last = b;
+    }
+    cell.append(form.slice(last));
+
+    if (canSpeak()) {
+      cell.classList.add('speakable');
+      cell.addEventListener('click', () => speak(form, 'es'));
+    }
+    return cell;
+  }));
+  host.classList.remove('hidden');
+}
 
 const MOODS = [
   {
