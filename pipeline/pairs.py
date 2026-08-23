@@ -69,7 +69,25 @@ MAX_SENSES = 4
 # learner it hides the most useful fact about the word: tener and tenere are
 # cognates that split, so the Italian instinct to read tener as "hold" is
 # exactly the error the card should be preventing.
+# Groups as a learner thinks about them, mirroring deck.js. Kept here too so
+# the per-part-of-speech sense sets are already collapsed when they ship.
+POS_GROUP = {
+    'vblex': 'vblex', 'vbmod': 'vblex', 'vbhaver': 'vblex', 'vbser': 'vblex',
+    'adv': 'adv', 'preadv': 'adv',
+    'cnjcoo': 'cnj', 'cnjsub': 'cnj', 'cnjadv': 'cnj',
+}
+
+
+def group_of(tag):
+    return POS_GROUP.get(tag, tag)
+
+
+# A value may be a plain list of senses, or a dict of part of speech to senses
+# where Apertium is missing a whole word class. `partido` has no adjective
+# entry at all, so its participial sense -- split, divided -- is unrecoverable
+# by any amount of rescoring.
 SENSE_OVERRIDES = {
+    'partido': {'n': ['partito', 'partita'], 'adj': ['tagliato', 'spaccato', 'diviso']},
     'tener':   ['avere', 'tenere', 'dovere'],
     'guardar': ['conservare', 'tenere', 'salvare'],   # salvare is the file sense
     # Apertium offers only planning, maestranze and soletta. The real senses
@@ -179,6 +197,15 @@ def load():
             key=lambda kv: (-(kv[1] * 1.2 + zipf_frequency(kv[0], "it")), len(kv[0])),
         )
         ranked = [ita for ita, _ in scored]
+        senses_all = set()
+        for ita in ranked:
+            z = zipf_frequency(ita, "it")
+            if z < MIN_SENSE_ZIPF:
+                continue
+            if " " in ita and zipf_frequency(ranked[0], "it") - z >= NOISE_GAP_PHRASE:
+                continue
+            senses_all.add(ita)
+
         senses = [ranked[0]]
         top_z = zipf_frequency(ranked[0], "it")
         for ita in ranked[1:]:
@@ -196,10 +223,50 @@ def load():
         # filtering to Prepositions silently loses `bajo`.
         all_pos = sorted({t for t in tags if t in CONTENT_POS},
                          key=lambda t: POS_PRIORITY.index(t) if t in POS_PRIORITY else 99)
-        if spa in SENSE_OVERRIDES:
-            senses = SENSE_OVERRIDES[spa][:MAX_SENSES]
+        # Senses per part of speech, so a card can say which gloss belongs to
+        # which. `bajo` is basso as an adjective and sotto as a preposition,
+        # and one flat list cannot express that.
+        by_pos = {}
+        for ita, ps, pi in entries:
+            g = group_of(ps) if ps in CONTENT_POS else None
+            if g is None or ita not in senses_all:
+                continue
+            by_pos.setdefault(g, [])
+            if ita not in by_pos[g]:
+                by_pos[g].append(ita)
+        by_pos = {g: v[:MAX_SENSES] for g, v in by_pos.items() if v}
 
-        out[spa] = {"it": senses[0], "senses": senses, "pos": pos, "pos_all": all_pos}
+        override = SENSE_OVERRIDES.get(spa)
+        if isinstance(override, dict):
+            by_pos = {g: v[:MAX_SENSES] for g, v in override.items()}
+            senses = []
+            for v in by_pos.values():
+                for x in v:
+                    if x not in senses:
+                        senses.append(x)
+            senses = senses[:MAX_SENSES]
+            all_pos = sorted(by_pos, key=lambda t: POS_PRIORITY.index(t)
+                             if t in POS_PRIORITY else 99)
+            pos = all_pos[0]
+        elif isinstance(override, list):
+            senses = override[:MAX_SENSES]
+            by_pos = {}
+
+        # Only worth grouping when each part of speech contributes something
+        # the others do not. `mucho` is molto and parecchio as an adjective and
+        # molto, granché and parecchio as an adverb -- one group contained in
+        # the other, so grouping repeats two words to isolate a third. Requiring
+        # that no group is a subset of another keeps the cases where the split
+        # is the point: basso against sotto, sè against sì.
+        sets = [frozenset(v) for v in by_pos.values()]
+        distinct = all(
+            not (a < b or a == b)
+            for i, a in enumerate(sets) for j, b in enumerate(sets) if i != j
+        )
+        record = {"it": senses[0], "senses": senses, "pos": pos, "pos_all": all_pos}
+        if len(by_pos) > 1 and distinct:
+            record["by_pos"] = by_pos
+        out[spa] = record
     return out
 
 

@@ -23,6 +23,7 @@ def build():
             "senses": c["senses"],
             "pos": c["pos"],
             "pos_all": c["pos_all"],
+            **({"by_pos": c["by_pos"]} if "by_pos" in c else {}),
             "bucket": c["bucket"],
             "tier": c["tier"],
             "zipf": c["zipf_es"],

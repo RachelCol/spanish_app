@@ -20,13 +20,27 @@ from wordfreq import zipf_frequency
 # Latin American paradigm: no vosotros. Its slot is filled by ustedes, which
 # takes the same form as ellos, so the two collapse into one row rather than
 # printing the identical form twice.
-ES_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'ellos']
+# The Latin American paradigm in full. `vos` earns its row because voseo is
+# standard across Argentina, Uruguay and much of Central America, and because
+# it is where `decís` lives once vosotros is gone -- as a second person
+# SINGULAR, where Spain uses the identical form as a plural.
+#
+# ustedes and ellos take the same form but get separate rows. Merging them
+# saved a line and made the second person plural look as though it had been
+# dropped, when in fact it is shared.
+ES_SLOTS = ['yo', 'tú', 'vos', 'él', 'nosotros', 'ustedes', 'ellos']
 
 # Row labels ship WITH the tables rather than being hardcoded in the app. When
-# the paradigm changed from six rows to five, an app still holding the old
-# labels lined them up against the new data and printed `vosotros dicen` above
-# an empty `ellos`. Labels and forms cannot drift apart if they travel together.
-PRONOUN_LABELS = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos']
+# the paradigm changed rows once before, an app still holding the old labels
+# lined them up against the new data and printed `vosotros dicen` above an
+# empty `ellos`. Labels and forms cannot drift apart if they travel together.
+PRONOUN_LABELS = ['yo', 'tú', 'vos', 'él / usted', 'nosotros', 'ustedes', 'ellos']
+
+# Indexed by name rather than by number, so adding a row cannot silently make
+# the stem detector read the wrong person -- which is what happened when `vos`
+# arrived and index 2 stopped meaning third person.
+I_YO = ES_SLOTS.index('yo')
+I_EL = ES_SLOTS.index('él')
 
 # Corrections to what verbecc returns. Kept tiny and explicit: check_conjugations.py
 # verifies nineteen hard irregulars against forms written out by hand, and this
@@ -35,7 +49,7 @@ PRONOUN_LABELS = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos']
 # haber third person is `hay` in the library -- right for the impersonal "there
 # is", wrong for the auxiliary paradigm this table shows.
 OVERRIDES = {
-    ('haber', 'present', 2): 'ha',
+    ('haber', 'present', 'él'): 'ha',
 }
 
 
@@ -140,19 +154,19 @@ def build():
 
         pres = entry['present']['es']
         if pres:
-            change = stem_change(card['es'], pres[2])
-            yo = irregular_yo(card['es'], pres[0], pres[2])
+            change = stem_change(card['es'], pres[I_EL])
+            yo = irregular_yo(card['es'], pres[I_YO], pres[I_EL])
             if change or yo:
                 entry['stem'] = {}
                 if change:
                     entry['stem']['change'] = change
-                    entry['stem']['example'] = pres[2]
+                    entry['stem']['example'] = pres[I_EL]
                 if yo:
                     entry['stem']['yo'] = yo
 
-        for (verb, tense, idx), form in OVERRIDES.items():
+        for (verb, tense, slot), form in OVERRIDES.items():
             if verb == card['es'] and entry.get(tense, {}).get('es'):
-                entry[tense]['es'][idx] = form
+                entry[tense]['es'][ES_SLOTS.index(slot)] = form
 
         if entry['present']['es']:
             out[card['es']] = entry

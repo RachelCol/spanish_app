@@ -30,6 +30,14 @@
    "pr",
    "cnjadv"
   ],
+  "by_pos": {
+   "cnj": [
+    "siccome"
+   ],
+   "pr": [
+    "come"
+   ]
+  },
   "sim": 0.75,
   "bucket": "near",
   "zipf_it": 6.67
@@ -66,6 +74,15 @@
    "adv",
    "cnjcoo"
   ],
+  "by_pos": {
+   "cnj": [
+    "ma",
+    "però"
+   ],
+   "adv": [
+    "eppure"
+   ]
+  },
   "sim": 0.0,
   "bucket": "distinct",
   "zipf_it": 6.73
@@ -270,6 +287,15 @@
    "adv",
    "pr"
   ],
+  "by_pos": {
+   "adv": [
+    "fino a",
+    "fin"
+   ],
+   "pr": [
+    "fino"
+   ]
+  },
   "sim": 0.17,
   "bucket": "distinct",
   "zipf_it": 5.71
@@ -1008,6 +1034,15 @@
    "adv",
    "prn"
   ],
+  "by_pos": {
+   "prn": [
+    "sé",
+    "sè"
+   ],
+   "adv": [
+    "sì"
+   ]
+  },
   "sim": 0.5,
   "bucket": "shifted",
   "zipf_it": 4.98
@@ -1059,6 +1094,14 @@
    "n",
    "prn"
   ],
+  "by_pos": {
+   "n": [
+    "qualcun"
+   ],
+   "prn": [
+    "qualcuno"
+   ]
+  },
   "sim": 0.25,
   "bucket": "distinct",
   "zipf_it": 5.62
@@ -1514,12 +1557,26 @@
   "it": "partito",
   "senses": [
    "partito",
-   "partita"
+   "partita",
+   "tagliato",
+   "spaccato"
   ],
   "pos": "n",
   "pos_all": [
-   "n"
+   "n",
+   "adj"
   ],
+  "by_pos": {
+   "n": [
+    "partito",
+    "partita"
+   ],
+   "adj": [
+    "tagliato",
+    "spaccato",
+    "diviso"
+   ]
+  },
   "sim": 0.86,
   "bucket": "near",
   "zipf_it": 5.31
@@ -1538,6 +1595,14 @@
    "adj",
    "pr"
   ],
+  "by_pos": {
+   "adj": [
+    "basso"
+   ],
+   "pr": [
+    "sotto"
+   ]
+  },
   "sim": 0.6,
   "bucket": "shifted",
   "zipf_it": 5.05
@@ -1769,6 +1834,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "scorso"
+   ],
+   "n": [
+    "passato"
+   ]
+  },
   "sim": 0.71,
   "bucket": "shifted",
   "zipf_it": 5.31
@@ -2020,6 +2093,15 @@
    "adv",
    "pr"
   ],
+  "by_pos": {
+   "adv": [
+    "prima"
+   ],
+   "pr": [
+    "davanti",
+    "davanti a"
+   ]
+  },
   "sim": 0.43,
   "bucket": "distinct",
   "zipf_it": 5.23
@@ -2451,6 +2533,15 @@
    "n",
    "adv"
   ],
+  "by_pos": {
+   "n": [
+    "pomeriggio"
+   ],
+   "adv": [
+    "tardi",
+    "in ritardo"
+   ]
+  },
   "sim": 0.8,
   "bucket": "near",
   "zipf_it": 4.97
@@ -2568,6 +2659,14 @@
    "adj",
    "adv"
   ],
+  "by_pos": {
+   "adj": [
+    "primo"
+   ],
+   "adv": [
+    "prima di tutto"
+   ]
+  },
   "sim": 0.71,
   "bucket": "shifted",
   "zipf_it": 5.82
@@ -4444,6 +4543,14 @@
    "adj",
    "adv"
   ],
+  "by_pos": {
+   "adj": [
+    "peggiore"
+   ],
+   "adv": [
+    "peggio"
+   ]
+  },
   "sim": 0.5,
   "bucket": "shifted",
   "zipf_it": 4.59
@@ -4870,6 +4977,14 @@
    "n",
    "adv"
   ],
+  "by_pos": {
+   "n": [
+    "modo"
+   ],
+   "adv": [
+    "altrimenti"
+   ]
+  },
   "sim": 1.0,
   "bucket": "identical",
   "zipf_it": 5.91
@@ -5164,6 +5279,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "chiamato"
+   ],
+   "n": [
+    "richiamo"
+   ]
+  },
   "sim": 0.25,
   "bucket": "distinct",
   "zipf_it": 4.2
@@ -6203,6 +6326,17 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "obiettivo",
+    "oggettivo"
+   ],
+   "n": [
+    "target",
+    "scopo",
+    "obiettivo"
+   ]
+  },
   "sim": 0.12,
   "bucket": "distinct",
   "zipf_it": 5.07
@@ -6405,6 +6539,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "interno"
+   ],
+   "n": [
+    "interiore"
+   ]
+  },
   "sim": 0.75,
   "bucket": "near",
   "zipf_it": 4.81
@@ -9433,6 +9575,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "congiunto"
+   ],
+   "n": [
+    "insieme"
+   ]
+  },
   "sim": 0.12,
   "bucket": "distinct",
   "zipf_it": 5.62
@@ -9451,6 +9601,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "quarto"
+   ],
+   "n": [
+    "stanza"
+   ]
+  },
   "sim": 0.17,
   "bucket": "distinct",
   "zipf_it": 4.79
@@ -9631,6 +9789,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "professionale"
+   ],
+   "n": [
+    "professionista"
+   ]
+  },
   "sim": 0.64,
   "bucket": "shifted",
   "zipf_it": 4.39
@@ -11204,6 +11370,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "fiscale"
+   ],
+   "n": [
+    "pubblico ministero"
+   ]
+  },
   "sim": 0.11,
   "bucket": "distinct",
   "zipf_it": 4.84
@@ -16155,6 +16329,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "mobile"
+   ],
+   "n": [
+    "cellulare"
+   ]
+  },
   "sim": 0.11,
   "bucket": "distinct",
   "zipf_it": 4.8
@@ -18109,6 +18291,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "periodico"
+   ],
+   "n": [
+    "giornale"
+   ]
+  },
   "sim": 0.0,
   "bucket": "distinct",
   "zipf_it": 4.82
@@ -19358,6 +19548,14 @@
    "vblex",
    "n"
   ],
+  "by_pos": {
+   "n": [
+    "godere"
+   ],
+   "vblex": [
+    "gustare"
+   ]
+  },
   "sim": 0.33,
   "bucket": "distinct",
   "zipf_it": 3.48
@@ -19376,6 +19574,14 @@
    "adj",
    "adv"
   ],
+  "by_pos": {
+   "adj": [
+    "intero"
+   ],
+   "adv": [
+    "interamente"
+   ]
+  },
   "sim": 0.83,
   "bucket": "near",
   "zipf_it": 4.84
@@ -21526,6 +21732,15 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "piatto"
+   ],
+   "n": [
+    "piano",
+    "mappa"
+   ]
+  },
   "sim": 0.8,
   "bucket": "near",
   "zipf_it": 5.41
@@ -21544,6 +21759,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "poco"
+   ],
+   "n": [
+    "pochino"
+   ]
+  },
   "sim": 0.57,
   "bucket": "shifted",
   "zipf_it": 4.09
@@ -25139,6 +25362,15 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "contenente"
+   ],
+   "n": [
+    "continente",
+    "terraferma"
+   ]
+  },
   "sim": 1.0,
   "bucket": "identical",
   "zipf_it": 4.25
@@ -25190,6 +25422,15 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "allievo",
+    "scolastico"
+   ],
+   "n": [
+    "scolare"
+   ]
+  },
   "sim": 0.4,
   "bucket": "distinct",
   "zipf_it": 4.36
@@ -30229,6 +30470,15 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "sosta"
+   ],
+   "n": [
+    "fermata",
+    "parata"
+   ]
+  },
   "sim": 0.43,
   "bucket": "distinct",
   "zipf_it": 4.34
@@ -31558,6 +31808,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "sconosciuto"
+   ],
+   "n": [
+    "ignoto"
+   ]
+  },
   "sim": 0.27,
   "bucket": "distinct",
   "zipf_it": 3.74
@@ -37798,6 +38056,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "diagnostico"
+   ],
+   "n": [
+    "diagnosi"
+   ]
+  },
   "sim": 0.64,
   "bucket": "shifted",
   "zipf_it": 4.21
@@ -38930,6 +39196,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "attraente"
+   ],
+   "n": [
+    "attrazione"
+   ]
+  },
   "sim": 0.4,
   "bucket": "distinct",
   "zipf_it": 4.03
@@ -50094,6 +50368,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "aggregato"
+   ],
+   "n": [
+    "aggiunto"
+   ]
+  },
   "sim": 0.38,
   "bucket": "distinct",
   "zipf_it": 4.68
@@ -52532,6 +52814,14 @@
    "n",
    "adj"
   ],
+  "by_pos": {
+   "adj": [
+    "dipendente"
+   ],
+   "n": [
+    "commesso"
+   ]
+  },
   "sim": 0.82,
   "bucket": "near",
   "zipf_it": 4.36

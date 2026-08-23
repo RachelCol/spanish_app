@@ -265,6 +265,7 @@ function renderCard() {
 
   stopSpeech();
   $('#answers').classList.add('hidden');
+  $('#answers').classList.remove('grouped');
   $('#answers').replaceChildren();
   $('#meta').classList.add('hidden');
   $('#accent-note').classList.add('hidden');
@@ -290,11 +291,16 @@ function reveal() {
   const card = item.card;
   const dir = DIRECTIONS[item.direction];
 
-  // Going to Italian, show every sense Apertium distinguishes: where a Spanish
-  // word does not map one-to-one, that is the useful information, and one
-  // gloss would hide it. Going to Spanish there is only ever one answer.
-  const words = dir.answer === 'it' ? (card.senses || [card.it]) : [card.es];
-  $('#answers').replaceChildren(...words.map(w => {
+  // Going to Italian, show every sense: where a Spanish word does not map
+  // one-to-one, that is the useful information and one gloss would hide it.
+  // Where the senses split by part of speech -- bajo is basso as an adjective
+  // and sotto as a preposition -- they are grouped under it, because a flat
+  // list makes `sí` read as "sè · sì" with no hint that one means yes and the
+  // other is a pronoun.
+  const toItalian = dir.answer === 'it';
+  const groups = toItalian && card.by_pos ? card.by_pos : null;
+
+  const speakable = (w, which) => {
     const row = document.createElement('div');
     row.className = 'word-row';
     const span = document.createElement('span');
@@ -307,11 +313,27 @@ function reveal() {
       play.className = 'say';
       play.textContent = '▶';
       play.setAttribute('aria-label', 'Hear ' + w);
-      play.addEventListener('click', e => { e.preventDefault(); speak(w, dir.answer); });
+      play.addEventListener('click', e => { e.preventDefault(); speak(w, which); });
       row.append(play);
     }
     return row;
-  }));
+  };
+
+  if (groups) {
+    const blocks = [];
+    for (const [g, words] of Object.entries(groups)) {
+      const label = document.createElement('div');
+      label.className = 'sense-pos';
+      label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
+      blocks.push(label, ...words.map(w => speakable(w, 'it')));
+    }
+    $('#answers').replaceChildren(...blocks);
+    $('#answers').classList.add('grouped');
+  } else {
+    const words = toItalian ? (card.senses || [card.it]) : [card.es];
+    $('#answers').replaceChildren(...words.map(w => speakable(w, dir.answer)));
+    $('#answers').classList.remove('grouped');
+  }
   $('#answers').classList.remove('hidden');
   $('#meta').classList.remove('hidden');
 

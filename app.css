@@ -342,3 +342,13 @@ button.secondary {
 
 /* settings and deck are full screens now, so their fieldsets need room */
 #view-deck fieldset, #view-settings fieldset { margin: 1.2rem 0; }
+
+/* --- senses grouped by part of speech --- */
+.answers.grouped { gap: 0; }
+.answers.grouped .sense-pos {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--muted); margin: .7rem 0 .1rem;
+}
+.answers.grouped .sense-pos:first-child { margin-top: 0; }
+.answers.grouped .answer { font-size: 1.6rem; }
+.answers.grouped .word-row:not(:first-child) .answer { color: var(--accent); }

@@ -32,6 +32,7 @@ def build():
             'senses': p['senses'],
             'pos': p['pos'],
             'pos_all': p['pos_all'],
+            **({'by_pos': p['by_pos']} if 'by_pos' in p else {}),
             'sim': round(sim, 2),
             'bucket': bucket(sim),
             'zipf_it': round(zipf_frequency(p['it'], 'it'), 2),

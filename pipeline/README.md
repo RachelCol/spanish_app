@@ -30,6 +30,10 @@ python3 -m venv .venv
    irregulars are where it would be wrong quietly. The check asserts nineteen
    of them against forms written out by hand.
 
+6. `mark_participles.py` -- tags past participles as adjectives too. Runs
+   last, since it reads the participles back out of the conjugation tables
+   rather than from a hand-written list.
+
 ## Two things that are not obvious
 
 **Cross-language frequency only means something after pairing.** Comparing the

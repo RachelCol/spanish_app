@@ -7,8 +7,9 @@ ever disagree, the library is what changed.
 """
 import json, sys
 
-# Five forms, not six: the tables use the Latin American paradigm, where
-# ustedes shares its form with ellos and vosotros does not appear.
+# Seven forms, in the Latin American order: yo, tú, vos, él, nosotros,
+# ustedes, ellos. The checks below assert the four that irregular verbs
+# actually distinguish, by index, and ignore the rest.
 EXPECT = {
  'ser':    {'present': ['soy','eres','es','somos','son'],
             'preterite': ['fui','fuiste','fue','fuimos','fueron'],
@@ -54,8 +55,17 @@ PARTICIPLES = {
 }
 
 
+# The expectations above list yo, tú, él, nosotros, ellos. Map them onto the
+# shipped row order rather than assuming positions: `vos` and `ustedes` sit
+# among them, and a positional comparison would drift the moment rows change.
+CHECK_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'ellos']
+
+
 def main():
-    d = json.load(open('data/conjugations.json'))['verbs']
+    data = json.load(open('data/conjugations.json'))
+    d, pronouns = data['verbs'], data['pronouns']
+    slots = ['yo', 'tú', 'vos', 'él', 'nosotros', 'ustedes', 'ellos']
+    idx = [slots.index(s) for s in CHECK_SLOTS]
     bad = []
 
     for verb, tenses in EXPECT.items():
@@ -64,9 +74,12 @@ def main():
             continue
         for tense, want in tenses.items():
             have = d[verb][tense]['es']
-            for i, (w, h) in enumerate(zip(want, have)):
-                if w != h:
-                    bad.append(f"{verb} {tense}[{i}]: expected {w}, got {h}")
+            if len(have) != len(slots):
+                bad.append(f"{verb} {tense}: {len(have)} forms, expected {len(slots)}")
+                continue
+            for w, i in zip(want, idx):
+                if w != have[i]:
+                    bad.append(f"{verb} {tense} ({slots[i]}): expected {w}, got {have[i]}")
 
     for verb, part in PARTICIPLES.items():
         if verb not in d:
