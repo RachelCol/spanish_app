@@ -37,6 +37,9 @@ const NAMED = ['Paulina', 'Mónica', 'Monica', 'Alice', 'Luciana', 'Juan', 'Dieg
 
 let voices = [];
 let ready = false;
+// Bumped by anything that starts or stops speech, so a paradigm already
+// playing knows to give up rather than talk over what replaced it.
+let runId = 0;
 let accent = 'es-MX';
 const listeners = [];
 
@@ -134,6 +137,7 @@ function localeFor(which) {
 
 export function speak(text, which, { rate = 0.9 } = {}) {
   if (!available() || !text) return Promise.resolve();
+  runId++;
   speechSynthesis.cancel();
   const locale = localeFor(which);
   return utter(text, bestVoice(locale), locale, rate);
@@ -164,6 +168,28 @@ export function speakOtherAccent(word) {
   return utter(word, v, other.locale, 0.8);
 }
 
+// Reads a whole paradigm in order, first person singular through third
+// person plural, with a beat between forms. Sequential rather than fired all
+// at once, since the synthesiser queues utterances and would otherwise run
+// them together.
+export async function speakSequence(words, which, { rate = 0.85, gap = 260 } = {}) {
+  if (!available() || !words || !words.length) return;
+  speechSynthesis.cancel();
+  const mine = ++runId;
+  const locale = localeFor(which);
+  const voice = bestVoice(locale);
+  for (const word of words) {
+    // Anything that starts new speech -- another paradigm, a single word, the
+    // card changing -- bumps runId and this run stops rather than playing over
+    // the top of it.
+    if (mine !== runId) return;
+    await utter(word, voice, locale, rate);
+    if (mine !== runId) return;
+    await new Promise(r => setTimeout(r, gap));
+  }
+}
+
 export function stop() {
+  runId++;
   if (available()) speechSynthesis.cancel();
 }

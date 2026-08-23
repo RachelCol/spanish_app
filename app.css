@@ -384,10 +384,34 @@ button.secondary {
   font-size: .95rem; color: var(--muted); text-align: left;
   font-variant-numeric: tabular-nums;
 }
+.present-form.speakable { cursor: pointer; }
+.present-form.speakable:active { color: var(--accent); }
+
+/* --- play a whole paradigm --- */
+.play-all {
+  width: 1.7rem; height: 1.7rem; padding: 0; flex: none;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: var(--surface); color: var(--muted);
+  font-size: .6rem; line-height: 1;
+  display: inline-grid; place-items: center;
+}
+.play-all:active { color: var(--accent); border-color: var(--accent); }
+
+.present-table {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  margin: .7rem 0 0;
+}
+.present-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: .1rem 1.6rem;
+}
+.tense-head { display: flex; align-items: center; gap: .5rem; }
+
 .present-form u {
   text-decoration: none;
   border-bottom: 2px solid var(--accent);
   color: var(--ink); font-weight: 600;
 }
-.present-form.speakable { cursor: pointer; }
-.present-form.speakable:active { color: var(--accent); }

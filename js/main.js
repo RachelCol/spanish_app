@@ -6,7 +6,7 @@ import { loadDeck, loadSentences, loadConjugations, buildItems, DIRECTIONS, BUCK
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
-         available as canSpeak, speak, stop as stopSpeech } from './speech.js';
+         available as canSpeak, speak, speakSequence, stop as stopSpeech } from './speech.js';
 
 const $ = sel => document.querySelector(sel);
 
@@ -504,15 +504,30 @@ async function finish() {
   show('done');
 }
 
+// A button that reads a whole paradigm aloud, first person singular through
+// third person plural. Sequential, with a beat between forms.
+function playAllButton(forms, label) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'play-all';
+  b.textContent = '▶';
+  b.setAttribute('aria-label', label);
+  b.addEventListener('click', e => {
+    e.preventDefault();
+    speakSequence(forms, 'es');
+  });
+  return b;
+}
+
 // The present tense on the card itself, in two columns. It replaces the
-// "e→ie" note that used to sit here: the note described the change, whereas
-// the paradigm shows it, and the underlines make the boot pattern -- yo, tú,
-// él, ellos changing while nosotros and vosotros do not -- visible at a
-// glance rather than stated in shorthand.
+// "e→ie" note that used to sit here: the note described the change in
+// shorthand, the paradigm shows it.
 //
-// Marks are computed in the pipeline, against what a regular verb of the same
-// ending would produce. They are absent for suppletive verbs, where nearly
-// every letter differs and highlighting all of it says nothing.
+// The underlines mark stem changes and nothing else. An earlier version
+// compared whole conjugated forms, which also caught irregular endings and
+// did so inconsistently: `está` and `están` differ from a regular esta/estan
+// by an accent and were marked, while `estáis` matches the regular -áis and
+// was not. estar's stem never changes, so it is now unmarked throughout.
 function renderPresentTable(entry) {
   const host = $('#present-table');
   if (!entry || !entry.present) { host.classList.add('hidden'); return; }
@@ -520,7 +535,9 @@ function renderPresentTable(entry) {
   const forms = entry.present;
   const marks = entry.marks || [];
 
-  host.replaceChildren(...forms.map((form, i) => {
+  const grid = document.createElement('div');
+  grid.className = 'present-grid';
+  grid.append(...forms.map((form, i) => {
     const cell = document.createElement('span');
     cell.className = 'present-form';
 
@@ -541,6 +558,9 @@ function renderPresentTable(entry) {
     }
     return cell;
   }));
+
+  host.replaceChildren(grid);
+  if (canSpeak()) host.append(playAllButton(forms, 'Hear the whole present tense'));
   host.classList.remove('hidden');
 }
 
@@ -551,23 +571,23 @@ const MOODS = [
       { key: 'present', en: 'Present', es: 'Presente',
         note: 'Current actions, facts and daily habits.',
         it: 'Matches the Italian presente directly.' },
-      { key: 'near', en: 'Near future', es: 'Ir + a + infinitivo',
-        note: 'Plans, without needing the future tense — like "going to say".',
-        it: 'Italian has no equivalent construction; it uses the present or the future.' },
+      { key: 'imperfect', en: 'Imperfect', es: 'Pretérito imperfecto',
+        note: 'Ongoing, repeated or background actions in the past.',
+        it: 'The same job as the Italian imperfetto, and the same feel.' },
       { key: 'preterite', en: 'Preterite', es: 'Pretérito indefinido',
         note: 'Completed actions at a specific moment.',
         warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho detto" ' +
               'is "ayer dije" — not the perfect below.' },
-      { key: 'imperfect', en: 'Imperfect', es: 'Pretérito imperfecto',
-        note: 'Ongoing, repeated or background actions in the past.',
-        it: 'The same job as the Italian imperfetto, and the same feel.' },
-      { key: 'future', en: 'Future', es: 'Futuro',
-        note: 'What will happen — and, as in Italian, guesses about the present.',
-        it: 'Matches the futuro semplice, including "will be" as supposition.' },
       { key: 'perfect', en: 'Present perfect', es: 'Pretérito perfecto',
         note: 'haber plus a past participle, for the recent past still connected to now.',
         warn: 'Identical in form to the passato prossimo, and much rarer in Latin ' +
               'America. When in doubt, use the preterite.' },
+      { key: 'near', en: 'Near future', es: 'Ir + a + infinitivo',
+        note: 'Plans, without needing the future tense — like "going to say".',
+        it: 'Italian has no equivalent construction; it uses the present or the future.' },
+      { key: 'future', en: 'Future', es: 'Futuro',
+        note: 'What will happen — and, as in Italian, guesses about the present.',
+        it: 'Matches the futuro semplice, including "will be" as supposition.' },
     ],
   },
   {
@@ -635,8 +655,11 @@ async function openConjugation() {
 
     for (const t of blocks) {
       const h = document.createElement('h3');
-      h.className = 'section-label';
+      h.className = 'section-label tense-head';
       h.textContent = t.en + ' · ' + t.es;
+      if (canSpeak()) {
+        h.append(playAllButton(data[t.key], `Hear the ${t.en.toLowerCase()} through`));
+      }
       section.append(h);
 
       const note = document.createElement('p');

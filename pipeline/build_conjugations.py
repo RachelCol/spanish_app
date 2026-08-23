@@ -58,13 +58,25 @@ REGULAR_PRESENT = {
 
 # A stem-changer marks exactly four forms -- the boot: yo, tú, él, ellos. Above
 # that the verb is suppletive rather than stem-changing: `ser` and `ir` share
-# almost nothing with what a regular verb would produce, so marking `so[y]`,
-# `[er]es`, `[e]s` highlights the whole word and teaches nothing.
+# almost nothing with a regular paradigm, so marking the difference marks
+# nearly every letter and teaches nothing.
 MAX_MARKED_FORMS = 4
+
+VOWELS = set('aeiouáéíóúü')
 
 
 def present_marks(infinitive, forms):
-    """Character ranges where each form departs from the regular pattern."""
+    """Character ranges where the STEM departs from the infinitive's.
+
+    Only the stem. Comparing whole forms also catches irregular endings --
+    `estás` differs from a regular `estas` by an accent, and `estoy` by its
+    -oy -- and neither is a stem change. The stem of estar is est- throughout,
+    so estar earns no marks at all.
+
+    A consonant appearing right where the ending begins is kept, since that is
+    a stem gaining a letter: tener's `tengo`, poner's `pongo`, salir's `salgo`.
+    A vowel there belongs to the ending and is dropped.
+    """
     ending = infinitive[-2:]
     if ending not in REGULAR_PRESENT or len(forms) != 6:
         return None
@@ -74,7 +86,13 @@ def present_marks(infinitive, forms):
         spans = []
         for tag, _, _, j1, j2 in difflib.SequenceMatcher(
                 None, stem + suffix, actual).get_opcodes():
-            if tag in ('replace', 'insert') and j2 > j1:
+            if tag not in ('replace', 'insert') or j2 <= j1:
+                continue
+            text = actual[j1:j2]
+            inside = j2 <= len(stem)
+            grew = (tag == 'insert' and j1 == len(stem)
+                    and not any(c in VOWELS for c in text))
+            if inside or grew:
                 spans.append([j1, j2])
         if spans:
             marked_count += 1
@@ -110,6 +128,33 @@ def forms(conj, mood, tense, slots):
     return out if all(out) else None
 
 
+# verbecc raises IndexError on a handful of verbs -- pasar, suceder, resultar
+# -- somewhere in its own template handling. All three are entirely regular, so
+# rather than hand-writing ten paradigms, a regular verb of the same ending is
+# conjugated and its stem swapped out. That borrows verbecc's endings for every
+# tense and mood, which are not in question, and only replaces the part that is.
+PROXY = {'ar': 'hablar', 'er': 'comer', 'ir': 'vivir'}
+
+# Verbs whose spelling shifts to preserve a sound -- llegar/llegué,
+# buscar/busqué, cruzar/crucé -- cannot borrow a proxy's letters.
+ORTHOGRAPHIC = re.compile(r'(car|gar|zar|ger|gir|guir|cer|cir)$')
+
+
+def conjugate_via_proxy(es, infinitive):
+    """Regular endings from a proxy verb, with this verb's stem."""
+    ending = infinitive[-2:]
+    proxy = PROXY.get(ending)
+    if not proxy or ORTHOGRAPHIC.search(infinitive):
+        return None
+    data = json.loads(es.conjugate(proxy).to_json())
+    p_stem, stem = proxy[:-2], infinitive[:-2]
+    for tenses in data['moods'].values():
+        for rows in tenses.values():
+            for r in rows:
+                r['c'] = [c.replace(p_stem, stem, 1) for c in r['c']]
+    return data
+
+
 def build():
     deck = json.load(open('data/deck.json'))
     verbs = [c for c in deck if any(p.startswith('vb') for p in c['pos_all'])]
@@ -123,8 +168,10 @@ def build():
         try:
             c = json.loads(es.conjugate(card['es']).to_json())
         except Exception:
-            skipped.append(card['es'])
-            continue
+            c = conjugate_via_proxy(es, card['es'])
+            if c is None:
+                skipped.append(card['es'])
+                continue
 
         entry = {}
         for key, mood, tense, imperative in TENSES:

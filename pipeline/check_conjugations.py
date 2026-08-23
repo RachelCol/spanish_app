@@ -44,6 +44,12 @@ EXPECT = {
  'seguir': {'present': ['sigo','sigues','sigue','seguimos','siguen']},
  'traer':  {'preterite': ['traje','trajiste','trajo','trajimos','trajeron']},
  'conocer':{'present': ['conozco','conoces','conoce','conocemos','conocen']},
+ # verbecc raises IndexError on these three and they are filled in from a
+ # regular proxy instead, so they are checked like any other verb.
+ 'pasar':  {'present': ['paso','pasas','pasa','pasamos','pasan'],
+            'preterite': ['pasé','pasaste','pasó','pasamos','pasaron']},
+ 'suceder':{'present': ['sucedo','sucedes','sucede','sucedemos','suceden']},
+ 'resultar':{'present': ['resulto','resultas','resulta','resultamos','resultan']},
 }
 
 # Irregular participles, checked through the perfect.
