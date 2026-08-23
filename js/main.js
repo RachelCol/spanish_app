@@ -452,21 +452,8 @@ async function toggleExamples() {
 
     block.append(es, it);
     return block;
-  }), credit());
+  }));
   panel.classList.remove('hidden');
-}
-
-// CC BY 2.0 FR asks for attribution wherever the sentences are shown.
-function credit() {
-  const p = document.createElement('p');
-  p.className = 'example-credit';
-  const a = document.createElement('a');
-  a.href = 'https://tatoeba.org';
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  a.textContent = 'Tatoeba';
-  p.append('Sentences from ', a, ' · CC BY 2.0 FR');
-  return p;
 }
 
 async function applyGrade(g) {

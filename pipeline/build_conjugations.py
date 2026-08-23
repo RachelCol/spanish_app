@@ -56,49 +56,50 @@ REGULAR_PRESENT = {
     'ir': ['o', 'es', 'e', 'imos', 'ís', 'en'],
 }
 
-# A stem-changer marks exactly four forms -- the boot: yo, tú, él, ellos. Above
-# that the verb is suppletive rather than stem-changing: `ser` and `ir` share
-# almost nothing with a regular paradigm, so marking the difference marks
-# nearly every letter and teaches nothing.
-MAX_MARKED_FORMS = 4
-
-VOWELS = set('aeiouáéíóúü')
+# Accents are stripped before comparing, but ñ is not: an accent is a stress
+# mark, while ñ is a different letter. Same-length so the positions still line
+# up with the original.
+DEACCENT = str.maketrans('áéíóúü', 'aeiouu')
 
 
 def present_marks(infinitive, forms):
-    """Character ranges where the STEM departs from the infinitive's.
+    """Character ranges where each form departs from the regular pattern.
 
-    Only the stem. Comparing whole forms also catches irregular endings --
-    `estás` differs from a regular `estas` by an accent, and `estoy` by its
-    -oy -- and neither is a stem change. The stem of estar is est- throughout,
-    so estar earns no marks at all.
+    Compared accent-blind. `está` differs from a regular `esta` only by stress,
+    and marking that was both wrong and inconsistent, since the regular -áis
+    ending already carries an accent and `estáis` therefore matched.
 
-    A consonant appearing right where the ending begins is kept, since that is
-    a stem gaining a letter: tener's `tengo`, poner's `pongo`, salir's `salgo`.
-    A vowel there belongs to the ending and is dropped.
+    Everything else is marked, however much that turns out to be. A verb like
+    `ir` has no stem left once -ir comes off, so nearly every letter of voy,
+    vas, va is unaccounted for -- and marking nearly every letter is the honest
+    answer for a verb that keeps nothing from its infinitive.
     """
-    ending = infinitive[-2:]
+    # oír, reír and sonreír end in an accented -ír but take -ir endings.
+    ending = infinitive[-2:].translate(DEACCENT)
     if ending not in REGULAR_PRESENT or len(forms) != 6:
         return None
     stem = infinitive[:-2]
-    marks, marked_count = [], 0
+    marks = []
     for actual, suffix in zip(forms, REGULAR_PRESENT[ending]):
+        expected = (stem + suffix).translate(DEACCENT)
+        plain = actual.translate(DEACCENT)
         spans = []
         for tag, _, _, j1, j2 in difflib.SequenceMatcher(
-                None, stem + suffix, actual).get_opcodes():
-            if tag not in ('replace', 'insert') or j2 <= j1:
-                continue
-            text = actual[j1:j2]
-            inside = j2 <= len(stem)
-            grew = (tag == 'insert' and j1 == len(stem)
-                    and not any(c in VOWELS for c in text))
-            if inside or grew:
+                None, expected, plain).get_opcodes():
+            if tag in ('replace', 'insert') and j2 > j1:
                 spans.append([j1, j2])
-        if spans:
-            marked_count += 1
         marks.append(spans)
-    if marked_count > MAX_MARKED_FORMS:
-        return None
+
+    # A stem change never reaches nosotros or vosotros -- that is what makes it
+    # a boot. When it does, the verb is not stem-changing but irregular
+    # throughout, and marking a letter here and there understates it: `ir`
+    # showed a lone v in voy while vas, va, vamos kept nothing from the
+    # infinitive either. Those get underlined whole, which says what is true.
+    # In practice this is ir and ser and nothing else; every other marked verb
+    # is boot-only and keeps the precise marks it already had.
+    if marks[3] or marks[4]:
+        return [[[0, len(f)]] for f in forms]
+
     return marks if any(marks) else []
 
 
