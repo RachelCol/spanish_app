@@ -55,7 +55,7 @@ PARTICIPLES = {
 
 
 def main():
-    d = json.load(open('data/conjugations.json'))
+    d = json.load(open('data/conjugations.json'))['verbs']
     bad = []
 
     for verb, tenses in EXPECT.items():

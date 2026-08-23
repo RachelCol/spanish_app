@@ -333,7 +333,7 @@ function reveal() {
   if (posGroups(card).includes('vblex')) {
     loadConjugations().then(all => {
       if (!state.queue[state.index] || state.queue[state.index].card.es !== card.es) return;
-      const entry = all[card.es];
+      const entry = all.verbs[card.es];
       $('#conj-btn').classList.toggle('hidden', !entry);
       renderStemNote(entry && entry.stem);
     });
@@ -365,7 +365,7 @@ function reveal() {
 // of `ver` appears in `vemos` or `vio`, so for verbs the conjugation table is
 // consulted as well; those forms are already on the device.
 function verbForms(card, conj) {
-  const entry = conj && conj[card.es];
+  const entry = conj && conj.verbs && conj.verbs[card.es];
   if (!entry) return null;
   const out = new Set();
   for (const tense of ['present', 'near', 'preterite', 'imperfect', 'perfect']) {
@@ -529,12 +529,16 @@ const TENSES = [
           'America. When in doubt, use the preterite.' },
 ];
 
-const PRONOUNS = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos'];
+// Fallback only. The real labels come from the data file, so a stale copy of
+// this file can never mislabel a fresh set of tables.
+const PRONOUNS_FALLBACK = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos'];
 
 async function openConjugation() {
   const card = state.queue[state.index].card;
-  const data = (await loadConjugations())[card.es];
+  const all = await loadConjugations();
+  const data = all.verbs[card.es];
   if (!data) return;
+  const pronouns = all.pronouns || PRONOUNS_FALLBACK;
 
   $('#conj-title').textContent = card.es;
   const body = $('#conj-body');
@@ -563,7 +567,10 @@ async function openConjugation() {
 
     const table = document.createElement('div');
     table.className = 'conj-table';
-    PRONOUNS.forEach((pr, i) => {
+    // Drive the rows off the forms themselves, so a mismatch shows up as a
+    // missing row rather than as a wrong label on a real form.
+    rows.es.forEach((form, i) => {
+      const pr = pronouns[i] || '';
       const row = document.createElement('div');
       row.className = 'conj-row';
 
@@ -573,9 +580,9 @@ async function openConjugation() {
 
       const esCell = document.createElement('span');
       esCell.className = 'conj-es';
-      esCell.textContent = rows.es[i];
+      esCell.textContent = form;
       if (canSpeak()) {
-        esCell.addEventListener('click', () => speak(rows.es[i], 'es'));
+        esCell.addEventListener('click', () => speak(form, 'es'));
         esCell.classList.add('speakable');
       }
 

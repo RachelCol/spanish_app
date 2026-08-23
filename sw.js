@@ -4,7 +4,7 @@
 // file changes, or the old copy will be served indefinitely. That is the cost
 // of skipping a build system, and it is a fair trade for a deck app.
 
-const CACHE = 'spanish-app-v29';
+const CACHE = 'spanish-app-v31';
 
 const ASSETS = [
   '.',
@@ -25,7 +25,16 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  // `cache: 'reload'` bypasses the browser's HTTP cache. Without it addAll is
+  // free to take some files from cache and others from the network, which
+  // installs a version that never existed -- new data against old code. That
+  // is what put `vosotros dicen` above an empty `ellos`.
+  const fresh = ASSETS.map(url => new Request(url, { cache: 'reload' }));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(fresh))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {

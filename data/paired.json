@@ -5,7 +5,8 @@
   "tier": "core",
   "it": "non",
   "senses": [
-   "non"
+   "non",
+   "no"
   ],
   "pos": "adv",
   "pos_all": [
@@ -467,7 +468,8 @@
   "senses": [
    "così",
    "tanto",
-   "poi tanto"
+   "poi tanto",
+   "talmente"
   ],
   "pos": "preadv",
   "pos_all": [
@@ -866,7 +868,8 @@
   "tier": "common",
   "it": "conto",
   "senses": [
-   "conto"
+   "conto",
+   "account"
   ],
   "pos": "n",
   "pos_all": [
@@ -1958,7 +1961,8 @@
   "tier": "common",
   "it": "squadra",
   "senses": [
-   "squadra"
+   "squadra",
+   "team"
   ],
   "pos": "n",
   "pos_all": [
@@ -2888,7 +2892,8 @@
   "senses": [
    "ancora",
    "comunque",
-   "tuttora"
+   "tuttora",
+   "tutt'ora"
   ],
   "pos": "adv",
   "pos_all": [
@@ -3527,7 +3532,8 @@
   "tier": "common",
   "it": "personale",
   "senses": [
-   "personale"
+   "personale",
+   "staff"
   ],
   "pos": "n",
   "pos_all": [
@@ -3593,7 +3599,8 @@
   "tier": "common",
   "it": "base",
   "senses": [
-   "base"
+   "base",
+   "database"
   ],
   "pos": "n",
   "pos_all": [
@@ -4198,7 +4205,8 @@
   "senses": [
    "mettere",
    "porre",
-   "indossare"
+   "indossare",
+   "rimettere"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -6187,6 +6195,7 @@
   "senses": [
    "scopo",
    "obiettivo",
+   "target",
    "oggettivo"
   ],
   "pos": "n",
@@ -6252,7 +6261,8 @@
   "tier": "common",
   "it": "rete",
   "senses": [
-   "rete"
+   "rete",
+   "network"
   ],
   "pos": "n",
   "pos_all": [
@@ -6335,7 +6345,8 @@
   "senses": [
    "società",
    "azienda",
-   "compagnia"
+   "compagnia",
+   "ditta"
   ],
   "pos": "n",
   "pos_all": [
@@ -7758,7 +7769,8 @@
   "tier": "common",
   "it": "camera",
   "senses": [
-   "camera"
+   "camera",
+   "cameraman"
   ],
   "pos": "n",
   "pos_all": [
@@ -8165,7 +8177,8 @@
   "it": "ingresso",
   "senses": [
    "ingresso",
-   "entrata"
+   "entrata",
+   "input"
   ],
   "pos": "n",
   "pos_all": [
@@ -9902,7 +9915,8 @@
   "tier": "useful",
   "it": "associazione",
   "senses": [
-   "associazione"
+   "associazione",
+   "partnership"
   ],
   "pos": "n",
   "pos_all": [
@@ -10047,6 +10061,7 @@
   "it": "relazione",
   "senses": [
    "relazione",
+   "report",
    "resoconto"
   ],
   "pos": "n",
@@ -12177,7 +12192,8 @@
   "senses": [
    "parere",
    "sembrare",
-   "assomigliare"
+   "assomigliare",
+   "somigliare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -12569,7 +12585,8 @@
   "it": "spesa",
   "senses": [
    "spesa",
-   "acquisto"
+   "acquisto",
+   "shopping"
   ],
   "pos": "n",
   "pos_all": [
@@ -13182,7 +13199,8 @@
   "tier": "useful",
   "it": "gestione",
   "senses": [
-   "gestione"
+   "gestione",
+   "management"
   ],
   "pos": "n",
   "pos_all": [
@@ -14471,7 +14489,8 @@
   "tier": "useful",
   "it": "schermo",
   "senses": [
-   "schermo"
+   "schermo",
+   "display"
   ],
   "pos": "n",
   "pos_all": [
@@ -15864,7 +15883,8 @@
   "tier": "useful",
   "it": "tendenza",
   "senses": [
-   "tendenza"
+   "tendenza",
+   "trend"
   ],
   "pos": "n",
   "pos_all": [
@@ -15913,7 +15933,8 @@
   "it": "pubblico",
   "senses": [
    "pubblico",
-   "udienza"
+   "udienza",
+   "audience"
   ],
   "pos": "n",
   "pos_all": [
@@ -16126,7 +16147,8 @@
   "tier": "useful",
   "it": "cellulare",
   "senses": [
-   "cellulare"
+   "cellulare",
+   "mobile"
   ],
   "pos": "n",
   "pos_all": [
@@ -17931,7 +17953,8 @@
   "senses": [
    "nello stesso modo",
    "altrettanto",
-   "ugualmente"
+   "ugualmente",
+   "contempo"
   ],
   "pos": "adv",
   "pos_all": [
@@ -20876,7 +20899,8 @@
   "tier": "useful",
   "it": "gol",
   "senses": [
-   "gol"
+   "gol",
+   "goal"
   ],
   "pos": "n",
   "pos_all": [
@@ -22374,7 +22398,8 @@
   "senses": [
    "ieri notte",
    "ieri sera",
-   "la notte scorsa"
+   "la notte scorsa",
+   "la scorsa notte"
   ],
   "pos": "adv",
   "pos_all": [
@@ -23999,7 +24024,8 @@
   "tier": "extended",
   "it": "benessere",
   "senses": [
-   "benessere"
+   "benessere",
+   "welfare"
   ],
   "pos": "n",
   "pos_all": [
@@ -24339,7 +24365,8 @@
   "tier": "extended",
   "it": "annuncio",
   "senses": [
-   "annuncio"
+   "annuncio",
+   "spot"
   ],
   "pos": "n",
   "pos_all": [
@@ -29298,7 +29325,8 @@
   "senses": [
    "conduttore",
    "autista",
-   "conducente"
+   "conducente",
+   "guidatore"
   ],
   "pos": "n",
   "pos_all": [
@@ -29720,7 +29748,8 @@
   "tier": "extended",
   "it": "modello",
   "senses": [
-   "modello"
+   "modello",
+   "pattern"
   ],
   "pos": "n",
   "pos_all": [
@@ -42126,7 +42155,8 @@
   "tier": "extended",
   "it": "scrivania",
   "senses": [
-   "scrivania"
+   "scrivania",
+   "desktop"
   ],
   "pos": "n",
   "pos_all": [
@@ -42708,7 +42738,8 @@
   "senses": [
    "discesa",
    "ribasso",
-   "flessione"
+   "flessione",
+   "retrocessione"
   ],
   "pos": "n",
   "pos_all": [
@@ -43205,7 +43236,8 @@
   "tier": "extended",
   "it": "uccello",
   "senses": [
-   "uccello"
+   "uccello",
+   "volatile"
   ],
   "pos": "n",
   "pos_all": [
@@ -43416,7 +43448,8 @@
   "tier": "extended",
   "it": "esportazione",
   "senses": [
-   "esportazione"
+   "esportazione",
+   "export"
   ],
   "pos": "n",
   "pos_all": [
@@ -50232,7 +50265,8 @@
   "tier": "extended",
   "it": "dimostrazione",
   "senses": [
-   "dimostrazione"
+   "dimostrazione",
+   "demo"
   ],
   "pos": "n",
   "pos_all": [
@@ -51424,17 +51458,19 @@
   "es": "plantilla",
   "zipf_es": 4.0,
   "tier": "extended",
-  "it": "maestranze",
+  "it": "organico",
   "senses": [
-   "maestranze"
+   "organico",
+   "modello",
+   "soletta"
   ],
   "pos": "n",
   "pos_all": [
    "n"
   ],
-  "sim": 0.1,
+  "sim": 0.22,
   "bucket": "distinct",
-  "zipf_it": 3.14
+  "zipf_it": 4.01
  },
  {
   "es": "recaudación",
@@ -51554,7 +51590,8 @@
   "tier": "extended",
   "it": "valutazione",
   "senses": [
-   "valutazione"
+   "valutazione",
+   "rating"
   ],
   "pos": "n",
   "pos_all": [
@@ -52957,7 +52994,8 @@
   "tier": "long_tail",
   "it": "crescita",
   "senses": [
-   "crescita"
+   "crescita",
+   "boom"
   ],
   "pos": "n",
   "pos_all": [

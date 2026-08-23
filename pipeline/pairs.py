@@ -54,7 +54,10 @@ NEUTRAL_AFFINITY = 1
 POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "cnjcoo", "cnjsub",
                 "cnjadv", "vbser", "vbhaver", "vbmod", "preadv"]
 
-MAX_SENSES = 3
+# Four, not three. A cap exists to stop Apertium's long tails filling the card,
+# but three was arbitrary enough to start costing real senses: `objetivo` is a
+# goal, an objective and a target, and something true had to be dropped to fit.
+MAX_SENSES = 4
 
 # Apertium is machine-translation data and is occasionally incomplete or
 # domain-skewed in ways no scoring rule can repair, because the right answer is
@@ -69,6 +72,11 @@ MAX_SENSES = 3
 SENSE_OVERRIDES = {
     'tener':   ['avere', 'tenere', 'dovere'],
     'guardar': ['conservare', 'tenere', 'salvare'],   # salvare is the file sense
+    # Apertium offers only planning, maestranze and soletta. The real senses
+    # are a staff complement, a template, and the insole of a shoe -- soletta
+    # being right for the last of those. `organico` beats `personale`, which
+    # in Italian also means "personal".
+    'plantilla': ['organico', 'modello', 'soletta'],
 }
 
 # Two different problems, two different rules.
@@ -91,14 +99,17 @@ SENSE_OVERRIDES = {
 MIN_SENSE_ZIPF = 3.0     # below this a gloss is archaic, misspelled or foreign
 NOISE_GAP_PHRASE = 0.8   # phrases only: register rather than meaning
 
-# Apertium carries English business and technology loanwords as Italian
-# glosses, picked up from technical corpora: gestión/management,
-# pantalla/display, cuenta/account. Some of those words are genuinely used in
-# Italian, but only in narrow modern senses, and offering `account` next to
-# `conto` implies an equivalence that does not hold -- Italians say conto for
-# the bill and the bank account alike. A gloss that reads more English than
-# Italian is dropped, and only ever as a secondary, so the primary is untouched
-# and every affected card keeps its correct Italian word.
+# English loanwords are NOT filtered out. An earlier version dropped any gloss
+# that read more English than Italian, which removed `cuenta -> account`,
+# `tendencia -> trend`, `personal -> staff` and twenty-five others. That was
+# the wrong test, and it answered the wrong question: what matters on the
+# Italian side of the card is what Italians say, and Italians say all of these.
+# The Zipf floor below already asks exactly that question, in Italian.
+#
+# The asymmetry is real but belongs elsewhere -- across thirty-one loanwords,
+# every one is commoner in Italian than in Spanish, by around 0.9 Zipf. Spanish
+# calques where Italian borrows. That is a fact about Spanish, and a card whose
+# Italian column is honest is what makes it visible.
 
 
 def _surface(node):
@@ -175,8 +186,6 @@ def load():
                 break
             z = zipf_frequency(ita, "it")
             if z < MIN_SENSE_ZIPF:
-                continue
-            if zipf_frequency(ita, "en") > z:
                 continue
             if " " in ita and top_z - z >= NOISE_GAP_PHRASE:
                 continue

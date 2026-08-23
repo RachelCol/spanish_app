@@ -22,6 +22,12 @@ from wordfreq import zipf_frequency
 # printing the identical form twice.
 ES_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'ellos']
 
+# Row labels ship WITH the tables rather than being hardcoded in the app. When
+# the paradigm changed from six rows to five, an app still holding the old
+# labels lined them up against the new data and printed `vosotros dicen` above
+# an empty `ellos`. Labels and forms cannot drift apart if they travel together.
+PRONOUN_LABELS = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos']
+
 # Corrections to what verbecc returns. Kept tiny and explicit: check_conjugations.py
 # verifies nineteen hard irregulars against forms written out by hand, and this
 # is everything that came back wrong.
@@ -156,7 +162,8 @@ def build():
 if __name__ == '__main__':
     import os
     data, skipped = build()
-    json.dump(data, open('data/conjugations.json', 'w'),
+    json.dump({'pronouns': PRONOUN_LABELS, 'verbs': data},
+              open('data/conjugations.json', 'w'),
               ensure_ascii=False, separators=(',', ':'))
     print(f"verbs conjugated: {len(data)}  (skipped {len(skipped)})")
     print(f"data/conjugations.json: {os.path.getsize('data/conjugations.json')/1024:.0f} KB")
