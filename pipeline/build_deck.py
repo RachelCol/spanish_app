@@ -22,6 +22,7 @@ def build():
             "it": c["it"],
             "senses": c["senses"],
             "pos": c["pos"],
+            "pos_all": c["pos_all"],
             "bucket": c["bucket"],
             "tier": c["tier"],
             "zipf": c["zipf_es"],

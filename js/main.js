@@ -2,7 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, loadSentences, loadConjugations, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
-         POS_LABEL, posGroup, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
+         POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
@@ -135,7 +135,7 @@ function renderFilters() {
 
   const pos = $('#f-pos');
   pos.replaceChildren(...Object.keys(POS_LABEL).map(p =>
-    chip(POS_LABEL[p], state.deck.filter(c => posGroup(c.pos) === p).length,
+    chip(POS_LABEL[p], state.deck.filter(c => posGroups(c).includes(p)).length,
          s.pos.includes(p), on => toggle(s.pos, p, on))));
 
   const dirs = $('#f-directions');
@@ -255,8 +255,13 @@ function renderCard() {
 
   $('#direction').textContent = dir.label;
   $('#prompt').textContent = item.card[dir.prompt];
+  // Every part of speech the word has, not just the one that won the vote:
+  // calling `bajo` an adjective and nothing else is a quiet lie.
+  const posText = posGroups(item.card)
+    .map(g => (POS_LABEL[g] || g).toLowerCase().replace(/s$/, ''))
+    .join(' · ');
   $('#meta').innerHTML =
-    `<span class="pos">${item.card.pos}</span> · ${BUCKET_LABEL[item.card.bucket]}`;
+    `<span class="pos">${posText}</span> · ${BUCKET_LABEL[item.card.bucket]}`;
 
   stopSpeech();
   $('#answers').classList.add('hidden');
@@ -323,7 +328,7 @@ function reveal() {
   $('#link-yg').href  = `https://youglish.com/pronounce/${w}/spanish`;
   $('#card-links').classList.remove('hidden');
 
-  if (card.pos.startsWith('vb')) {
+  if (posGroups(card).includes('vblex')) {
     loadConjugations().then(all => {
       if (state.queue[state.index] && state.queue[state.index].card.es === card.es) {
         $('#conj-btn').classList.toggle('hidden', !all[card.es]);
@@ -395,7 +400,7 @@ async function toggleExamples() {
   }
   const card = state.queue[state.index].card;
   const rows = (await loadSentences())[card.es] || [];
-  const forms = card.pos.startsWith('vb') ? verbForms(card, await loadConjugations()) : null;
+  const forms = posGroups(card).includes('vblex') ? verbForms(card, await loadConjugations()) : null;
   panel.replaceChildren(...rows.map(r => {
     const block = document.createElement('div');
     block.className = 'example';

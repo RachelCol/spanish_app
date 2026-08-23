@@ -25,7 +25,7 @@ DIX = "vendor/apertium-spa-ita/apertium-spa-ita.spa-ita.dix"
 # prepositions are real vocabulary for an Italian speaker -- `ante`, `bajo`,
 # `hacia`, `según` -- and because dropping them is what lost `davanti`.
 CONTENT_POS = {"n", "vblex", "adj", "adv", "vbmod", "vbhaver", "vbser", "pr",
-               "cnjcoo", "cnjsub", "cnjadv", "preadv"}
+               "cnjcoo", "cnjsub", "cnjadv", "preadv", "prn"}
 
 # How the Spanish tag ranks Italian senses: a preposition should be glossed by
 # a preposition, not by an adverb that happens to be commoner.
@@ -41,6 +41,7 @@ POS_AFFINITY = {
     "cnjsub": {"cnjsub": 3, "cnjcoo": 2, "cnjadv": 2, "adv": 1},
     "cnjadv": {"cnjadv": 3, "cnjcoo": 2, "cnjsub": 2, "adv": 1},
     "preadv": {"preadv": 3, "adv": 2},
+    "prn": {"prn": 3, "n": 1, "adj": 1},
 }
 
 # An Italian tag with no entry in the affinity table scores neutrally, so
@@ -50,10 +51,21 @@ NEUTRAL_AFFINITY = 1
 # When a word carries several tags equally often, prefer the ordinary ones.
 # `bien` is tagged preadv, n and adv once each, and letting preadv win chose
 # the apocopated `ben` over `bene`.
-POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "cnjcoo", "cnjsub", "cnjadv",
-                "vbser", "vbhaver", "vbmod", "preadv"]
+POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "cnjcoo", "cnjsub",
+                "cnjadv", "vbser", "vbhaver", "vbmod", "preadv"]
 
 MAX_SENSES = 3
+
+# A secondary sense that is a phrase AND markedly rarer than the primary is
+# register, not meaning: `antes` glossing to `in precedenza` as well as `prima`
+# says only that Italian has a formal way to say "before". Compare `otro ->
+# altro, un altro`, where the second gloss is the same frequency and encodes a
+# real grammatical difference, and is kept.
+# A phrase needs less of a gap to be dismissed than a single word does, since
+# a rarer single word is often a genuine synonym while a rarer phrase is
+# usually just formal register.
+NOISE_GAP_PHRASE = 0.8
+NOISE_GAP_WORD = 1.8
 
 
 def _surface(node):
@@ -129,8 +141,24 @@ def load():
             best.items(),
             key=lambda kv: (-(kv[1] * 1.2 + zipf_frequency(kv[0], "it")), len(kv[0])),
         )
-        senses = [ita for ita, _ in scored[:MAX_SENSES]]
-        out[spa] = {"it": senses[0], "senses": senses, "pos": pos}
+        ranked = [ita for ita, _ in scored]
+        senses = [ranked[0]]
+        top_z = zipf_frequency(ranked[0], "it")
+        for ita in ranked[1:]:
+            if len(senses) >= MAX_SENSES:
+                break
+            gap = top_z - zipf_frequency(ita, "it")
+            limit = NOISE_GAP_PHRASE if " " in ita else NOISE_GAP_WORD
+            if gap >= limit:
+                continue
+            senses.append(ita)
+        # A word can be several things at once -- `bajo` is an adjective and a
+        # preposition, `ver` a verb and a noun. One tag drives conjugation and
+        # sense ranking, but the filter and the label need all of them, or
+        # filtering to Prepositions silently loses `bajo`.
+        all_pos = sorted({t for t in tags if t in CONTENT_POS},
+                         key=lambda t: POS_PRIORITY.index(t) if t in POS_PRIORITY else 99)
+        out[spa] = {"it": senses[0], "senses": senses, "pos": pos, "pos_all": all_pos}
     return out
 
 

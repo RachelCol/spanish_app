@@ -30,6 +30,7 @@ export const POS_LABEL = {
   adj: 'Adjectives',
   adv: 'Adverbs',
   pr: 'Prepositions',
+  prn: 'Pronouns',
   cnj: 'Conjunctions',
 };
 
@@ -43,6 +44,14 @@ const POS_GROUPS = {
 
 export function posGroup(pos) {
   return POS_GROUPS[pos] || pos;
+}
+
+// A word is often several things at once -- `bajo` is an adjective and a
+// preposition, `ver` a verb and a noun -- so filtering on a single tag loses
+// it from every category but one.
+export function posGroups(card) {
+  const tags = card.pos_all && card.pos_all.length ? card.pos_all : [card.pos];
+  return [...new Set(tags.map(posGroup))];
 }
 
 let deckCache = null;
@@ -87,7 +96,7 @@ export function buildItems(deck, progressList, settings) {
   for (const card of deck) {
     if (!settings.tiers.includes(card.tier)) continue;
     if (!settings.buckets.includes(card.bucket)) continue;
-    if (!settings.pos.includes(posGroup(card.pos))) continue;
+    if (!posGroups(card).some(g => settings.pos.includes(g))) continue;
     for (const dir of settings.directions) {
       const key = itemKey(card.id, dir);
       const item = stored.get(key) || newItem(key, card.id, dir, card.bucket);
@@ -100,7 +109,7 @@ export function buildItems(deck, progressList, settings) {
 export const DEFAULT_SETTINGS = {
   tiers: ['common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
-  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'cnj'],
+  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj'],
   directions: ['es>it', 'it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js

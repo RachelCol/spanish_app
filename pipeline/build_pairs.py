@@ -31,6 +31,7 @@ def build():
             'it': p['it'],
             'senses': p['senses'],
             'pos': p['pos'],
+            'pos_all': p['pos_all'],
             'sim': round(sim, 2),
             'bucket': bucket(sim),
             'zipf_it': round(zipf_frequency(p['it'], 'it'), 2),

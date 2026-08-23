@@ -195,11 +195,6 @@
   "tier": "common"
  },
  {
-  "es": "uno",
-  "zipf_es": 5.96,
-  "tier": "common"
- },
- {
   "es": "mejor",
   "zipf_es": 5.95,
   "tier": "common"
@@ -1075,11 +1070,6 @@
   "tier": "common"
  },
  {
-  "es": "ti",
-  "zipf_es": 5.46,
-  "tier": "common"
- },
- {
   "es": "algunas",
   "zipf_es": 5.45,
   "tier": "common"
@@ -1282,11 +1272,6 @@
  {
   "es": "varios",
   "zipf_es": 5.4,
-  "tier": "common"
- },
- {
-  "es": "mí",
-  "zipf_es": 5.39,
   "tier": "common"
  },
  {
@@ -1606,11 +1591,6 @@
  },
  {
   "es": "derechos",
-  "zipf_es": 5.31,
-  "tier": "common"
- },
- {
-  "es": "ello",
   "zipf_es": 5.31,
   "tier": "common"
  },
@@ -2036,11 +2016,6 @@
  },
  {
   "es": "rey",
-  "zipf_es": 5.24,
-  "tier": "common"
- },
- {
-  "es": "vos",
   "zipf_es": 5.24,
   "tier": "common"
  },
@@ -4505,11 +4480,6 @@
   "tier": "useful"
  },
  {
-  "es": "éste",
-  "zipf_es": 4.95,
-  "tier": "useful"
- },
- {
   "es": "alma",
   "zipf_es": 4.94,
   "tier": "useful"
@@ -5610,11 +5580,6 @@
   "tier": "useful"
  },
  {
-  "es": "ésta",
-  "zipf_es": 4.86,
-  "tier": "useful"
- },
- {
   "es": "acaba",
   "zipf_es": 4.85,
   "tier": "useful"
@@ -5832,11 +5797,6 @@
  {
   "es": "vienen",
   "zipf_es": 4.84,
-  "tier": "useful"
- },
- {
-  "es": "ambas",
-  "zipf_es": 4.83,
   "tier": "useful"
  },
  {
@@ -18790,11 +18750,6 @@
   "tier": "extended"
  },
  {
-  "es": "éstos",
-  "zipf_es": 4.32,
-  "tier": "extended"
- },
- {
   "es": "ética",
   "zipf_es": 4.32,
   "tier": "extended"
@@ -22156,11 +22111,6 @@
  },
  {
   "es": "volvieron",
-  "zipf_es": 4.24,
-  "tier": "extended"
- },
- {
-  "es": "éstas",
   "zipf_es": 4.24,
   "tier": "extended"
  },

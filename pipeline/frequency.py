@@ -26,6 +26,7 @@ este esta esto estos estas ese esa eso esos esas aquel aquella aquello
 aquellos aquellas
 qué quién quiénes cuál cuáles cómo dónde adónde cuándo cuánto cuánta
 cuántos cuántas cuyo cuya quien quienes cual cuales
+ti mí vos ello uno éste ésta éstos éstas ambas
 """.split())
 
 # Apertium lists these, but they are contractions, apocopated forms, conjugated
