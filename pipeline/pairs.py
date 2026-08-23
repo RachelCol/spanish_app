@@ -56,6 +56,21 @@ POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "cnjcoo", "cnjsub",
 
 MAX_SENSES = 3
 
+# Apertium is machine-translation data and is occasionally incomplete or
+# domain-skewed in ways no scoring rule can repair, because the right answer is
+# simply not in the file. This is the escape hatch: an explicit, auditable list
+# of hand-written sense sets, ordered primary first.
+#
+# `tener` has no `tenere` entry at all -- Apertium offers avere three times and
+# dovere once, the latter from `tener que`. For translation that is fine. For a
+# learner it hides the most useful fact about the word: tener and tenere are
+# cognates that split, so the Italian instinct to read tener as "hold" is
+# exactly the error the card should be preventing.
+SENSE_OVERRIDES = {
+    'tener':   ['avere', 'tenere', 'dovere'],
+    'guardar': ['conservare', 'tenere', 'salvare'],   # salvare is the file sense
+}
+
 # Two different problems, two different rules.
 #
 # Archaic and junk glosses are rare in absolute terms, not merely rarer than
@@ -161,6 +176,9 @@ def load():
         # filtering to Prepositions silently loses `bajo`.
         all_pos = sorted({t for t in tags if t in CONTENT_POS},
                          key=lambda t: POS_PRIORITY.index(t) if t in POS_PRIORITY else 99)
+        if spa in SENSE_OVERRIDES:
+            senses = SENSE_OVERRIDES[spa][:MAX_SENSES]
+
         out[spa] = {"it": senses[0], "senses": senses, "pos": pos, "pos_all": all_pos}
     return out
 

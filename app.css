@@ -269,6 +269,15 @@ button.secondary {
 /* --- multiple senses --- */
 .answers { display: flex; flex-direction: column; align-items: center; gap: .25rem; }
 .answers .answer { font-size: 1.9rem; }
+/* The first sense is the primary one and usually dominates -- tener is avere
+   far more often than it is tenere -- so it leads. The step down is small on
+   purpose: the ranking is a heuristic, and for genuinely co-equal senses like
+   tiempo's tempo and meteo the later ones must still read as real answers
+   rather than footnotes. */
+.answers .word-row:not(:first-child) .answer {
+  font-size: 1.55rem;
+  color: color-mix(in srgb, var(--accent) 78%, var(--muted));
+}
 
 /* --- conjugation --- */
 .conj-sub { margin: 0 0 .5rem; }

@@ -751,6 +751,7 @@
   "it": "avere",
   "senses": [
    "avere",
+   "tenere",
    "dovere"
   ],
   "pos": "vblex",
@@ -32140,17 +32141,19 @@
   "es": "guardar",
   "zipf_es": 4.31,
   "tier": "extended",
-  "it": "salvare",
+  "it": "conservare",
   "senses": [
+   "conservare",
+   "tenere",
    "salvare"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.29,
+  "sim": 0.3,
   "bucket": "distinct",
-  "zipf_it": 4.72
+  "zipf_it": 4.12
  },
  {
   "es": "inocente",
