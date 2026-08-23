@@ -352,3 +352,20 @@ button.secondary {
 .answers.grouped .sense-pos:first-child { margin-top: 0; }
 .answers.grouped .answer { font-size: 1.6rem; }
 .answers.grouped .word-row:not(:first-child) .answer { color: var(--accent); }
+
+/* --- conjugation moods --- */
+.mood { margin-bottom: .5rem; }
+.mood > summary {
+  cursor: pointer; list-style: none;
+  padding: .7rem 0 .5rem;
+  font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink);
+  border-bottom: 2px solid var(--line);
+}
+.mood > summary::-webkit-details-marker { display: none; }
+.mood > summary::after { content: ' ▸'; color: var(--muted); font-weight: 400; }
+.mood[open] > summary::after { content: ' ▾'; }
+.conj-italian {
+  margin: 0 0 .6rem; font-size: .82rem; line-height: 1.45; color: var(--muted);
+  padding-left: .7rem; border-left: 2px solid var(--line);
+}

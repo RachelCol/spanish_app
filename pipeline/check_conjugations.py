@@ -7,9 +7,9 @@ ever disagree, the library is what changed.
 """
 import json, sys
 
-# Seven forms, in the Latin American order: yo, tú, vos, él, nosotros,
-# ustedes, ellos. The checks below assert the four that irregular verbs
-# actually distinguish, by index, and ignore the rest.
+# Six rows: yo, tú, él, nosotros, vosotros, ellos. The expectations below list
+# five of them and are matched by pronoun rather than by position, so adding or
+# reordering rows cannot silently compare the wrong ones.
 EXPECT = {
  'ser':    {'present': ['soy','eres','es','somos','son'],
             'preterite': ['fui','fuiste','fue','fuimos','fueron'],
@@ -64,7 +64,7 @@ CHECK_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'ellos']
 def main():
     data = json.load(open('data/conjugations.json'))
     d, pronouns = data['verbs'], data['pronouns']
-    slots = ['yo', 'tú', 'vos', 'él', 'nosotros', 'ustedes', 'ellos']
+    slots = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos']
     idx = [slots.index(s) for s in CHECK_SLOTS]
     bad = []
 
@@ -73,7 +73,7 @@ def main():
             bad.append(f"{verb}: not in the deck")
             continue
         for tense, want in tenses.items():
-            have = d[verb][tense]['es']
+            have = d[verb][tense]
             if len(have) != len(slots):
                 bad.append(f"{verb} {tense}: {len(have)} forms, expected {len(slots)}")
                 continue
@@ -84,7 +84,7 @@ def main():
     for verb, part in PARTICIPLES.items():
         if verb not in d:
             continue
-        have = d[verb]['perfect']['es'][0]
+        have = d[verb]['perfect'][0]
         if have != 'he ' + part:
             bad.append(f"{verb} participle: expected he {part}, got {have}")
 

@@ -390,8 +390,10 @@ function verbForms(card, conj) {
   const entry = conj && conj.verbs && conj.verbs[card.es];
   if (!entry) return null;
   const out = new Set();
-  for (const tense of ['present', 'near', 'preterite', 'imperfect', 'perfect']) {
-    for (const form of (entry[tense] && entry[tense].es) || []) {
+  // Every tense, so an example sentence lights up whichever form it used.
+  for (const tense of Object.keys(entry)) {
+    if (tense === 'stem') continue;
+    for (const form of (Array.isArray(entry[tense]) ? entry[tense] : [])) {
       // "he visto" and "voy a ver" carry the meaning in their last word; the
       // auxiliary would light up half the sentences on the card.
       const parts = form.split(/\s+/);
@@ -534,84 +536,143 @@ function renderStemNote(stem) {
 // speaking: what is happening, what is going to happen, and the three ways of
 // talking about the past that Spanish actually uses day to day.
 
-const TENSES = [
-  { key: 'present', es: 'Presente de Indicativo', en: 'Present',
-    note: 'Current actions, facts and daily habits. Start here.' },
-  { key: 'near', es: 'Ir + a + Infinitivo', en: 'Near future',
-    note: 'Plans, without needing the future tense at all — like "going to eat".' },
-  { key: 'preterite', es: 'Pretérito Indefinido', en: 'Preterite',
-    note: 'Completed actions at a specific moment.',
-    warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho mangiato" ' +
-          'is "ayer comí" — not the perfect below.' },
-  { key: 'imperfect', es: 'Pretérito Imperfecto', en: 'Imperfect',
-    note: 'Ongoing, repeated or background actions in the past. Same job as the imperfetto.' },
-  { key: 'perfect', es: 'Pretérito Perfecto', en: 'Present perfect',
-    note: 'haber plus a past participle, for the recent past still connected to now.',
-    warn: 'Identical in form to the passato prossimo, and much rarer in Latin ' +
-          'America. When in doubt, use the preterite.' },
+const MOODS = [
+  {
+    name: 'Indicative', open: true,
+    tenses: [
+      { key: 'present', en: 'Present', es: 'Presente',
+        note: 'Current actions, facts and daily habits.',
+        it: 'Matches the Italian presente directly.' },
+      { key: 'near', en: 'Near future', es: 'Ir + a + infinitivo',
+        note: 'Plans, without needing the future tense — like "going to say".',
+        it: 'Italian has no equivalent construction; it uses the present or the future.' },
+      { key: 'preterite', en: 'Preterite', es: 'Pretérito indefinido',
+        note: 'Completed actions at a specific moment.',
+        warn: 'This is where Italian\u2019s everyday past lands. "Ieri ho detto" ' +
+              'is "ayer dije" — not the perfect below.' },
+      { key: 'imperfect', en: 'Imperfect', es: 'Pretérito imperfecto',
+        note: 'Ongoing, repeated or background actions in the past.',
+        it: 'The same job as the Italian imperfetto, and the same feel.' },
+      { key: 'future', en: 'Future', es: 'Futuro',
+        note: 'What will happen — and, as in Italian, guesses about the present.',
+        it: 'Matches the futuro semplice, including "will be" as supposition.' },
+      { key: 'perfect', en: 'Present perfect', es: 'Pretérito perfecto',
+        note: 'haber plus a past participle, for the recent past still connected to now.',
+        warn: 'Identical in form to the passato prossimo, and much rarer in Latin ' +
+              'America. When in doubt, use the preterite.' },
+    ],
+  },
+  {
+    name: 'Subjunctive', open: false,
+    tenses: [
+      { key: 'subjPresent', en: 'Present', es: 'Presente de subjuntivo',
+        note: 'After doubt, desire, emotion and impersonal expressions.',
+        it: 'The congiuntivo presente, and the triggers are largely the same.' },
+      { key: 'subjImperfect', en: 'Imperfect', es: 'Pretérito imperfecto de subjuntivo',
+        note: 'The past subjunctive, plus si-clauses and polite requests.',
+        it: 'The congiuntivo imperfetto. A second form in -se exists and is interchangeable; ' +
+            'Latin America prefers the -ra shown here.' },
+    ],
+  },
+  {
+    name: 'Imperative', open: false,
+    tenses: [
+      { key: 'impAffirm', en: 'Affirmative', es: 'Imperativo afirmativo',
+        note: 'Commands. No yo form — you cannot order yourself about.',
+        it: 'The usted and ustedes commands are borrowed from the subjunctive.' },
+      { key: 'impNegative', en: 'Negative', es: 'Imperativo negativo',
+        note: 'Every negative command is the subjunctive with "no" in front.',
+        it: 'Italian does this differently: the negative tú command is the infinitive, ' +
+            '"non dire".' },
+    ],
+  },
+  {
+    name: 'Conditional', open: false,
+    tenses: [
+      { key: 'conditional', en: 'Conditional', es: 'Condicional',
+        note: 'Would-statements, hypotheticals and softened requests.',
+        it: 'The condizionale, used the same way.' },
+    ],
+  },
 ];
 
-// Fallback only. The real labels come from the data file, so a stale copy of
-// this file can never mislabel a fresh set of tables.
-const PRONOUNS_FALLBACK = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos'];
+const IMPERATIVE_KEYS = new Set(['impAffirm', 'impNegative']);
 
 async function openConjugation() {
   const card = state.queue[state.index].card;
   const all = await loadConjugations();
   const data = all.verbs[card.es];
   if (!data) return;
-  const pronouns = all.pronouns || PRONOUNS_FALLBACK;
+
+  const pronouns = all.pronouns || [];
+  const impPronouns = all.imperativePronouns || pronouns;
 
   $('#conj-title').textContent = card.es;
   const body = $('#conj-body');
   body.replaceChildren();
 
-  for (const t of TENSES) {
-    const rows = data[t.key];
-    if (!rows || !rows.es) continue;
+  for (const mood of MOODS) {
+    const blocks = mood.tenses.filter(t => data[t.key]);
+    if (!blocks.length) continue;
 
-    const h = document.createElement('h3');
-    h.className = 'section-label';
-    h.textContent = t.en + ' · ' + t.es;
-    body.append(h);
+    // Indicative carries the tenses in daily use, so it opens; the rest are a
+    // tap away rather than a long scroll past things you are not looking for.
+    const section = document.createElement('details');
+    section.className = 'mood';
+    section.open = mood.open;
 
-    const note = document.createElement('p');
-    note.className = 'muted small conj-note';
-    note.textContent = t.note;
-    body.append(note);
+    const summary = document.createElement('summary');
+    summary.textContent = mood.name;
+    section.append(summary);
 
-    if (t.warn) {
-      const w = document.createElement('p');
-      w.className = 'conj-warn';
-      w.textContent = t.warn;
-      body.append(w);
-    }
+    for (const t of blocks) {
+      const h = document.createElement('h3');
+      h.className = 'section-label';
+      h.textContent = t.en + ' · ' + t.es;
+      section.append(h);
 
-    const table = document.createElement('div');
-    table.className = 'conj-table';
-    // Drive the rows off the forms themselves, so a mismatch shows up as a
-    // missing row rather than as a wrong label on a real form.
-    rows.es.forEach((form, i) => {
-      const pr = pronouns[i] || '';
-      const row = document.createElement('div');
-      row.className = 'conj-row';
+      const note = document.createElement('p');
+      note.className = 'muted small conj-note';
+      note.textContent = t.note;
+      section.append(note);
 
-      const p = document.createElement('span');
-      p.className = 'conj-pron';
-      p.textContent = pr;
-
-      const esCell = document.createElement('span');
-      esCell.className = 'conj-es';
-      esCell.textContent = form;
-      if (canSpeak()) {
-        esCell.addEventListener('click', () => speak(form, 'es'));
-        esCell.classList.add('speakable');
+      if (t.warn) {
+        const w = document.createElement('p');
+        w.className = 'conj-warn';
+        w.textContent = t.warn;
+        section.append(w);
+      } else if (t.it) {
+        const i = document.createElement('p');
+        i.className = 'conj-italian';
+        i.textContent = t.it;
+        section.append(i);
       }
 
-      row.append(p, esCell);
-      table.append(row);
-    });
-    body.append(table);
+      const labels = IMPERATIVE_KEYS.has(t.key) ? impPronouns : pronouns;
+      const table = document.createElement('div');
+      table.className = 'conj-table';
+      data[t.key].forEach((form, i) => {
+        const row = document.createElement('div');
+        row.className = 'conj-row';
+
+        const p = document.createElement('span');
+        p.className = 'conj-pron';
+        p.textContent = labels[i] || '';
+
+        const cell = document.createElement('span');
+        cell.className = 'conj-es';
+        cell.textContent = form;
+        if (canSpeak()) {
+          cell.addEventListener('click', () => speak(form, 'es'));
+          cell.classList.add('speakable');
+        }
+
+        row.append(p, cell);
+        table.append(row);
+      });
+      section.append(table);
+    }
+    body.append(section);
   }
 
   show('conj');

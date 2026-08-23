@@ -1,70 +1,69 @@
 """Conjugation tables for the verbs in the deck.
 
-Five tenses only, chosen for what gets someone speaking rather than for
-completeness: present, the ir + a + infinitive near future, preterite,
-imperfect, and present perfect.
+Every simple tense, grouped by mood, plus two things that are not simple
+tenses and earn their place anyway: the present perfect, because it is the one
+compound tense in daily use and the one an Italian speaker will reach for
+wrongly, and `ir a` + infinitive, because Latin American speakers use it far
+more than the simple future.
 
-Spanish only. An Italian column was tempting -- and it is where the contrast
-between the preterite and the perfect shows up most clearly -- but a card can
-carry several Italian senses, and conjugating just one of them next to the
-Spanish asserts a one-to-one mapping that is not there. `tener` glosses to both
-avere and dovere; putting `ho` beside `tengo` would teach that as fact.
+Deliberately absent: the future subjunctive, which survives only in legal
+formulas, and every other compound tense, which are all `haber` plus the
+participle once the perfect has shown how that works.
 
-The contrast survives as prose in the tense notes, which talk about how Italian
-behaves without claiming any particular verb is the equivalent.
+The Italian column was removed earlier and is not coming back: a card can gloss
+to several Italian verbs -- tener is avere and tenere -- and conjugating one of
+them beside the Spanish asserts a mapping that does not hold. The contrast
+lives in the per-tense notes instead, which describe how Italian behaves
+without naming an equivalent verb.
 """
-import json, sys, re
+import json, re
 from verbecc import CompleteConjugator, LangCodeISO639_1 as L
 from wordfreq import zipf_frequency
 
-# Latin American paradigm: no vosotros. Its slot is filled by ustedes, which
-# takes the same form as ellos, so the two collapse into one row rather than
-# printing the identical form twice.
-# The Latin American paradigm in full. `vos` earns its row because voseo is
-# standard across Argentina, Uruguay and much of Central America, and because
-# it is where `decís` lives once vosotros is gone -- as a second person
-# SINGULAR, where Spain uses the identical form as a plural.
-#
-# ustedes and ellos take the same form but get separate rows. Merging them
-# saved a line and made the second person plural look as though it had been
-# dropped, when in fact it is shared.
-ES_SLOTS = ['yo', 'tú', 'vos', 'él', 'nosotros', 'ustedes', 'ellos']
+# Six rows, the paradigm as it is taught. ustedes shares the ellos form and
+# rides with it; vosotros keeps its own row even though Latin America does not
+# use it, because leaving it out makes the second person plural look missing.
+SLOTS = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos']
+PRONOUNS = ['yo', 'tú', 'él/ella/usted', 'nosotros', 'vosotros', 'ellos/ustedes']
 
-# Row labels ship WITH the tables rather than being hardcoded in the app. When
-# the paradigm changed rows once before, an app still holding the old labels
-# lined them up against the new data and printed `vosotros dicen` above an
-# empty `ellos`. Labels and forms cannot drift apart if they travel together.
-PRONOUN_LABELS = ['yo', 'tú', 'vos', 'él / usted', 'nosotros', 'ustedes', 'ellos']
+# The imperative has no first person singular -- you cannot command yourself --
+# and its usted forms are borrowed from the subjunctive.
+IMP_SLOTS = ['tú', 'él', 'nosotros', 'vosotros', 'ellos']
+IMP_PRONOUNS = ['tú', 'usted', 'nosotros', 'vosotros', 'ustedes']
 
-# Indexed by name rather than by number, so adding a row cannot silently make
-# the stem detector read the wrong person -- which is what happened when `vos`
-# arrived and index 2 stopped meaning third person.
-I_YO = ES_SLOTS.index('yo')
-I_EL = ES_SLOTS.index('él')
+I_YO = SLOTS.index('yo')
+I_EL = SLOTS.index('él')
 
-# Corrections to what verbecc returns. Kept tiny and explicit: check_conjugations.py
-# verifies nineteen hard irregulars against forms written out by hand, and this
-# is everything that came back wrong.
-#
-# haber third person is `hay` in the library -- right for the impersonal "there
-# is", wrong for the auxiliary paradigm this table shows.
-OVERRIDES = {
-    ('haber', 'present', 'él'): 'ha',
-}
+# (key, verbecc mood, verbecc tense, uses the imperative row set)
+TENSES = [
+    ('present',      'indicativo', 'presente', False),
+    ('preterite',    'indicativo', 'pretérito-perfecto-simple', False),
+    ('imperfect',    'indicativo', 'pretérito-imperfecto', False),
+    ('future',       'indicativo', 'futuro', False),
+    ('perfect',      'indicativo', 'pretérito-perfecto-compuesto', False),
+    ('subjPresent',  'subjuntivo', 'presente', False),
+    ('subjImperfect','subjuntivo', 'pretérito-imperfecto-1', False),
+    ('impAffirm',    'imperativo', 'afirmativo', True),
+    ('impNegative',  'imperativo', 'negativo', True),
+    ('conditional',  'condicional', 'presente', False),
+]
+
+# haber's third person is `hay` in the library: right for the impersonal
+# "there is", wrong for the auxiliary paradigm these tables show.
+OVERRIDES = {('haber', 'present', 'él'): 'ha'}
+
+STEM_PATTERNS = [('e', 'ie'), ('o', 'ue'), ('u', 'ue'), ('i', 'ie'), ('e', 'i')]
 
 
 def _pick(word, lang):
-    """verbecc offers alternates as "veduto/visto". Take the commoner one --
-    taking the first gave `ho veduto`, which is correct and not what anyone
-    says."""
+    """verbecc offers alternates as "veduto/visto". Take the commoner one."""
     if '/' not in word:
         return word
-    alts = word.split('/')
-    return max(alts, key=lambda a: zipf_frequency(a, lang))
+    return max(word.split('/'), key=lambda a: zipf_frequency(a, lang))
 
 
-def forms(conj, mood, tense, slots, lang):
-    """Six forms in person order, with the pronoun stripped off."""
+def forms(conj, mood, tense, slots):
+    """One form per slot, in order, with the pronoun stripped off."""
     try:
         rows = conj['moods'][mood][tense]
     except (KeyError, TypeError):
@@ -74,39 +73,31 @@ def forms(conj, mood, tense, slots, lang):
         pr = r.get('pr')
         if pr in slots and pr not in by_pronoun:
             text = r['c'][0] if isinstance(r.get('c'), list) else r.get('c', '')
+            # Imperatives come back as "no digas"; only a leading pronoun goes.
             if text.startswith(pr + ' '):
                 text = text[len(pr) + 1:]
-            text = ' '.join(_pick(part, lang) for part in text.split())
-            by_pronoun[pr] = text
+            by_pronoun[pr] = ' '.join(_pick(p, 'es') for p in text.split())
     out = [by_pronoun.get(s) for s in slots]
     return out if all(out) else None
 
 
-# Diphthongisations and vowel raisings, longest first so e->ie is tried before
-# e->i.
-STEM_PATTERNS = [('e', 'ie'), ('o', 'ue'), ('u', 'ue'), ('i', 'ie'), ('e', 'i')]
-
-
 def stem_change(infinitive, third_person):
-    """Compare the infinitive stem with the third-person present stem.
+    """Infinitive stem against the third-person present stem.
 
     Third person rather than first: `tener` gives `tengo`, whose inserted g is
-    a first-person quirk that hides the actual e->ie showing in `tiene`.
+    a first-person quirk hiding the e->ie that `tiene` shows plainly.
     """
     if not third_person or ' ' in third_person:
         return None
     if infinitive[-2:] not in ('ar', 'er', 'ir', 'ír'):
         return None
-    inf_stem = infinitive[:-2]
-    pres_stem = third_person[:-1]          # drop the -a / -e
+    inf_stem, pres_stem = infinitive[:-2], third_person[:-1]
     if pres_stem == inf_stem:
         return None
     for src, dst in STEM_PATTERNS:
         i = inf_stem.rfind(src)
-        if i == -1:
-            continue
-        if inf_stem[:i] + dst + inf_stem[i + 1:] == pres_stem:
-            return f'{src}\u2192{dst}'
+        if i != -1 and inf_stem[:i] + dst + inf_stem[i + 1:] == pres_stem:
+            return f'{src}→{dst}'
     return None
 
 
@@ -122,65 +113,69 @@ def irregular_yo(infinitive, first_person, third_person):
         return None
     expected = {infinitive[:-2] + 'o'}
     if third_person and ' ' not in third_person:
-        expected.add(third_person[:-1] + 'o')       # stem as it appears in él
+        expected.add(third_person[:-1] + 'o')
     return None if first_person in expected else first_person
 
 
 def build():
     deck = json.load(open('data/deck.json'))
-    verbs = [c for c in deck if c['pos'].startswith('vb')]
+    verbs = [c for c in deck if any(p.startswith('vb') for p in c['pos_all'])]
     es = CompleteConjugator(L.es)
 
-    # "voy a hablar" -- built here rather than looked up, since it is a
-    # construction rather than a tense.
-    ir = json.loads(es.conjugate('ir').to_json())
-    ir_present = forms(ir, 'indicativo', 'presente', ES_SLOTS, 'es')
+    ir_present = forms(json.loads(es.conjugate('ir').to_json()),
+                       'indicativo', 'presente', SLOTS)
 
     out, skipped = {}, []
     for card in verbs:
         try:
-            e = json.loads(es.conjugate(card['es']).to_json())
+            c = json.loads(es.conjugate(card['es']).to_json())
         except Exception:
             skipped.append(card['es'])
             continue
 
-        entry = {
-            'present':  {'es': forms(e, 'indicativo', 'presente', ES_SLOTS, 'es')},
-            'near':     {'es': [f'{v} a {card["es"]}' for v in ir_present]},
-            'preterite':{'es': forms(e, 'indicativo', 'pretérito-perfecto-simple', ES_SLOTS, 'es')},
-            'imperfect':{'es': forms(e, 'indicativo', 'pretérito-imperfecto', ES_SLOTS, 'es')},
-            'perfect':  {'es': forms(e, 'indicativo', 'pretérito-perfecto-compuesto', ES_SLOTS, 'es')},
-        }
+        entry = {}
+        for key, mood, tense, imperative in TENSES:
+            f = forms(c, mood, tense, IMP_SLOTS if imperative else SLOTS)
+            if f:
+                entry[key] = f
 
-        pres = entry['present']['es']
-        if pres:
-            change = stem_change(card['es'], pres[I_EL])
-            yo = irregular_yo(card['es'], pres[I_YO], pres[I_EL])
-            if change or yo:
-                entry['stem'] = {}
-                if change:
-                    entry['stem']['change'] = change
-                    entry['stem']['example'] = pres[I_EL]
-                if yo:
-                    entry['stem']['yo'] = yo
+        # A construction rather than a tense, so it is assembled here.
+        if ir_present:
+            entry['near'] = [f'{v} a {card["es"]}' for v in ir_present]
 
-        for (verb, tense, slot), form in OVERRIDES.items():
-            if verb == card['es'] and entry.get(tense, {}).get('es'):
-                entry[tense]['es'][ES_SLOTS.index(slot)] = form
+        if 'present' not in entry:
+            skipped.append(card['es'])
+            continue
 
-        if entry['present']['es']:
-            out[card['es']] = entry
+        for (verb, key, slot), form in OVERRIDES.items():
+            if verb == card['es'] and entry.get(key):
+                entry[key][SLOTS.index(slot)] = form
+
+        pres = entry['present']
+        change = stem_change(card['es'], pres[I_EL])
+        yo = irregular_yo(card['es'], pres[I_YO], pres[I_EL])
+        if change or yo:
+            entry['stem'] = {}
+            if change:
+                entry['stem']['change'] = change
+                entry['stem']['example'] = pres[I_EL]
+            if yo:
+                entry['stem']['yo'] = yo
+
+        out[card['es']] = entry
     return out, skipped
 
 
 if __name__ == '__main__':
     import os
     data, skipped = build()
-    json.dump({'pronouns': PRONOUN_LABELS, 'verbs': data},
+    json.dump({'pronouns': PRONOUNS, 'imperativePronouns': IMP_PRONOUNS,
+               'verbs': data},
               open('data/conjugations.json', 'w'),
               ensure_ascii=False, separators=(',', ':'))
     print(f"verbs conjugated: {len(data)}  (skipped {len(skipped)})")
     print(f"data/conjugations.json: {os.path.getsize('data/conjugations.json')/1024:.0f} KB")
-    d = data.get('hablar') or next(iter(data.values()))
-    for k in ('present','near','preterite','imperfect','perfect'):
-        print(f"  {k:10s} {d[k]['es']}")
+    d = data.get('decir') or next(iter(data.values()))
+    for k, _, _, _ in TENSES:
+        print(f"  {k:14s} {d.get(k)}")
+    print(f"  {'near':14s} {d.get('near')}")

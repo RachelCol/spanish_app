@@ -17,7 +17,7 @@ def participles(conj):
     """Map each participle back to the verb it came from."""
     out = {}
     for verb, entry in conj['verbs'].items():
-        forms = entry.get('perfect', {}).get('es') or []
+        forms = entry.get('perfect') or []
         if not forms:
             continue
         parts = forms[0].split()          # "he hecho"
