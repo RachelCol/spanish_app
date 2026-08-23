@@ -17,7 +17,10 @@ import json, sys, re
 from verbecc import CompleteConjugator, LangCodeISO639_1 as L
 from wordfreq import zipf_frequency
 
-ES_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos']
+# Latin American paradigm: no vosotros. Its slot is filled by ustedes, which
+# takes the same form as ellos, so the two collapse into one row rather than
+# printing the identical form twice.
+ES_SLOTS = ['yo', 'tú', 'él', 'nosotros', 'ellos']
 
 # Corrections to what verbecc returns. Kept tiny and explicit: check_conjugations.py
 # verifies nineteen hard irregulars against forms written out by hand, and this
@@ -59,6 +62,50 @@ def forms(conj, mood, tense, slots, lang):
     return out if all(out) else None
 
 
+# Diphthongisations and vowel raisings, longest first so e->ie is tried before
+# e->i.
+STEM_PATTERNS = [('e', 'ie'), ('o', 'ue'), ('u', 'ue'), ('i', 'ie'), ('e', 'i')]
+
+
+def stem_change(infinitive, third_person):
+    """Compare the infinitive stem with the third-person present stem.
+
+    Third person rather than first: `tener` gives `tengo`, whose inserted g is
+    a first-person quirk that hides the actual e->ie showing in `tiene`.
+    """
+    if not third_person or ' ' in third_person:
+        return None
+    if infinitive[-2:] not in ('ar', 'er', 'ir', 'ír'):
+        return None
+    inf_stem = infinitive[:-2]
+    pres_stem = third_person[:-1]          # drop the -a / -e
+    if pres_stem == inf_stem:
+        return None
+    for src, dst in STEM_PATTERNS:
+        i = inf_stem.rfind(src)
+        if i == -1:
+            continue
+        if inf_stem[:i] + dst + inf_stem[i + 1:] == pres_stem:
+            return f'{src}\u2192{dst}'
+    return None
+
+
+def irregular_yo(infinitive, first_person, third_person):
+    """A yo form the stem change does not already account for.
+
+    `puedo` follows from poder's o->ue and needs no separate mention; `tengo`
+    does not follow from tener's e->ie and does.
+    """
+    if not first_person or ' ' in first_person:
+        return None
+    if infinitive[-2:] not in ('ar', 'er', 'ir', 'ír'):
+        return None
+    expected = {infinitive[:-2] + 'o'}
+    if third_person and ' ' not in third_person:
+        expected.add(third_person[:-1] + 'o')       # stem as it appears in él
+    return None if first_person in expected else first_person
+
+
 def build():
     deck = json.load(open('data/deck.json'))
     verbs = [c for c in deck if c['pos'].startswith('vb')]
@@ -84,6 +131,18 @@ def build():
             'imperfect':{'es': forms(e, 'indicativo', 'pretérito-imperfecto', ES_SLOTS, 'es')},
             'perfect':  {'es': forms(e, 'indicativo', 'pretérito-perfecto-compuesto', ES_SLOTS, 'es')},
         }
+
+        pres = entry['present']['es']
+        if pres:
+            change = stem_change(card['es'], pres[2])
+            yo = irregular_yo(card['es'], pres[0], pres[2])
+            if change or yo:
+                entry['stem'] = {}
+                if change:
+                    entry['stem']['change'] = change
+                    entry['stem']['example'] = pres[2]
+                if yo:
+                    entry['stem']['yo'] = yo
 
         for (verb, tense, idx), form in OVERRIDES.items():
             if verb == card['es'] and entry.get(tense, {}).get('es'):

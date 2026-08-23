@@ -271,6 +271,8 @@ function renderCard() {
   $('#card-links').classList.add('hidden');
   $('#examples-btn').classList.add('hidden');
   $('#conj-btn').classList.add('hidden');
+  $('#stem-note').classList.add('hidden');
+  $('#stem-note').replaceChildren();
   $('#examples').classList.add('hidden');
   $('#examples').replaceChildren();
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
@@ -330,9 +332,10 @@ function reveal() {
 
   if (posGroups(card).includes('vblex')) {
     loadConjugations().then(all => {
-      if (state.queue[state.index] && state.queue[state.index].card.es === card.es) {
-        $('#conj-btn').classList.toggle('hidden', !all[card.es]);
-      }
+      if (!state.queue[state.index] || state.queue[state.index].card.es !== card.es) return;
+      const entry = all[card.es];
+      $('#conj-btn').classList.toggle('hidden', !entry);
+      renderStemNote(entry && entry.stem);
     });
   }
 
@@ -477,6 +480,32 @@ async function finish() {
   show('done');
 }
 
+// A verb that changes its stem is worth knowing about before the conjugation
+// panel is opened, because the change is what makes the whole paradigm
+// unpredictable. The example is the third person: `tiene` shows tener's e->ie
+// where `tengo` hides it behind a quirk of the first person, which is then
+// listed separately when it is not explained by the change.
+function renderStemNote(stem) {
+  const el = $('#stem-note');
+  if (!stem) { el.classList.add('hidden'); return; }
+
+  const parts = [];
+  if (stem.change) {
+    const b = document.createElement('b');
+    b.textContent = stem.change;
+    parts.push(b, document.createTextNode(' ' + stem.example));
+  }
+  if (stem.yo) {
+    if (parts.length) parts.push(document.createTextNode(' · '));
+    parts.push(document.createTextNode('yo '));
+    const y = document.createElement('b');
+    y.textContent = stem.yo;
+    parts.push(y);
+  }
+  el.replaceChildren(...parts);
+  el.classList.remove('hidden');
+}
+
 // ---------- conjugation ----------
 //
 // Five tenses, not the full fifteen. These are the ones that get someone
@@ -500,7 +529,7 @@ const TENSES = [
           'America. When in doubt, use the preterite.' },
 ];
 
-const PRONOUNS = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos'];
+const PRONOUNS = ['yo', 'tú', 'él', 'nosotros', 'ustedes · ellos'];
 
 async function openConjugation() {
   const card = state.queue[state.index].card;
@@ -536,7 +565,7 @@ async function openConjugation() {
     table.className = 'conj-table';
     PRONOUNS.forEach((pr, i) => {
       const row = document.createElement('div');
-      row.className = 'conj-row' + (pr === 'vosotros' ? ' spain-only' : '');
+      row.className = 'conj-row';
 
       const p = document.createElement('span');
       p.className = 'conj-pron';

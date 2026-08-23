@@ -56,16 +56,25 @@ POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "cnjcoo", "cnjsub",
 
 MAX_SENSES = 3
 
-# A secondary sense that is a phrase AND markedly rarer than the primary is
-# register, not meaning: `antes` glossing to `in precedenza` as well as `prima`
-# says only that Italian has a formal way to say "before". Compare `otro ->
-# altro, un altro`, where the second gloss is the same frequency and encodes a
-# real grammatical difference, and is kept.
+# Two different problems, two different rules.
+#
+# Archaic and junk glosses are rare in absolute terms, not merely rarer than
+# the primary: meco, teco, taluno, allocuzione, a misspelled lievietare and an
+# English "corporate tax" all sit at or below Zipf 2.8, while every gloss worth
+# keeping -- meteo, granché, parecchio, indossare -- is at 3.7 or above. A
+# floor separates them cleanly, and a gap does not: `tiempo -> meteo` is a
+# genuine second meaning that a gap rule throws away, and it is exactly the
+# case multiple senses exist for, since Spanish has no separate word for it.
+#
+# Register duplicates are a different thing. `antes -> in precedenza` is common
+# enough to clear the floor but says only that Italian has a formal way to say
+# "before". Those are phrases, and close enough in meaning to the primary that
+# a frequency gap does identify them.
 # A phrase needs less of a gap to be dismissed than a single word does, since
 # a rarer single word is often a genuine synonym while a rarer phrase is
 # usually just formal register.
-NOISE_GAP_PHRASE = 0.8
-NOISE_GAP_WORD = 1.8
+MIN_SENSE_ZIPF = 3.0     # below this a gloss is archaic, misspelled or foreign
+NOISE_GAP_PHRASE = 0.8   # phrases only: register rather than meaning
 
 
 def _surface(node):
@@ -79,13 +88,6 @@ def _surface(node):
             pos = child.get("n")
         parts.append(child.tail or "")
     return "".join(parts).strip(), pos
-
-
-def _fix_pos(spa, pos):
-    """Apertium calls plenty of infinitives nouns. The ending gives it away."""
-    if pos == "n" and len(spa) > 3 and spa[-2:] in ("ar", "er", "ir") and " " not in spa:
-        return "vblex"
-    return pos
 
 
 def load():
@@ -108,7 +110,7 @@ def load():
 
     out = {}
     for spa, entries in raw.items():
-        tags = [_fix_pos(spa, ps) for _, ps, _ in entries if ps]
+        tags = [ps for _, ps, _ in entries if ps]
         if not any(t in CONTENT_POS for t in tags):
             continue
         # Majority across ALL tags, not just the content ones. Restricting the
@@ -147,9 +149,10 @@ def load():
         for ita in ranked[1:]:
             if len(senses) >= MAX_SENSES:
                 break
-            gap = top_z - zipf_frequency(ita, "it")
-            limit = NOISE_GAP_PHRASE if " " in ita else NOISE_GAP_WORD
-            if gap >= limit:
+            z = zipf_frequency(ita, "it")
+            if z < MIN_SENSE_ZIPF:
+                continue
+            if " " in ita and top_z - z >= NOISE_GAP_PHRASE:
                 continue
             senses.append(ita)
         # A word can be several things at once -- `bajo` is an adjective and a

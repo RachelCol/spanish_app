@@ -22,7 +22,8 @@
   "tier": "core",
   "it": "come",
   "senses": [
-   "come"
+   "come",
+   "siccome"
   ],
   "pos": "pr",
   "pos_all": [
@@ -57,7 +58,8 @@
   "it": "ma",
   "senses": [
    "ma",
-   "però"
+   "però",
+   "eppure"
   ],
   "pos": "cnjcoo",
   "pos_all": [
@@ -190,7 +192,8 @@
   "tier": "core",
   "it": "così",
   "senses": [
-   "così"
+   "così",
+   "cosicché"
   ],
   "pos": "adv",
   "pos_all": [
@@ -376,7 +379,8 @@
   "tier": "common",
   "it": "qualcosa",
   "senses": [
-   "qualcosa"
+   "qualcosa",
+   "alcunché"
   ],
   "pos": "prn",
   "pos_all": [
@@ -392,7 +396,8 @@
   "tier": "common",
   "it": "tempo",
   "senses": [
-   "tempo"
+   "tempo",
+   "meteo"
   ],
   "pos": "n",
   "pos_all": [
@@ -443,7 +448,8 @@
   "it": "molto",
   "senses": [
    "molto",
-   "parecchio"
+   "parecchio",
+   "granché"
   ],
   "pos": "adv",
   "pos_all": [
@@ -796,9 +802,9 @@
   "senses": [
    "luogo"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.4,
   "bucket": "distinct",
@@ -826,7 +832,8 @@
   "tier": "common",
   "it": "anche se",
   "senses": [
-   "anche se"
+   "anche se",
+   "seppur"
   ],
   "pos": "cnjadv",
   "pos_all": [
@@ -880,7 +887,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.4,
   "bucket": "distinct",
@@ -1161,7 +1169,7 @@
   ],
   "pos": "vbmod",
   "pos_all": [
-   "vblex",
+   "n",
    "vbmod"
   ],
   "sim": 0.67,
@@ -1655,9 +1663,9 @@
   "senses": [
    "donna"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.0,
   "bucket": "distinct",
@@ -1918,7 +1926,8 @@
   "tier": "common",
   "it": "punto",
   "senses": [
-   "punto"
+   "punto",
+   "puntino"
   ],
   "pos": "n",
   "pos_all": [
@@ -1987,7 +1996,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.67,
   "bucket": "shifted",
@@ -2237,7 +2247,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.57,
   "bucket": "shifted",
@@ -2730,7 +2741,8 @@
   "it": "passo",
   "senses": [
    "passo",
-   "passaggio"
+   "passaggio",
+   "attraversamento"
   ],
   "pos": "n",
   "pos_all": [
@@ -3317,7 +3329,8 @@
   "tier": "common",
   "it": "senso",
   "senses": [
-   "senso"
+   "senso",
+   "buonsenso"
   ],
   "pos": "n",
   "pos_all": [
@@ -4550,12 +4563,12 @@
   "tier": "common",
   "it": "pesare",
   "senses": [
-   "pesare",
-   "magone"
+   "pesare"
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.83,
   "bucket": "near",
@@ -5009,7 +5022,8 @@
   "tier": "common",
   "it": "ricerca",
   "senses": [
-   "ricerca"
+   "ricerca",
+   "investigazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -5349,7 +5363,8 @@
   "tier": "common",
   "it": "capo",
   "senses": [
-   "capo"
+   "capo",
+   "caporedattore"
   ],
   "pos": "n",
   "pos_all": [
@@ -6027,8 +6042,7 @@
   "it": "all'incirca",
   "senses": [
    "all'incirca",
-   "tutt'intorno",
-   "tutt'attorno"
+   "tutt'intorno"
   ],
   "pos": "adv",
   "pos_all": [
@@ -6723,6 +6737,7 @@
   "pos": "vblex",
   "pos_all": [
    "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.88,
@@ -6899,7 +6914,8 @@
   "it": "fondo",
   "senses": [
    "fondo",
-   "sfondo"
+   "sfondo",
+   "fondale"
   ],
   "pos": "n",
   "pos_all": [
@@ -7747,7 +7763,8 @@
   "tier": "common",
   "it": "camera",
   "senses": [
-   "camera"
+   "camera",
+   "cameraman"
   ],
   "pos": "n",
   "pos_all": [
@@ -8270,7 +8287,8 @@
   "it": "di sotto",
   "senses": [
    "di sotto",
-   "giù"
+   "giù",
+   "abbasso"
   ],
   "pos": "adv",
   "pos_all": [
@@ -9401,7 +9419,8 @@
   "tier": "useful",
   "it": "insieme",
   "senses": [
-   "insieme"
+   "insieme",
+   "congiunto"
   ],
   "pos": "n",
   "pos_all": [
@@ -11207,9 +11226,9 @@
   "senses": [
    "leader"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.67,
   "bucket": "shifted",
@@ -11582,9 +11601,9 @@
   "senses": [
    "casa"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.2,
   "bucket": "distinct",
@@ -11792,8 +11811,7 @@
   "tier": "useful",
   "it": "incredibile",
   "senses": [
-   "incredibile",
-   "strabiliante"
+   "incredibile"
   ],
   "pos": "adj",
   "pos_all": [
@@ -12172,7 +12190,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.71,
   "bucket": "shifted",
@@ -12315,9 +12334,9 @@
   "senses": [
    "carattere"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.67,
   "bucket": "shifted",
@@ -13190,7 +13209,8 @@
   "tier": "useful",
   "it": "che",
   "senses": [
-   "che"
+   "che",
+   "minuto"
   ],
   "pos": "adj",
   "pos_all": [
@@ -13617,9 +13637,9 @@
   "senses": [
    "familiare"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.89,
@@ -15498,7 +15518,8 @@
   "it": "circa",
   "senses": [
    "circa",
-   "all'incirca"
+   "all'incirca",
+   "approssimativamente"
   ],
   "pos": "adv",
   "pos_all": [
@@ -15905,7 +15926,8 @@
   "it": "pubblico",
   "senses": [
    "pubblico",
-   "udienza"
+   "udienza",
+   "audience"
   ],
   "pos": "n",
   "pos_all": [
@@ -16334,9 +16356,9 @@
   "senses": [
    "cancro"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.5,
   "bucket": "shifted",
@@ -17448,7 +17470,8 @@
   "tier": "useful",
   "it": "anche",
   "senses": [
-   "anche"
+   "anche",
+   "altresì"
   ],
   "pos": "adv",
   "pos_all": [
@@ -18090,9 +18113,9 @@
   "senses": [
    "piacere"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.71,
   "bucket": "shifted",
@@ -18137,12 +18160,12 @@
   "tier": "useful",
   "it": "intitolare",
   "senses": [
-   "intitolare",
-   "intestatario"
+   "intitolare"
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.6,
   "bucket": "shifted",
@@ -19324,7 +19347,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.33,
   "bucket": "distinct",
@@ -20478,8 +20502,7 @@
   "tier": "useful",
   "it": "utensile",
   "senses": [
-   "utensile",
-   "arnese"
+   "utensile"
   ],
   "pos": "n",
   "pos_all": [
@@ -22400,8 +22423,7 @@
   "it": "paragone",
   "senses": [
    "paragone",
-   "comparazione",
-   "equiparazione"
+   "comparazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -22434,7 +22456,9 @@
   "tier": "useful",
   "it": "fare",
   "senses": [
-   "fare"
+   "fare",
+   "mancare",
+   "gettare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -22698,9 +22722,9 @@
   "senses": [
    "officina"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.0,
   "bucket": "distinct",
@@ -23295,8 +23319,7 @@
   "tier": "extended",
   "it": "ingegneria",
   "senses": [
-   "ingegneria",
-   "ingegneristica"
+   "ingegneria"
   ],
   "pos": "n",
   "pos_all": [
@@ -23995,9 +24018,9 @@
    "benessere",
    "welfare"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.56,
   "bucket": "shifted",
@@ -24385,9 +24408,9 @@
   "senses": [
    "zucchero"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.25,
   "bucket": "distinct",
@@ -24677,7 +24700,8 @@
   "tier": "extended",
   "it": "richiesta",
   "senses": [
-   "richiesta"
+   "richiesta",
+   "sollecitazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -24774,8 +24798,7 @@
   "tier": "extended",
   "it": "documentario",
   "senses": [
-   "documentario",
-   "documentale"
+   "documentario"
   ],
   "pos": "n",
   "pos_all": [
@@ -25155,7 +25178,7 @@
   ],
   "pos": "adj",
   "pos_all": [
-   "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.4,
@@ -26027,9 +26050,10 @@
   "senses": [
    "dovere"
   ],
-  "pos": "vblex",
+  "pos": "vbmod",
   "pos_all": [
    "vblex",
+   "n",
    "vbmod"
   ],
   "sim": 0.5,
@@ -28413,8 +28437,7 @@
   "tier": "extended",
   "it": "rivedere",
   "senses": [
-   "rivedere",
-   "revisionare"
+   "rivedere"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -31321,8 +31344,7 @@
   "tier": "extended",
   "it": "indiano",
   "senses": [
-   "indiano",
-   "indio"
+   "indiano"
   ],
   "pos": "n",
   "pos_all": [
@@ -31454,8 +31476,7 @@
   "tier": "extended",
   "it": "alimentazione",
   "senses": [
-   "alimentazione",
-   "mangime"
+   "alimentazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -32702,8 +32723,7 @@
   "tier": "extended",
   "it": "mistero",
   "senses": [
-   "mistero",
-   "indovinello"
+   "mistero"
   ],
   "pos": "n",
   "pos_all": [
@@ -32913,9 +32933,9 @@
   "senses": [
    "affitto"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.25,
   "bucket": "distinct",
@@ -34287,9 +34307,9 @@
   "senses": [
    "dollaro"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.57,
   "bucket": "shifted",
@@ -34872,7 +34892,8 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex"
+   "vblex",
+   "n"
   ],
   "sim": 0.78,
   "bucket": "near",
@@ -35092,8 +35113,7 @@
   "tier": "extended",
   "it": "facilità",
   "senses": [
-   "facilità",
-   "agevolazione"
+   "facilità"
   ],
   "pos": "n",
   "pos_all": [
@@ -35689,8 +35709,7 @@
   "tier": "extended",
   "it": "lanciare",
   "senses": [
-   "lanciare",
-   "varare"
+   "lanciare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -35948,8 +35967,7 @@
   "tier": "extended",
   "it": "camion",
   "senses": [
-   "camion",
-   "autocarro"
+   "camion"
   ],
   "pos": "n",
   "pos_all": [
@@ -37311,7 +37329,7 @@
   ],
   "pos": "adj",
   "pos_all": [
-   "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.62,
@@ -38296,8 +38314,7 @@
   "it": "emotivo",
   "senses": [
    "emotivo",
-   "emozionale",
-   "impressionabile"
+   "emozionale"
   ],
   "pos": "adj",
   "pos_all": [
@@ -38894,8 +38911,7 @@
   "it": "attrazione",
   "senses": [
    "attrazione",
-   "attraente",
-   "attrattivo"
+   "attraente"
   ],
   "pos": "n",
   "pos_all": [
@@ -40822,8 +40838,7 @@
   "it": "disparità",
   "senses": [
    "disparità",
-   "disuguaglianza",
-   "diseguaglianza"
+   "disuguaglianza"
   ],
   "pos": "n",
   "pos_all": [
@@ -41115,9 +41130,9 @@
   "senses": [
    "pilastro"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.62,
   "bucket": "shifted",
@@ -41293,9 +41308,9 @@
   "senses": [
    "caso"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.0,
   "bucket": "distinct",
@@ -43437,8 +43452,7 @@
   "tier": "extended",
   "it": "rafforzare",
   "senses": [
-   "rafforzare",
-   "fortificare"
+   "rafforzare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -43776,9 +43790,9 @@
   "senses": [
    "cadavere"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.75,
   "bucket": "near",
@@ -44337,8 +44351,7 @@
   "tier": "extended",
   "it": "tribù",
   "senses": [
-   "tribù",
-   "tribu"
+   "tribù"
   ],
   "pos": "n",
   "pos_all": [
@@ -44660,8 +44673,7 @@
   "tier": "extended",
   "it": "schiavitù",
   "senses": [
-   "schiavitù",
-   "schiavismo"
+   "schiavitù"
   ],
   "pos": "n",
   "pos_all": [
@@ -45306,8 +45318,7 @@
   "tier": "extended",
   "it": "impronta",
   "senses": [
-   "impronta",
-   "orma"
+   "impronta"
   ],
   "pos": "n",
   "pos_all": [
@@ -46627,8 +46638,7 @@
   "tier": "extended",
   "it": "grano",
   "senses": [
-   "grano",
-   "granello"
+   "grano"
   ],
   "pos": "n",
   "pos_all": [
@@ -47100,9 +47110,9 @@
   "senses": [
    "esemplare"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.78,
@@ -47436,8 +47446,7 @@
   "tier": "extended",
   "it": "posteriore",
   "senses": [
-   "posteriore",
-   "didietro"
+   "posteriore"
   ],
   "pos": "adj",
   "pos_all": [
@@ -48227,9 +48236,9 @@
   "senses": [
    "altare"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.83,
   "bucket": "near",
@@ -49500,8 +49509,7 @@
   "it": "automobile",
   "senses": [
    "automobile",
-   "autovettura",
-   "autoveicolo"
+   "autovettura"
   ],
   "pos": "n",
   "pos_all": [
@@ -50729,8 +50737,7 @@
   "tier": "extended",
   "it": "sollievo",
   "senses": [
-   "sollievo",
-   "attenuazione"
+   "sollievo"
   ],
   "pos": "n",
   "pos_all": [
@@ -50746,8 +50753,7 @@
   "tier": "extended",
   "it": "stoccaggio",
   "senses": [
-   "stoccaggio",
-   "immagazzinamento"
+   "stoccaggio"
   ],
   "pos": "n",
   "pos_all": [
@@ -50829,9 +50835,9 @@
   "senses": [
    "cancelliere"
   ],
-  "pos": "vblex",
+  "pos": "n",
   "pos_all": [
-   "vblex"
+   "n"
   ],
   "sim": 0.73,
   "bucket": "shifted",
@@ -51442,8 +51448,7 @@
   "it": "maestranze",
   "senses": [
    "maestranze",
-   "planning",
-   "soletta"
+   "planning"
   ],
   "pos": "n",
   "pos_all": [
@@ -51684,8 +51689,7 @@
   "tier": "long_tail",
   "it": "luccichio",
   "senses": [
-   "luccichio",
-   "brillio"
+   "luccichio"
   ],
   "pos": "n",
   "pos_all": [
@@ -53492,8 +53496,7 @@
   "tier": "long_tail",
   "it": "pennarello",
   "senses": [
-   "pennarello",
-   "marcatore"
+   "pennarello"
   ],
   "pos": "n",
   "pos_all": [
@@ -53899,7 +53902,7 @@
   ],
   "pos": "adj",
   "pos_all": [
-   "vblex",
+   "n",
    "adj"
   ],
   "sim": 0.7,
@@ -54619,8 +54622,7 @@
   "tier": "long_tail",
   "it": "divano",
   "senses": [
-   "divano",
-   "sofà"
+   "divano"
   ],
   "pos": "n",
   "pos_all": [
@@ -55133,8 +55135,7 @@
   "tier": "long_tail",
   "it": "cattiveria",
   "senses": [
-   "cattiveria",
-   "malignità"
+   "cattiveria"
   ],
   "pos": "n",
   "pos_all": [
@@ -55295,8 +55296,7 @@
   "tier": "long_tail",
   "it": "uccello",
   "senses": [
-   "uccello",
-   "passero"
+   "uccello"
   ],
   "pos": "n",
   "pos_all": [
