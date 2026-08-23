@@ -5,8 +5,7 @@
   "tier": "core",
   "it": "non",
   "senses": [
-   "non",
-   "no"
+   "non"
   ],
   "pos": "adv",
   "pos_all": [
@@ -867,8 +866,7 @@
   "tier": "common",
   "it": "conto",
   "senses": [
-   "conto",
-   "account"
+   "conto"
   ],
   "pos": "n",
   "pos_all": [
@@ -1960,8 +1958,7 @@
   "tier": "common",
   "it": "squadra",
   "senses": [
-   "squadra",
-   "team"
+   "squadra"
   ],
   "pos": "n",
   "pos_all": [
@@ -3530,8 +3527,7 @@
   "tier": "common",
   "it": "personale",
   "senses": [
-   "personale",
-   "staff"
+   "personale"
   ],
   "pos": "n",
   "pos_all": [
@@ -3597,8 +3593,7 @@
   "tier": "common",
   "it": "base",
   "senses": [
-   "base",
-   "database"
+   "base"
   ],
   "pos": "n",
   "pos_all": [
@@ -6192,7 +6187,7 @@
   "senses": [
    "scopo",
    "obiettivo",
-   "target"
+   "oggettivo"
   ],
   "pos": "n",
   "pos_all": [
@@ -6257,8 +6252,7 @@
   "tier": "common",
   "it": "rete",
   "senses": [
-   "rete",
-   "network"
+   "rete"
   ],
   "pos": "n",
   "pos_all": [
@@ -7764,8 +7758,7 @@
   "tier": "common",
   "it": "camera",
   "senses": [
-   "camera",
-   "cameraman"
+   "camera"
   ],
   "pos": "n",
   "pos_all": [
@@ -8172,8 +8165,7 @@
   "it": "ingresso",
   "senses": [
    "ingresso",
-   "entrata",
-   "input"
+   "entrata"
   ],
   "pos": "n",
   "pos_all": [
@@ -9910,8 +9902,7 @@
   "tier": "useful",
   "it": "associazione",
   "senses": [
-   "associazione",
-   "partnership"
+   "associazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -10056,7 +10047,6 @@
   "it": "relazione",
   "senses": [
    "relazione",
-   "report",
    "resoconto"
   ],
   "pos": "n",
@@ -12579,8 +12569,7 @@
   "it": "spesa",
   "senses": [
    "spesa",
-   "acquisto",
-   "shopping"
+   "acquisto"
   ],
   "pos": "n",
   "pos_all": [
@@ -13193,8 +13182,7 @@
   "tier": "useful",
   "it": "gestione",
   "senses": [
-   "gestione",
-   "management"
+   "gestione"
   ],
   "pos": "n",
   "pos_all": [
@@ -14483,8 +14471,7 @@
   "tier": "useful",
   "it": "schermo",
   "senses": [
-   "schermo",
-   "display"
+   "schermo"
   ],
   "pos": "n",
   "pos_all": [
@@ -15877,8 +15864,7 @@
   "tier": "useful",
   "it": "tendenza",
   "senses": [
-   "tendenza",
-   "trend"
+   "tendenza"
   ],
   "pos": "n",
   "pos_all": [
@@ -15927,8 +15913,7 @@
   "it": "pubblico",
   "senses": [
    "pubblico",
-   "udienza",
-   "audience"
+   "udienza"
   ],
   "pos": "n",
   "pos_all": [
@@ -16141,8 +16126,7 @@
   "tier": "useful",
   "it": "cellulare",
   "senses": [
-   "cellulare",
-   "mobile"
+   "cellulare"
   ],
   "pos": "n",
   "pos_all": [
@@ -20892,8 +20876,7 @@
   "tier": "useful",
   "it": "gol",
   "senses": [
-   "gol",
-   "goal"
+   "gol"
   ],
   "pos": "n",
   "pos_all": [
@@ -24016,8 +23999,7 @@
   "tier": "extended",
   "it": "benessere",
   "senses": [
-   "benessere",
-   "welfare"
+   "benessere"
   ],
   "pos": "n",
   "pos_all": [
@@ -24357,8 +24339,7 @@
   "tier": "extended",
   "it": "annuncio",
   "senses": [
-   "annuncio",
-   "spot"
+   "annuncio"
   ],
   "pos": "n",
   "pos_all": [
@@ -29739,8 +29720,7 @@
   "tier": "extended",
   "it": "modello",
   "senses": [
-   "modello",
-   "pattern"
+   "modello"
   ],
   "pos": "n",
   "pos_all": [
@@ -42146,8 +42126,7 @@
   "tier": "extended",
   "it": "scrivania",
   "senses": [
-   "scrivania",
-   "desktop"
+   "scrivania"
   ],
   "pos": "n",
   "pos_all": [
@@ -43226,8 +43205,7 @@
   "tier": "extended",
   "it": "uccello",
   "senses": [
-   "uccello",
-   "volatile"
+   "uccello"
   ],
   "pos": "n",
   "pos_all": [
@@ -43438,8 +43416,7 @@
   "tier": "extended",
   "it": "esportazione",
   "senses": [
-   "esportazione",
-   "export"
+   "esportazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -50255,8 +50232,7 @@
   "tier": "extended",
   "it": "dimostrazione",
   "senses": [
-   "dimostrazione",
-   "demo"
+   "dimostrazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -51450,8 +51426,7 @@
   "tier": "extended",
   "it": "maestranze",
   "senses": [
-   "maestranze",
-   "planning"
+   "maestranze"
   ],
   "pos": "n",
   "pos_all": [
@@ -51579,8 +51554,7 @@
   "tier": "extended",
   "it": "valutazione",
   "senses": [
-   "valutazione",
-   "rating"
+   "valutazione"
   ],
   "pos": "n",
   "pos_all": [
@@ -52983,8 +52957,7 @@
   "tier": "long_tail",
   "it": "crescita",
   "senses": [
-   "crescita",
-   "boom"
+   "crescita"
   ],
   "pos": "n",
   "pos_all": [

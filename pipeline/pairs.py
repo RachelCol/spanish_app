@@ -91,6 +91,15 @@ SENSE_OVERRIDES = {
 MIN_SENSE_ZIPF = 3.0     # below this a gloss is archaic, misspelled or foreign
 NOISE_GAP_PHRASE = 0.8   # phrases only: register rather than meaning
 
+# Apertium carries English business and technology loanwords as Italian
+# glosses, picked up from technical corpora: gestión/management,
+# pantalla/display, cuenta/account. Some of those words are genuinely used in
+# Italian, but only in narrow modern senses, and offering `account` next to
+# `conto` implies an equivalence that does not hold -- Italians say conto for
+# the bill and the bank account alike. A gloss that reads more English than
+# Italian is dropped, and only ever as a secondary, so the primary is untouched
+# and every affected card keeps its correct Italian word.
+
 
 def _surface(node):
     """Flatten an <l>/<r> node into its lemma string and first POS tag."""
@@ -166,6 +175,8 @@ def load():
                 break
             z = zipf_frequency(ita, "it")
             if z < MIN_SENSE_ZIPF:
+                continue
+            if zipf_frequency(ita, "en") > z:
                 continue
             if " " in ita and top_z - z >= NOISE_GAP_PHRASE:
                 continue
