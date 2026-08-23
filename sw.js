@@ -4,7 +4,7 @@
 // file changes, or the old copy will be served indefinitely. That is the cost
 // of skipping a build system, and it is a fair trade for a deck app.
 
-const CACHE = 'spanish-app-v39';
+const CACHE = 'spanish-app-v40';
 
 const ASSETS = [
   '.',
@@ -17,9 +17,15 @@ const ASSETS = [
   'js/deck.js',
   'js/session.js',
   'js/speech.js',
+  'js/grammar.js',
+  'js/drills.js',
+  'js/sections.js',
   'data/deck.json',
   'data/sentences.json',
   'data/conjugations.json',
+  'data/grammar.json',
+  'data/extras.json',
+  'data/drill_verbs.json',
   'icons/icon-192.png',
   'icons/icon-512.png',
 ];

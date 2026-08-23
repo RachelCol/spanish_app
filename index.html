@@ -54,6 +54,22 @@
         <button id="open-settings">Settings</button>
       </div>
     </div>
+
+    <div class="group">
+      <h2 class="group-title">Grammar</h2>
+      <div class="group-row">
+        <button id="open-grammar">Lessons</button>
+        <button id="open-prep">Prepositions</button>
+        <button id="open-convo">Conversations</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="group-title">Verb practice</h2>
+      <div class="group-row">
+        <button id="open-drill" class="wide">Conjugation drill</button>
+      </div>
+    </div>
   </section>
 
   <!-- Deck: which cards get drilled -->
@@ -159,6 +175,42 @@
       <h2 class="progress-title" id="conj-title"></h2>
     </header>
     <div id="conj-body"></div>
+  </section>
+
+  <!-- Grammar -->
+  <section id="view-grammar" class="view hidden">
+    <header class="review-bar">
+      <button id="close-grammar" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="grammar-title">Grammar</h2>
+    </header>
+    <div id="grammar-body"></div>
+  </section>
+
+  <!-- Conjugation drill -->
+  <section id="view-drill" class="view hidden">
+    <header class="review-bar">
+      <button id="close-drill" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="drill-title">Conjugation drill</h2>
+    </header>
+    <div id="drill-body"></div>
+  </section>
+
+  <!-- Preposition drill -->
+  <section id="view-prep" class="view hidden">
+    <header class="review-bar">
+      <button id="close-prep" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="prep-title">Prepositions</h2>
+    </header>
+    <div id="prep-body"></div>
+  </section>
+
+  <!-- Conversations -->
+  <section id="view-convo" class="view hidden">
+    <header class="review-bar">
+      <button id="close-convo" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="convo-title">Conversations</h2>
+    </header>
+    <div id="convo-body"></div>
   </section>
 
   <!-- Review -->

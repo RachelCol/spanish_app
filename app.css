@@ -415,3 +415,83 @@ button.secondary {
   border-bottom: 2px solid var(--accent);
   color: var(--ink); font-weight: 600;
 }
+
+/* --- shared section furniture --- */
+.section-intro { margin: 0 0 1.2rem; line-height: 1.5; }
+.wide { grid-column: 1 / -1; }
+.back-link { margin-top: 1.2rem; }
+
+/* --- lesson and conversation lists --- */
+.lesson-list { display: flex; flex-direction: column; gap: .5rem; }
+.lesson-row {
+  display: flex; align-items: flex-start; gap: .8rem; text-align: left;
+  padding: .8rem .9rem; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.lesson-row:active { border-color: var(--accent); }
+.lesson-num {
+  flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  background: var(--bg); color: var(--muted);
+  font-size: .75rem; display: grid; place-items: center;
+}
+.lesson-text { display: flex; flex-direction: column; gap: .15rem; }
+.lesson-summary { font-size: .82rem; color: var(--muted); line-height: 1.4; font-weight: 400; }
+
+/* --- lesson body --- */
+.lesson-para { line-height: 1.6; margin: 0 0 .9rem; }
+.lesson-para b { color: var(--accent); }
+.pair-table { margin: 1.2rem 0; }
+.pair-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .1rem .8rem;
+  padding: .55rem 0; border-bottom: 1px solid var(--line);
+}
+.pair-it { color: var(--muted); font-size: .95rem; }
+.pair-es { font-weight: 600; font-size: .95rem; }
+.pair-note { grid-column: 1 / -1; font-size: .76rem; color: var(--muted); }
+.speakable { cursor: pointer; }
+.speakable:active { color: var(--accent); }
+
+/* --- drills --- */
+.drill-prompt { text-align: center; margin: 2rem 0 1.4rem; }
+.drill-verb { display: block; font-size: 2.2rem; font-weight: 650; letter-spacing: -.02em; }
+.drill-meta {
+  display: block; margin-top: .35rem; font-size: .8rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.drill-form { display: flex; justify-content: center; }
+.drill-input {
+  font: inherit; font-size: 1.4rem; text-align: center;
+  width: 100%; max-width: 18rem; padding: .6rem .8rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink);
+}
+.drill-input:focus { outline: none; border-color: var(--accent); }
+.drill-input:disabled { opacity: .6; }
+.drill-feedback {
+  text-align: center; min-height: 1.6rem; margin: .9rem 0 0;
+  font-size: 1.05rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+.drill-feedback.right { color: var(--good); }
+.drill-feedback.accents { color: var(--hard); }
+.drill-feedback.wrong { color: var(--again); }
+.drill-score { text-align: center; font-size: 2.4rem; font-weight: 650; margin: 2rem 0 .2rem; }
+.prep-prompt {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: 2rem 0 1.4rem; text-align: center;
+}
+.prep-sentence { font-size: 1.35rem; font-weight: 600; line-height: 1.4; }
+
+/* --- conversations --- */
+.convo { display: flex; flex-direction: column; gap: .9rem; margin: 1rem 0; }
+.convo-line {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .7rem .9rem; max-width: 92%;
+}
+.convo-line.right { align-self: flex-end; }
+.convo-es {
+  display: flex; align-items: center; gap: .45rem;
+  font-size: 1.02rem; font-weight: 600;
+}
+.convo-it { font-size: .88rem; color: var(--muted); margin-top: .2rem; }
+.convo-en { font-size: .8rem; color: var(--muted); opacity: .75; margin-top: .1rem; }

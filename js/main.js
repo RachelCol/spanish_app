@@ -4,6 +4,7 @@ import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewIt
 import { loadDeck, loadSentences, loadConjugations, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
+import { initSections } from './sections.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, speakSequence, stop as stopSpeech } from './speech.js';
@@ -55,6 +56,12 @@ async function start() {
   await refresh();
   renderFilters();
   wire();
+  // The grammar, drill and conversation sections are additive: they share the
+  // view switcher and the conjugation tables and touch nothing else.
+  loadConjugations()
+    .then(conj => initSections(show, conj))
+    .catch(() => {});
+
   initVoices();
   onVoicesReady(() => {
     setAccent(state.settings.accent);
@@ -235,7 +242,8 @@ async function save() {
 // ---------- review ----------
 
 function show(view) {
-  ['home', 'review', 'done', 'progress', 'conj', 'deck', 'settings'].forEach(v =>
+  ['home', 'review', 'done', 'progress', 'conj', 'deck', 'settings',
+   'grammar', 'drill', 'prep', 'convo'].forEach(v =>
     $('#view-' + v).classList.toggle('hidden', v !== view));
 }
 

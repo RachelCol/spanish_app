@@ -23,6 +23,18 @@ This app inverts that. It teaches:
 
 And deliberately skips everything that carries over intact.
 
+## Sections
+
+**Flashcards** — the vocabulary deck, spaced repetition, example sentences and
+conjugation tables.
+
+**Grammar** — twelve lessons on what Italian gets wrong about Spanish, ordered
+by how much trouble each thing causes. A preposition drill, and short written
+conversations.
+
+**Verb practice** — typed conjugation drills over the fifty commonest verbs,
+choosing verbs and tenses.
+
 ## Status
 
 Early. See [docs/spec.md](docs/spec.md) for the design.

@@ -1,0 +1,130 @@
+# -*- coding: utf-8 -*-
+"""Preposition drills and sample conversations.
+
+Written, not extracted, so every line is one I would defend. Kept short and
+plain on purpose: an invented sentence that is elaborate is an invented
+sentence with more places to be wrong.
+"""
+
+# Prepositions, where Italian and Spanish diverge most. Each item is drilled in
+# both directions, so the Italian side has to be as natural as the Spanish.
+PREPOSITIONS = [
+ ["Sono a Roma.", "Estoy en Roma.", "Italian a for a city; Spanish uses en for location"],
+ ["Vado a Roma.", "Voy a Roma.", "movement takes a in both"],
+ ["Sono in Italia.", "Estoy en Italia.", "in → en"],
+ ["Vado in Italia.", "Voy a Italia.", "movement → a, not en"],
+ ["Sono a casa.", "Estoy en casa.", "at home is en casa"],
+ ["Vado a casa.", "Voy a casa.", "movement → a"],
+ ["Vado da Mario.", "Voy a casa de Mario.", "no Spanish equivalent of da"],
+ ["Sono da Mario.", "Estoy en casa de Mario.", "same, with en"],
+ ["Vengo da Roma.", "Vengo de Roma.", "origin → de"],
+ ["Il libro è di Ana.", "El libro es de Ana.", "possession → de, same"],
+ ["Parto per Madrid.", "Salgo para Madrid.", "destination → para"],
+ ["È per te.", "Es para ti.", "recipient → para"],
+ ["Grazie per tutto.", "Gracias por todo.", "cause → por"],
+ ["L'ho comprato per venti euro.", "Lo compré por veinte euros.", "exchange → por"],
+ ["Ho studiato per tre ore.", "Estudié por tres horas.", "duration → por"],
+ ["Passiamo per il centro.", "Pasamos por el centro.", "through → por"],
+ ["Lavoro per una banca.", "Trabajo para un banco.", "employer → para"],
+ ["Vedo Maria.", "Veo a María.", "personal a before a person"],
+ ["Vedo la casa.", "Veo la casa.", "no a before a thing"],
+ ["Aspetto mio fratello.", "Espero a mi hermano.", "personal a"],
+ ["Aspetto l'autobus.", "Espero el autobús.", "no a"],
+ ["Penso a te.", "Pienso en ti.", "pensare a → pensar en"],
+ ["Sogno di partire.", "Sueño con salir.", "sognare di → soñar con"],
+ ["Mi innamoro di lei.", "Me enamoro de ella.", "de, as in Italian"],
+ ["Dipende da te.", "Depende de ti.", "da → de"],
+ ["Comincio a lavorare.", "Empiezo a trabajar.", "a before an infinitive, same"],
+ ["Finisco di lavorare.", "Termino de trabajar.", "di → de"],
+ ["Provo a farlo.", "Trato de hacerlo.", "a → de here"],
+ ["Vado in macchina.", "Voy en coche.", "means → en"],
+ ["Vado a piedi.", "Voy a pie.", "on foot → a pie"],
+ ["Alle tre.", "A las tres.", "clock time → a"],
+ ["In estate.", "En verano.", "season → en"],
+ ["Il lunedì non lavoro.", "Los lunes no trabajo.", "habitual: plural article, no preposition"],
+ ["Lunedì vado a Madrid.", "El lunes voy a Madrid.", "one occasion: el, no preposition"],
+]
+
+# Short exchanges. Latin American Spanish, everyday register.
+CONVERSATIONS = [
+ {
+  "id": "cafe",
+  "title": "Ordering in a café",
+  "note": "Note tomar rather than prendere, and that the bill is la cuenta.",
+  "lines": [
+   ["¿Qué le doy?", "Prego?", "What can I get you?"],
+   ["Un café con leche, por favor.", "Un caffellatte, per favore.", "A coffee with milk, please."],
+   ["¿Algo de comer?", "Qualcosa da mangiare?", "Anything to eat?"],
+   ["No, gracias. Así está bien.", "No, grazie. Va bene così.", "No thanks, that's fine."],
+   ["¿Me trae la cuenta?", "Mi porta il conto?", "Could you bring me the bill?"],
+   ["Claro, ya se la traigo.", "Certo, gliela porto subito.", "Of course, I'll bring it right away."],
+  ],
+ },
+ {
+  "id": "directions",
+  "title": "Asking the way",
+  "note": "Every location here is estar, never ser. Queda is a common alternative.",
+  "lines": [
+   ["Perdón, ¿dónde está la estación?", "Scusi, dov'è la stazione?", "Excuse me, where is the station?"],
+   ["Está a dos cuadras de aquí.", "È a due isolati da qui.", "It's two blocks from here."],
+   ["¿Está lejos?", "È lontano?", "Is it far?"],
+   ["No, queda cerca. Cinco minutos.", "No, è vicino. Cinque minuti.", "No, it's close. Five minutes."],
+   ["¿Voy por esta calle?", "Vado per questa strada?", "Do I go along this street?"],
+   ["Sí, siga derecho y doble a la izquierda.", "Sì, vada dritto e giri a sinistra.", "Yes, go straight and turn left."],
+   ["Muchas gracias.", "Grazie mille.", "Thank you very much."],
+  ],
+ },
+ {
+  "id": "meeting",
+  "title": "Meeting someone",
+  "note": "Soy for identity, estoy for how you are. Both appear here in two lines.",
+  "lines": [
+   ["Hola, ¿cómo estás?", "Ciao, come stai?", "Hi, how are you?"],
+   ["Bien, ¿y tú?", "Bene, e tu?", "Good, and you?"],
+   ["Muy bien. ¿De dónde eres?", "Molto bene. Di dove sei?", "Very well. Where are you from?"],
+   ["Soy de Italia, pero vivo aquí.", "Sono italiana, ma vivo qui.", "I'm from Italy, but I live here."],
+   ["¿Y a qué te dedicas?", "E che lavoro fai?", "And what do you do?"],
+   ["Soy profesora. ¿Y tú?", "Sono insegnante. E tu?", "I'm a teacher. And you?"],
+   ["Trabajo en un banco.", "Lavoro in una banca.", "I work at a bank."],
+  ],
+ },
+ {
+  "id": "shopping",
+  "title": "In a shop",
+  "note": "No partitive: quiero pan, not *quiero del pan*. And cuánto cuesta, not quanto costa.",
+  "lines": [
+   ["Buenos días. ¿Tiene pan?", "Buongiorno. Avete del pane?", "Good morning. Do you have bread?"],
+   ["Sí, ¿cuánto quiere?", "Sì, quanto ne vuole?", "Yes, how much would you like?"],
+   ["Dos, por favor. ¿Cuánto cuesta?", "Due, per favore. Quanto costa?", "Two, please. How much is it?"],
+   ["Cuarenta pesos.", "Quaranta pesos.", "Forty pesos."],
+   ["¿Puedo pagar con tarjeta?", "Posso pagare con la carta?", "Can I pay by card?"],
+   ["Sí, claro.", "Sì, certo.", "Yes, of course."],
+  ],
+ },
+ {
+  "id": "plans",
+  "title": "Making plans",
+  "note": "Ir a + infinitive does the work of the future all through this.",
+  "lines": [
+   ["¿Qué vas a hacer mañana?", "Cosa fai domani?", "What are you doing tomorrow?"],
+   ["Voy a ver a unos amigos.", "Vado a trovare degli amici.", "I'm going to see some friends."],
+   ["¿A qué hora?", "A che ora?", "At what time?"],
+   ["A las ocho, más o menos.", "Alle otto, più o meno.", "Around eight."],
+   ["¿Puedo ir contigo?", "Posso venire con te?", "Can I come with you?"],
+   ["Claro que sí. Te aviso.", "Certo. Ti faccio sapere.", "Of course. I'll let you know."],
+  ],
+ },
+ {
+  "id": "yesterday",
+  "title": "Talking about yesterday",
+  "note": "Every past here is the preterite, where Italian uses the passato prossimo.",
+  "lines": [
+   ["¿Qué hiciste ayer?", "Cosa hai fatto ieri?", "What did you do yesterday?"],
+   ["Fui al cine con Ana.", "Sono andata al cinema con Ana.", "I went to the cinema with Ana."],
+   ["¿Qué vieron?", "Cosa avete visto?", "What did you see?"],
+   ["Una película española. Me gustó mucho.", "Un film spagnolo. Mi è piaciuto molto.", "A Spanish film. I liked it a lot."],
+   ["¿A qué hora volviste?", "A che ora sei tornata?", "What time did you get back?"],
+   ["Tarde. Llegué a medianoche.", "Tardi. Sono arrivata a mezzanotte.", "Late. I got in at midnight."],
+  ],
+ },
+]
