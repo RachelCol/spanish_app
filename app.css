@@ -305,3 +305,40 @@ button.secondary {
   letter-spacing: .01em;
 }
 .stem-note b { color: var(--accent); font-weight: 650; }
+
+/* --- home: backup line --- */
+.backup-line {
+  display: flex; justify-content: center; align-items: center; gap: .5rem;
+  margin: .6rem 0 0;
+}
+.linkish {
+  border: none; background: none; padding: .2rem .3rem;
+  color: var(--muted); font-size: .82rem;
+  border-bottom: 1px solid var(--line); border-radius: 0;
+}
+.linkish:active { color: var(--accent); border-color: var(--accent); }
+.backup-line .sep { color: var(--line); font-size: .82rem; }
+.centred { text-align: center; margin: .35rem 0 0; }
+
+/* --- home: a titled group of destinations --- */
+.group {
+  margin-top: 1.6rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); overflow: hidden;
+}
+.group-title {
+  margin: 0; padding: .6rem .9rem;
+  font-size: .72rem; font-weight: 650; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+.group-row { display: grid; grid-template-columns: repeat(3, 1fr); }
+.group-row button {
+  border: none; border-radius: 0; background: none;
+  padding: .95rem .4rem; font-size: .95rem; font-weight: 600;
+}
+.group-row button + button { border-left: 1px solid var(--line); }
+.group-row button:active { background: var(--bg); color: var(--accent); }
+
+/* settings and deck are full screens now, so their fieldsets need room */
+#view-deck fieldset, #view-settings fieldset { margin: 1.2rem 0; }

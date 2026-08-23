@@ -100,7 +100,7 @@ async function refresh() {
       ? 'No cards match your Deck filters. Turn a frequency band, closeness or direction back on.'
       : state.settings.grades.length
         ? 'No cards in that grade yet. Clear the grade drill under Deck.'
-        : 'Nothing left in this deck. Widen the filters under Deck to add more.';
+        : 'Nothing due right now. Widen the filters under Deck to add more.';
   }
 }
 
@@ -235,7 +235,7 @@ async function save() {
 // ---------- review ----------
 
 function show(view) {
-  ['home', 'review', 'done', 'progress', 'conj'].forEach(v =>
+  ['home', 'review', 'done', 'progress', 'conj', 'deck', 'settings'].forEach(v =>
     $('#view-' + v).classList.toggle('hidden', v !== view));
 }
 
@@ -745,10 +745,12 @@ function renderBackupState(lastBackup, learned) {
 
   const stale = learned > 0 && (lastBackup === undefined || days >= BACKUP_NAG_DAYS);
   warn.classList.toggle('hidden', !stale);
+  // Short enough for one line. Export sits directly below now, so the banner
+  // does not need to say where to find it.
   if (stale) {
     warn.textContent = lastBackup
-      ? `Last backed up ${days} days ago — export again under Backup.`
-      : `${learned} cards in progress and no backup yet. Export under Backup.`;
+      ? `Last backed up ${days} days ago`
+      : `${learned} cards in progress and no backup yet`;
   }
 }
 
@@ -810,6 +812,10 @@ function wire() {
   });
   $('#open-progress').addEventListener('click', openProgress);
   $('#close-progress').addEventListener('click', () => show('home'));
+  $('#open-deck').addEventListener('click', () => show('deck'));
+  $('#close-deck').addEventListener('click', () => show('home'));
+  $('#open-settings').addEventListener('click', () => show('settings'));
+  $('#close-settings').addEventListener('click', () => show('home'));
   $('#grade-row').addEventListener('click', e => {
     const b = e.target.closest('button[data-g]');
     if (b) applyGrade(Number(b.dataset.g));

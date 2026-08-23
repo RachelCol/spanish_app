@@ -36,68 +36,89 @@
     <p id="backup-warning" class="backup-warning hidden"></p>
 
     <button id="start" class="primary">Start review</button>
-    <p id="nothing-due" class="muted hidden">Nothing due. Add new cards below, or come back tomorrow.</p>
+    <p id="nothing-due" class="muted hidden"></p>
 
-    <details class="panel">
-      <summary>Deck</summary>
+    <p class="backup-line">
+      <button id="export" class="linkish">Export</button>
+      <span class="sep">·</span>
+      <button id="import-btn" class="linkish">Import</button>
+      <input id="import" type="file" accept="application/json" hidden>
+    </p>
+    <p id="backup-msg" class="muted small centred"></p>
 
-      <fieldset>
-        <legend>Frequency band</legend>
-        <div id="f-tiers" class="chips"></div>
-      </fieldset>
+    <div class="group">
+      <h2 class="group-title">Flashcards</h2>
+      <div class="group-row">
+        <button id="open-deck">Deck</button>
+        <button id="open-progress">Progress</button>
+        <button id="open-settings">Settings</button>
+      </div>
+    </div>
+  </section>
 
-      <fieldset>
-        <legend>How close to Italian</legend>
-        <div id="f-buckets" class="chips"></div>
-      </fieldset>
+  <!-- Deck: which cards get drilled -->
+  <section id="view-deck" class="view hidden">
+    <header class="review-bar">
+      <button id="close-deck" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Deck</h2>
+    </header>
 
-      <fieldset>
-        <legend>Part of speech</legend>
-        <div id="f-pos" class="chips"></div>
-      </fieldset>
+    <fieldset>
+      <legend>Frequency band</legend>
+      <div id="f-tiers" class="chips"></div>
+    </fieldset>
 
-      <fieldset>
-        <legend>Direction</legend>
-        <div id="f-directions" class="chips"></div>
-      </fieldset>
+    <fieldset>
+      <legend>How close to Italian</legend>
+      <div id="f-buckets" class="chips"></div>
+    </fieldset>
 
-      <fieldset>
-        <legend>Drill one grade</legend>
-        <div id="f-grades" class="chips"></div>
-        <p class="muted small">
-          Leave all off for the normal mixed session. Turning one on reviews
-          only those cards, due first, then whatever comes due soonest.
-        </p>
-      </fieldset>
+    <fieldset>
+      <legend>Part of speech</legend>
+      <div id="f-pos" class="chips"></div>
+    </fieldset>
 
-      <label class="row">
-        New cards per session
-        <input id="f-new" type="number" min="0" max="100" step="5">
-      </label>
-    </details>
+    <fieldset>
+      <legend>Drill one grade</legend>
+      <div id="f-grades" class="chips"></div>
+      <p class="muted small">
+        Leave all off for the normal mixed session. Turning one on reviews
+        only those cards, due first, then whatever comes due soonest.
+      </p>
+    </fieldset>
+  </section>
 
-    <button id="open-progress" class="secondary">Progress</button>
+  <!-- Settings: how the cards behave -->
+  <section id="view-settings" class="view hidden">
+    <header class="review-bar">
+      <button id="close-settings" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Settings</h2>
+    </header>
 
-    <details class="panel">
-      <summary>Voice</summary>
+    <fieldset>
+      <legend>Direction</legend>
+      <div id="f-directions" class="chips"></div>
+      <p class="muted small">
+        Each direction is scheduled separately. Reading Spanish is recognition;
+        producing it is harder, and sharing one schedule would let the easy
+        direction hide the hard one.
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Sound</legend>
       <div id="f-speech" class="chips"></div>
       <div id="voice-rows"></div>
-    </details>
+    </fieldset>
 
-    <details class="panel">
-      <summary>Backup</summary>
+    <fieldset>
+      <legend>Backup</legend>
       <p class="muted small">
-        iOS can clear a web app's storage if it goes unused. Export now and then —
-        it is the only copy of your progress.
+        iOS can clear a web app's storage if it goes unused. Export now and
+        then — it is the only copy of your progress.
       </p>
-      <div class="row-buttons">
-        <button id="export">Export progress</button>
-        <button id="import-btn">Import…</button>
-        <input id="import" type="file" accept="application/json" hidden>
-      </div>
-      <p id="backup-msg" class="muted small"></p>
       <p id="backup-when" class="muted small"></p>
-    </details>
+    </fieldset>
   </section>
 
   <!-- Progress -->
