@@ -495,3 +495,38 @@ button.secondary {
 }
 .convo-it { font-size: .88rem; color: var(--muted); margin-top: .2rem; }
 .convo-en { font-size: .8rem; color: var(--muted); opacity: .75; margin-top: .1rem; }
+
+/* --- drill submit --- */
+.drill-form { gap: .5rem; align-items: stretch; }
+.drill-submit {
+  font-weight: 600; padding: .6rem 1.1rem; flex: none;
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.drill-submit:active { filter: brightness(.92); }
+
+/* --- the paradigm shown after a wrong answer --- */
+.drill-paradigm {
+  margin: 1rem auto 0; max-width: 20rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: .6rem .8rem;
+}
+.paradigm-label {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--muted); margin-bottom: .4rem;
+}
+.paradigm-row {
+  display: grid; grid-template-columns: 7.5rem 1fr; gap: .5rem;
+  padding: .18rem 0; font-size: .92rem;
+}
+.paradigm-pron { color: var(--muted); font-size: .8rem; }
+.paradigm-row.this-one .paradigm-form { color: var(--again); font-weight: 700; }
+.paradigm-row.this-one .paradigm-pron { color: var(--again); }
+
+/* --- preposition reference --- */
+.use-label {
+  grid-column: 1 / -1; text-transform: uppercase; letter-spacing: .05em;
+  font-size: .68rem; margin-bottom: .1rem;
+}
+.split-target { color: var(--accent); text-transform: none; letter-spacing: 0; font-size: .8rem; }
+.split-row .pair-it { grid-column: 1; }
+.split-row .pair-es { grid-column: 2; font-weight: 600; }

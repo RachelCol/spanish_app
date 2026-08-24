@@ -165,11 +165,15 @@ function renderQuestion() {
   input.autocomplete = 'off';
   input.spellcheck = false;
   input.setAttribute('aria-label', 'Your answer');
-  form.append(input);
+  const go = el('button', 'drill-submit', 'Check');
+  go.type = 'submit';
+  form.append(input, go);
   body.append(form);
 
   const feedback = el('p', 'drill-feedback');
   body.append(feedback);
+  const paradigm = el('div', 'drill-paradigm hidden');
+  body.append(paradigm);
 
   const score = el('p', 'muted small centred',
                    `${run.right} right · ${run.wrong} wrong`);
@@ -190,6 +194,22 @@ function renderQuestion() {
     }
     const say = speakerButton(q.answer, 'es');
     if (say) feedback.append(' ', say);
+
+    // Getting one wrong is the moment the rest of the paradigm is worth
+    // seeing: the form you missed makes more sense beside the five you did
+    // not, and the pattern is what carries to the next verb.
+    if (verdict !== 'right') {
+      const forms = conjugations.verbs[q.verb][q.tense] || [];
+      paradigm.replaceChildren(
+        el('div', 'paradigm-label', `${q.verb} · ${label ? label.label : q.tense}`));
+      forms.forEach((f, i) => {
+        const row = el('div', 'paradigm-row' + (f === q.answer ? ' this-one' : ''));
+        row.append(el('span', 'paradigm-pron', conjugations.pronouns[i] || ''),
+                   el('span', 'paradigm-form', f));
+        paradigm.append(row);
+      });
+      paradigm.classList.remove('hidden');
+    }
 
     form.replaceChildren(input);
     input.disabled = true;
@@ -262,8 +282,69 @@ async function openPrep() {
   });
   body.append(start, el('p', 'muted small centred',
                         `${prepositions.length} sentence pairs`));
+
+  const { prepSpanish, prepItalian } = await loadExtras();
+  body.append(renderPrepReference(prepSpanish || [], prepItalian || []));
+
   show('prep');
   window.scrollTo(0, 0);
+}
+
+// The reference. Spanish first, since that is the direction you produce in,
+// then the four Italian prepositions that actually cause the trouble.
+function renderPrepReference(spanish, italian) {
+  const wrap = document.createDocumentFragment();
+
+  const a = document.createElement('details');
+  a.className = 'mood';
+  a.append(el('summary', null, 'Spanish prepositions, and what they cover'));
+  for (const p of spanish) {
+    const h = el('h3', 'section-label', p.prep);
+    a.append(h);
+    a.append(el('p', 'muted small conj-note', p.gloss));
+    a.append(el('p', 'conj-italian', 'Italian: ' + p.italian));
+    const table = el('div', 'pair-table');
+    for (const use of p.uses) {
+      const [label, es, it, note] = use;
+      const row = el('div', 'pair-row');
+      row.append(el('span', 'pair-note use-label', label));
+      row.append(speakLine(es, 'es', 'pair-es'), speakLine(it, 'it', 'pair-it'));
+      if (note) row.append(el('span', 'pair-note', note));
+      table.append(row);
+    }
+    a.append(table);
+  }
+  wrap.append(a);
+
+  const b = document.createElement('details');
+  b.className = 'mood';
+  b.append(el('summary', null, 'Italian prepositions, and where each one goes'));
+  for (const p of italian) {
+    b.append(el('h3', 'section-label', p.prep));
+    b.append(el('p', 'conj-warn', p.warning));
+    const table = el('div', 'pair-table');
+    for (const [label, target, it, es] of p.splits) {
+      const row = el('div', 'pair-row split-row');
+      const head = el('span', 'pair-note use-label');
+      head.append(label + ' → ');
+      head.append(el('b', 'split-target', target));
+      row.append(head);
+      row.append(speakLine(it, 'it', 'pair-it'), speakLine(es, 'es', 'pair-es'));
+      table.append(row);
+    }
+    b.append(table);
+  }
+  wrap.append(b);
+  return wrap;
+}
+
+function speakLine(text, which, cls) {
+  const e = el('span', cls, text);
+  if (canSpeak()) {
+    e.classList.add('speakable');
+    e.addEventListener('click', () => speak(text, which));
+  }
+  return e;
 }
 
 function renderPrepQuestion() {
@@ -285,7 +366,9 @@ function renderPrepQuestion() {
   input.autocapitalize = 'none';
   input.autocomplete = 'off';
   input.spellcheck = false;
-  form.append(input);
+  const go = el('button', 'drill-submit', 'Check');
+  go.type = 'submit';
+  form.append(input, go);
   body.append(form);
 
   const feedback = el('p', 'drill-feedback');
