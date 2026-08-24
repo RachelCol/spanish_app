@@ -399,9 +399,14 @@ function verbForms(card, conj) {
   if (!entry) return null;
   const out = new Set();
   // Every tense, so an example sentence lights up whichever form it used.
-  for (const tense of Object.keys(entry)) {
-    if (tense === 'stem') continue;
-    for (const form of (Array.isArray(entry[tense]) ? entry[tense] : [])) {
+  //
+  // Only string entries. The record also carries `marks`, which is an array of
+  // character ranges rather than of forms, and treating it as forms threw --
+  // taking the Examples panel down with it on every verb that had any.
+  for (const value of Object.values(entry)) {
+    if (!Array.isArray(value)) continue;
+    for (const form of value) {
+      if (typeof form !== 'string') continue;
       // "he visto" and "voy a ver" carry the meaning in their last word; the
       // auxiliary would light up half the sentences on the card.
       const parts = form.split(/\s+/);
