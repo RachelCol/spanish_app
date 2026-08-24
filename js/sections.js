@@ -405,6 +405,78 @@ function renderPrepQuestion() {
   input.focus();
 }
 
+// ---------- readings ----------
+//
+// Stories with a translation behind every sentence. Tapping one reveals the
+// Italian underneath it rather than opening anything, so the Spanish stays
+// where it was and the eye does not lose its place.
+
+let storiesCache = null;
+
+async function loadStories() {
+  if (storiesCache) return storiesCache;
+  const res = await fetch('data/stories.json');
+  storiesCache = res.ok ? await res.json() : [];
+  return storiesCache;
+}
+
+async function openReadings() {
+  const stories = await loadStories();
+  $('#read-title').textContent = 'Readings';
+  const body = $('#read-body');
+  body.replaceChildren(
+    el('p', 'muted small section-intro',
+       'Detective stories, written for this app. Tap any sentence to see it in '
+       + 'Italian. Latin American Spanish throughout.'),
+  );
+  const list = el('div', 'lesson-list');
+  stories.forEach((story, i) => {
+    const row = el('button', 'lesson-row');
+    row.type = 'button';
+    row.append(el('span', 'lesson-num', String(i + 1)));
+    const text = el('span', 'lesson-text');
+    text.append(el('b', null, story.title),
+                el('span', 'lesson-summary', story.blurb));
+    row.append(text);
+    row.addEventListener('click', () => renderStory(story));
+    list.append(row);
+  });
+  body.append(list);
+  show('read');
+  window.scrollTo(0, 0);
+}
+
+function renderStory(story) {
+  $('#read-title').textContent = story.title;
+  const body = $('#read-body');
+  body.replaceChildren();
+
+  const meta = el('p', 'muted small section-intro',
+                  `${story.words} words · tap a sentence for the Italian`);
+  body.append(meta);
+
+  const prose = el('div', 'story');
+  for (const para of story.paragraphs) {
+    const p = el('p', 'story-para');
+    for (const [es, it] of para) {
+      const sentence = el('span', 'story-sentence');
+      sentence.textContent = es;
+      const trans = el('span', 'story-it hidden');
+      trans.textContent = it;
+      sentence.addEventListener('click', () => {
+        const open = !trans.classList.contains('hidden');
+        trans.classList.toggle('hidden', open);
+        sentence.classList.toggle('open', !open);
+        if (!open && canSpeak()) speak(es, 'es');
+      });
+      p.append(sentence, trans, ' ');
+    }
+    prose.append(p);
+  }
+  body.append(prose, backButton(openReadings, 'All readings'));
+  window.scrollTo(0, 0);
+}
+
 // ---------- conversations ----------
 
 async function openConversations() {
@@ -480,6 +552,8 @@ export function initSections(showView, conjugationData) {
   $('#close-drill').addEventListener('click', () => show('home'));
   $('#open-prep').addEventListener('click', openPrep);
   $('#close-prep').addEventListener('click', () => show('home'));
+  $('#open-read').addEventListener('click', openReadings);
+  $('#close-read').addEventListener('click', () => show('home'));
   $('#open-convo').addEventListener('click', openConversations);
   $('#close-convo').addEventListener('click', () => show('home'));
 }

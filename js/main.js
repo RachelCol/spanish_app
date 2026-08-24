@@ -243,7 +243,7 @@ async function save() {
 
 function show(view) {
   ['home', 'review', 'done', 'progress', 'conj', 'deck', 'settings',
-   'grammar', 'drill', 'prep', 'convo'].forEach(v =>
+   'grammar', 'drill', 'prep', 'convo', 'read'].forEach(v =>
     $('#view-' + v).classList.toggle('hidden', v !== view));
 }
 

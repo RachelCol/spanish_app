@@ -282,3 +282,143 @@ LESSONS = [
   "watch": "*Quiero burro en el pan* asks for donkey on your bread.",
  },
 ]
+
+LESSONS += [
+ {
+  "id": "word-order",
+  "title": "Where the words go",
+  "summary": "Freer than English, and mostly like Italian — until it isn't.",
+  "body": [
+   "Both languages let you move things around for emphasis, and both drop the "
+   "subject pronoun by default. Most of your instincts carry over.",
+   "Two places they part company. Spanish **inverts the subject in questions** "
+   "far more consistently than Italian, which often relies on intonation alone. "
+   "And Spanish will not split a compound verb: nothing goes between **haber** "
+   "and the participle.",
+   "Adjectives normally follow the noun in both. Moving one in front changes the "
+   "sense the same way in both languages: *un hombre pobre* is penniless, *un "
+   "pobre hombre* is pitiable.",
+  ],
+  "pairs": [
+   ["Dove va Maria?", "¿Adónde va María?", "verb before subject"],
+   ["Maria è arrivata?", "¿Llegó María?", "inverted, not just intonation"],
+   ["Ho sempre detto questo.", "Siempre he dicho eso.", "nothing between haber and the participle"],
+   ["Non ho mai visto.", "Nunca he visto.", "adverb moves out front"],
+   ["Una casa grande", "Una casa grande", "adjective after, as in Italian"],
+   ["Un povero uomo", "Un pobre hombre", "before the noun: pitiable"],
+   ["Un uomo povero", "Un hombre pobre", "after the noun: penniless"],
+  ],
+  "watch": "*He siempre dicho* is the error, and it comes straight from Italian "
+           "word order.",
+ },
+ {
+  "id": "questions",
+  "title": "Asking and exclaiming",
+  "summary": "Spanish opens a question with an upside-down mark, and closes it.",
+  "body": [
+   "Every question is wrapped: **¿...?** And every exclamation: **¡...!** The "
+   "opening mark goes where the question actually starts, which is not always "
+   "the start of the sentence.",
+   "Question words carry a written accent — *qué*, *dónde*, *cuándo*, *quién*, "
+   "*cómo*, *cuánto* — and lose it when they are not questioning.",
+  ],
+  "pairs": [
+   ["Come stai?", "¿Cómo estás?", "both marks"],
+   ["Che bello!", "¡Qué bonito!", "exclamation marks too"],
+   ["Maria, dove vai?", "María, ¿adónde vas?", "the mark opens at the question"],
+   ["So dove abita.", "Sé dónde vive.", "indirect question keeps the accent"],
+   ["La casa dove abito.", "La casa donde vivo.", "not a question, no accent"],
+  ],
+  "watch": "Leaving off the opening ¿ is the most visible way to write Spanish "
+           "like an Italian.",
+ },
+ {
+  "id": "object-pronouns",
+  "title": "Two pronouns in a row",
+  "summary": "le + lo becomes se lo. Italian has nothing that behaves like it.",
+  "body": [
+   "Placement works as it does in Italian: before a conjugated verb, attached to "
+   "an infinitive, a gerund or an affirmative command.",
+   "The difference is what happens when two third-person pronouns meet. Italian "
+   "turns *gli* + *lo* into *glielo*. Spanish turns **le** + **lo** into **se lo** "
+   "— the indirect pronoun is replaced outright by *se*.",
+   "Latin America keeps **lo** and **la** for the direct object of a person. "
+   "Spain often uses *le* for a man; you can ignore that.",
+  ],
+  "pairs": [
+   ["Lo vedo.", "Lo veo.", "same placement"],
+   ["Voglio vederlo.", "Quiero verlo.", "attached to the infinitive, same"],
+   ["Glielo do.", "Se lo doy.", "le + lo → se lo"],
+   ["Gliela mando.", "Se la mando.", "same rule"],
+   ["Me lo dai?", "¿Me lo das?", "first person is unchanged"],
+   ["Dammelo!", "¡Dámelo!", "attached to the command, with an accent added"],
+  ],
+  "watch": "*Le lo doy* is never right. It is always *se lo doy*.",
+ },
+ {
+  "id": "se",
+  "title": "The many uses of se",
+  "summary": "Reflexive, impersonal, passive — and the replacement for le.",
+  "body": [
+   "Spanish *se* does the work of Italian *si*, and the two line up closely: "
+   "reflexive, impersonal, and passive.",
+   "The impersonal is everywhere in Spanish, on signs and in speech, where "
+   "English would use 'you' or a passive.",
+  ],
+  "pairs": [
+   ["Mi lavo.", "Me lavo.", "reflexive, as in Italian"],
+   ["Si parla spagnolo.", "Se habla español.", "impersonal, as in Italian"],
+   ["Si vendono case.", "Se venden casas.", "agrees with the plural, as in Italian"],
+   ["Come si dice?", "¿Cómo se dice?", "identical structure"],
+   ["Si è fatto tardi.", "Se hizo tarde.", "same idiom"],
+  ],
+  "watch": "This one transfers almost perfectly. The only se that will surprise "
+           "you is the one standing in for le.",
+ },
+ {
+  "id": "gustar",
+  "title": "gustar works like piacere",
+  "summary": "The structure is the same. The doubling is not.",
+  "body": [
+   "*Me gusta el café* is built exactly like *mi piace il caffè*: the thing "
+   "liked is the subject, and you are the indirect object. That transfers "
+   "without effort.",
+   "What Spanish adds is a habit of **doubling** the pronoun with *a mí*, *a ti*, "
+   "*a Ana* — for emphasis, contrast, or simply because it sounds right. Italian "
+   "does this far less.",
+   "The same pattern runs through a family of verbs: *encantar*, *interesar*, "
+   "*parecer*, *faltar*, *doler*.",
+  ],
+  "pairs": [
+   ["Mi piace il caffè.", "Me gusta el café.", "identical structure"],
+   ["Mi piacciono i libri.", "Me gustan los libros.", "plural subject, plural verb"],
+   ["A me piace, a lui no.", "A mí me gusta, a él no.", "Spanish doubles the pronoun"],
+   ["Ad Ana piace il cinema.", "A Ana le gusta el cine.", "a Ana AND le"],
+   ["Mi fa male la testa.", "Me duele la cabeza.", "doler works the same way"],
+   ["Mi manca il mare.", "Extraño el mar.", "faltar does NOT mean this"],
+  ],
+  "watch": "*Mi manca* is the trap: Spanish *me falta* means something is "
+           "lacking, not that you miss it. To miss someone is **extrañar**.",
+ },
+ {
+  "id": "diminutives",
+  "title": "Diminutives, and how much they matter",
+  "summary": "-ito is everywhere in Mexico, and not always about size.",
+  "body": [
+   "Italian has -ino, -etto, -ello. Spanish has **-ito** and **-illo**, and in "
+   "Mexico -ito is used constantly — for affection, for politeness, for softening "
+   "a request, and only sometimes for size.",
+   "*Ahorita* is the one to know. Literally 'right now', in practice anywhere "
+   "from this second to never.",
+  ],
+  "pairs": [
+   ["un momentino", "un momentito", "-ino → -ito"],
+   ["Adesso.", "Ahorita.", "softened, and vaguer than it looks"],
+   ["un caffè piccolo", "un cafecito", "affection, not size"],
+   ["poco", "poquito", "a little bit"],
+   ["Aspetta un attimo.", "Espérame tantito.", "very Mexican"],
+  ],
+  "watch": "Using no diminutives at all reads as brusque in Mexico, in a way it "
+           "would not in Italy.",
+ },
+]

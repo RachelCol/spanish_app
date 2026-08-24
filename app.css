@@ -530,3 +530,17 @@ button.secondary {
 .split-target { color: var(--accent); text-transform: none; letter-spacing: 0; font-size: .8rem; }
 .split-row .pair-it { grid-column: 1; }
 .split-row .pair-es { grid-column: 2; font-weight: 600; }
+
+.group-row.two { grid-template-columns: repeat(2, 1fr); }
+
+/* --- readings --- */
+.story { line-height: 1.75; }
+.story-para { margin: 0 0 1.1rem; }
+.story-sentence { cursor: pointer; border-bottom: 1px solid transparent; }
+.story-sentence:active { color: var(--accent); }
+.story-sentence.open { color: var(--accent); border-bottom-color: var(--line); }
+.story-it {
+  display: block; margin: .35rem 0 .55rem;
+  padding-left: .7rem; border-left: 2px solid var(--line);
+  font-size: .92rem; color: var(--muted); line-height: 1.55;
+}
