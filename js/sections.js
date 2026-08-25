@@ -303,28 +303,39 @@ function renderQuestion() {
     const verdict = checkAnswer(input.value, q.answer);
     if (verdict === 'wrong') run.wrong++; else run.right++;
 
+    // The mark belongs on what you wrote, not on the answer. Seeing "✗ tiene"
+    // reads as though the correct form were the mistake.
+    const typed = input.value.trim() || '—';
     feedback.replaceChildren();
     feedback.className = 'drill-feedback ' + verdict;
-    feedback.append(verdict === 'right' ? '✓ ' + q.answer
-      : verdict === 'accents' ? `✓ ${q.answer} — watch the accent`
-      : `✗ ${q.answer}`);
-    const say = speakerButton(q.answer, 'es');
-    if (say) feedback.append(' ', say);
+    feedback.append(el('span', 'typed-answer',
+                       (verdict === 'wrong' ? '✗ ' : '✓ ') + typed));
 
-    // The form you missed reads better beside the five you did not, and the
-    // pattern is the part that carries to the next verb.
+    // The right form, in green, whenever it is not exactly what was typed.
     if (verdict !== 'right') {
-      const forms = conjugations.verbs[q.verb][q.tense] || [];
-      paradigm.replaceChildren(
-        el('div', 'paradigm-label', `${q.verb} · ${label ? label.label : q.tense}`));
-      forms.forEach((f, i) => {
-        const row = el('div', 'paradigm-row' + (f === q.answer ? ' this-one' : ''));
-        row.append(el('span', 'paradigm-pron', conjugations.pronouns[i] || ''),
-                   el('span', 'paradigm-form', f));
-        paradigm.append(row);
-      });
-      paradigm.classList.remove('hidden');
+      const right = el('p', 'correct-answer');
+      right.append(el('span', 'correct-word', q.answer));
+      if (verdict === 'accents') right.append(el('span', 'correct-note', 'watch the accent'));
+      const say = speakerButton(q.answer, 'es');
+      if (say) right.append(say);
+      feedback.after(right);
+    } else {
+      const say = speakerButton(q.answer, 'es');
+      if (say) feedback.append(' ', say);
     }
+
+    // The paradigm every time, right or wrong. Getting one right is a good
+    // moment to see the other five, and it costs nothing to look.
+    const forms = conjugations.verbs[q.verb][q.tense] || [];
+    paradigm.replaceChildren(
+      el('div', 'paradigm-label', `${q.verb} · ${label ? label.label : q.tense}`));
+    forms.forEach((f, i) => {
+      const row = el('div', 'paradigm-row' + (f === q.answer ? ' this-one' : ''));
+      row.append(el('span', 'paradigm-pron', conjugations.pronouns[i] || ''),
+                 el('span', 'paradigm-form', f));
+      paradigm.append(row);
+    });
+    paradigm.classList.remove('hidden');
 
     form.replaceChildren(input);
     input.disabled = true;

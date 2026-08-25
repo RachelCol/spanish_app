@@ -505,8 +505,10 @@ button.secondary {
   padding: .18rem 0; font-size: .92rem;
 }
 .paradigm-pron { color: var(--muted); font-size: .8rem; }
-.paradigm-row.this-one .paradigm-form { color: var(--again); font-weight: 700; }
-.paradigm-row.this-one .paradigm-pron { color: var(--again); }
+/* The form being asked about, in green: it is the right answer, whether or
+   not it was the one typed. */
+.paradigm-row.this-one .paradigm-form { color: var(--good); font-weight: 700; }
+.paradigm-row.this-one .paradigm-pron { color: var(--good); }
 
 /* --- preposition reference --- */
 .use-label {
@@ -553,3 +555,12 @@ button.secondary {
   text-align: center; margin: 1rem 0 0; font-size: 1rem;
   display: flex; align-items: center; justify-content: center; gap: .4rem;
 }
+
+/* --- drill feedback --- */
+.typed-answer { font-weight: 700; }
+.correct-answer {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: .35rem 0 0; text-align: center;
+}
+.correct-word { color: var(--good); font-size: 1.15rem; font-weight: 700; }
+.correct-note { color: var(--hard); font-size: .8rem; }
