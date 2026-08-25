@@ -76,6 +76,17 @@ export async function loadSentences() {
   return sentenceCache;
 }
 
+// Gender for nouns, read off corpus usage. Lazily fetched: it is only needed
+// once a noun card is turned over.
+let genderCache = null;
+
+export async function loadGender() {
+  if (genderCache) return genderCache;
+  const res = await fetch('data/gender.json');
+  genderCache = res.ok ? await res.json() : {};
+  return genderCache;
+}
+
 let conjCache = null;
 
 export async function loadConjugations() {

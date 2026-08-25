@@ -1,7 +1,7 @@
 import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, loadSentences, loadConjugations, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
+import { loadDeck, loadSentences, loadConjugations, loadGender, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initSections } from './sections.js';
@@ -13,6 +13,7 @@ const $ = sel => document.querySelector(sel);
 
 const state = {
   deck: [],
+  gender: {},
   items: [],
   settings: { ...DEFAULT_SETTINGS },
   queue: [],
@@ -61,6 +62,8 @@ async function start() {
   loadConjugations()
     .then(conj => initSections(show, conj))
     .catch(() => {});
+
+  loadGender().then(g => { state.gender = g; }).catch(() => {});
 
   initVoices();
   onVoicesReady(() => {
@@ -262,7 +265,11 @@ function renderCard() {
   state.revealed = false;
 
   $('#direction').textContent = dir.label;
-  $('#prompt').textContent = item.card[dir.prompt];
+  const promptWord = item.card[dir.prompt];
+  $('#prompt').replaceChildren(
+    withGender(promptWord,
+               genderFor(state.gender, item.card, promptWord, dir.prompt),
+               dir.prompt));
   // Every part of speech the word has, not just the one that won the vote:
   // calling `bajo` an adjective and nothing else is a quiet lie.
   const posText = posGroups(item.card)
@@ -313,7 +320,7 @@ function reveal() {
     row.className = 'word-row';
     const span = document.createElement('span');
     span.className = 'answer';
-    span.textContent = w;
+    span.replaceChildren(withGender(w, genderFor(state.gender, card, w, which), which));
     row.append(span);
     if (canSpeak()) {
       const play = document.createElement('button');
@@ -502,6 +509,36 @@ async function finish() {
   $('#done-summary').textContent =
     `${state.graded} card${state.graded === 1 ? '' : 's'} reviewed.`;
   show('done');
+}
+
+// A noun shown with the article a speaker would use, and its gender spelled
+// out after it. Both, deliberately: the article is what you need in order to
+// say the word, and the letter is what tells you the truth when the article
+// lies -- `el agua` is feminine, and only the letter says so.
+function withGender(word, info, lang) {
+  const frag = document.createDocumentFragment();
+  if (!info) {
+    frag.append(word);
+    return frag;
+  }
+  const article = document.createElement('span');
+  article.className = 'gender-article';
+  // l' binds to the word; every other article takes a space.
+  article.textContent = info.art.endsWith("'") ? info.art : info.art + ' ';
+  frag.append(article, word);
+
+  const mark = document.createElement('i');
+  mark.className = 'gender-mark';
+  mark.textContent = info.g;
+  frag.append(mark);
+  return frag;
+}
+
+function genderFor(all, card, word, which) {
+  const entry = all && all[card.es];
+  if (!entry) return null;
+  if (which === 'es') return word === card.es ? entry : null;
+  return (entry.it || {})[word] || null;
 }
 
 // A button that reads a whole paradigm aloud, first person singular through

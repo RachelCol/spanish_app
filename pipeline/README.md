@@ -38,11 +38,20 @@ python3 -m venv .venv
    drills, cut out of Tatoeba pairs. Nothing is written: the gap is removed
    from a real sentence, so the right answer is what a speaker said.
 
+8. `build_gender.py` -- article and gender for every noun, read off which
+   articles actually precede it across 441k Spanish and 982k Italian
+   sentences. Writes `data/gender.json`.
+
 ## Two things that are not obvious
 
 **Cross-language frequency only means something after pairing.** Comparing the
 Zipf of `mayoría` against the Italian string `mayoría` measures orthographic
 coincidence, not difficulty. It has to be compared against `maggioranza`.
+
+**`el agua` is feminine.** A feminine noun starting with a stressed a- borrows
+`el` in the singular, so counting singular articles calls it masculine. The
+plural gives it away -- `las aguas` -- so gender is checked there before the
+call is made.
 
 **Frequency mismatch is a correctness signal.** A pair whose Italian side is
 much rarer than its Spanish side is usually a bad translation — Apertium is MT

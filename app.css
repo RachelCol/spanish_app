@@ -564,3 +564,16 @@ button.secondary {
 }
 .correct-word { color: var(--good); font-size: 1.15rem; font-weight: 700; }
 .correct-note { color: var(--hard); font-size: .8rem; }
+
+/* --- noun gender --- */
+.gender-article {
+  color: var(--muted); font-weight: 400;
+  font-size: .68em;          /* relative, so it scales with prompt and answers */
+}
+.gender-mark {
+  font-style: italic; color: var(--accent);
+  font-size: .42em; font-weight: 600;
+  margin-left: .3em; vertical-align: .55em;
+  letter-spacing: .02em;
+}
+.answers .gender-mark { color: color-mix(in srgb, var(--accent) 70%, var(--muted)); }
