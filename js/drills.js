@@ -22,20 +22,12 @@ export const DRILL_TENSES = [
 ];
 
 let verbCache = null;
-let extrasCache = null;
 
 export async function loadDrillVerbs() {
   if (verbCache) return verbCache;
   const res = await fetch('data/drill_verbs.json');
   verbCache = res.ok ? await res.json() : [];
   return verbCache;
-}
-
-export async function loadExtras() {
-  if (extrasCache) return extrasCache;
-  const res = await fetch('data/extras.json');
-  extrasCache = res.ok ? await res.json() : { prepositions: [], conversations: [] };
-  return extrasCache;
 }
 
 // Accents are part of the answer, but a missing one is a typo rather than a
@@ -68,15 +60,6 @@ export function buildVerbQuestions(conjugations, verbs, tenses, pronouns, limit)
       });
     }
   }
-  return shuffle(out).slice(0, limit);
-}
-
-export function buildPrepositionQuestions(items, direction, limit) {
-  const out = items.map(([it, es, note]) => (
-    direction === 'it>es'
-      ? { prompt: it, promptLang: 'it', answer: es, answerLang: 'es', note }
-      : { prompt: es, promptLang: 'es', answer: it, answerLang: 'it', note }
-  ));
   return shuffle(out).slice(0, limit);
 }
 

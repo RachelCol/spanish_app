@@ -28,12 +28,12 @@ And deliberately skips everything that carries over intact.
 **Flashcards** — the vocabulary deck, spaced repetition, example sentences and
 conjugation tables.
 
-**Grammar** — twelve lessons on what Italian gets wrong about Spanish, ordered
-by how much trouble each thing causes. A preposition drill, and short written
-conversations.
+**Grammar** — *Comparisons*, eighteen lessons on what Italian gets wrong about
+Spanish, ordered by how much trouble each causes. *Basics*, a plain outline of
+how Spanish works, in English, including the preposition mapping.
 
-**Verb practice** — typed conjugation drills over the fifty commonest verbs,
-choosing verbs and tenses.
+**Drills** — *Verbs*, typed conjugation drills over the fifty commonest verbs.
+*Prepositions* and *Articles*, gap-fill against real Tatoeba sentence pairs.
 
 ## Status
 

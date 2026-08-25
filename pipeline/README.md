@@ -34,6 +34,10 @@ python3 -m venv .venv
    last, since it reads the participles back out of the conjugation tables
    rather than from a hand-written list.
 
+7. `build_drill_bank.py` -- gap-fill items for the preposition and article
+   drills, cut out of Tatoeba pairs. Nothing is written: the gap is removed
+   from a real sentence, so the right answer is what a speaker said.
+
 ## Two things that are not obvious
 
 **Cross-language frequency only means something after pairing.** Comparing the

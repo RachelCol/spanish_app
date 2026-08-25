@@ -482,20 +482,6 @@ button.secondary {
 }
 .prep-sentence { font-size: 1.35rem; font-weight: 600; line-height: 1.4; }
 
-/* --- conversations --- */
-.convo { display: flex; flex-direction: column; gap: .9rem; margin: 1rem 0; }
-.convo-line {
-  background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: .7rem .9rem; max-width: 92%;
-}
-.convo-line.right { align-self: flex-end; }
-.convo-es {
-  display: flex; align-items: center; gap: .45rem;
-  font-size: 1.02rem; font-weight: 600;
-}
-.convo-it { font-size: .88rem; color: var(--muted); margin-top: .2rem; }
-.convo-en { font-size: .8rem; color: var(--muted); opacity: .75; margin-top: .1rem; }
-
 /* --- drill submit --- */
 .drill-form { gap: .5rem; align-items: stretch; }
 .drill-submit {
@@ -533,14 +519,37 @@ button.secondary {
 
 .group-row.two { grid-template-columns: repeat(2, 1fr); }
 
-/* --- readings --- */
-.story { line-height: 1.75; }
-.story-para { margin: 0 0 1.1rem; }
-.story-sentence { cursor: pointer; border-bottom: 1px solid transparent; }
-.story-sentence:active { color: var(--accent); }
-.story-sentence.open { color: var(--accent); border-bottom-color: var(--line); }
-.story-it {
-  display: block; margin: .35rem 0 .55rem;
-  padding-left: .7rem; border-left: 2px solid var(--line);
-  font-size: .92rem; color: var(--muted); line-height: 1.55;
+/* --- gap-fill drills --- */
+.gap-italian {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: 1.8rem 0 .8rem; font-size: 1rem; color: var(--muted); text-align: center;
+}
+.gap-spanish {
+  text-align: center; font-size: 1.3rem; font-weight: 600; line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.gap-slot {
+  display: inline-block; min-width: 3.4rem;
+  border-bottom: 2px solid var(--accent); margin: 0 .15rem;
+  vertical-align: baseline;
+}
+.gap-choices {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem;
+  max-width: 22rem; margin: 0 auto;
+}
+.gap-option {
+  padding: .8rem .4rem; font-size: 1.05rem; font-weight: 600;
+  background: var(--surface);
+}
+.gap-choices.answered .gap-option { opacity: .5; }
+.gap-choices.answered .chosen-right,
+.gap-choices.answered .is-answer {
+  opacity: 1; border-color: var(--good); color: var(--good);
+}
+.gap-choices.answered .chosen-wrong {
+  opacity: 1; border-color: var(--again); color: var(--again);
+}
+.gap-full {
+  text-align: center; margin: 1rem 0 0; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
 }
