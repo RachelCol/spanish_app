@@ -772,43 +772,226 @@ function bar(label, sub, value, max, cls, text) {
   return row;
 }
 
+// Everything on this page can be read two ways: against the deck as it is
+// currently filtered, or against the whole thing. Filtered is what you are
+// working on; whole is what you have actually done, and a page that only ever
+// showed the first would keep hiding progress the moment you narrowed a filter.
+let progressScope = 'deck';
+
+const EVERYTHING = {
+  tiers: TIER_ORDER,
+  buckets: Object.keys(BUCKET_LABEL),
+  pos: Object.keys(POS_LABEL),
+  directions: Object.keys(DIRECTIONS),
+  grades: [],
+  newOnly: false,
+};
+
+function scopedItems(progress) {
+  return progressScope === 'deck'
+    ? state.items
+    : buildItems(state.deck, progress, EVERYTHING);
+}
+
+function scopedReviews(reviews, items) {
+  if (progressScope !== 'deck') return reviews;
+  const keys = new Set(items.map(i => i.key));
+  return reviews.filter(r => keys.has(r.key));
+}
+
 async function openProgress() {
   show('progress');
+  const [progress, reviews] = await Promise.all([db.allProgress(), db.allReviews()]);
+  renderProgress(progress, reviews);
+  window.scrollTo(0, 0);
+}
 
-  const dist = gradeBreakdown(state.items);
+function renderProgress(progress, reviews) {
+  const items = scopedItems(progress);
+  const seen = scopedReviews(reviews, items);
 
-  // Scale the letters against each other, not against New. Early on New
-  // outnumbers everything by a hundred to one, and sharing a scale with it
-  // flattens every bar you actually want to read.
+  $('#scope-toggle').replaceChildren(...[
+    ['deck', 'This deck'], ['all', 'Everything'],
+  ].map(([value, label]) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = label;
+    b.setAttribute('aria-pressed', String(progressScope === value));
+    b.addEventListener('click', () => {
+      progressScope = value;
+      renderProgress(progress, reviews);
+    });
+    return b;
+  }));
+
+  renderStats(items, seen);
+  renderGrades(items);
+  renderDirections(seen);
+  renderForecast(items);
+  renderDays(seen);
+  renderTrouble(progress, items);
+}
+
+// --- the headline numbers ---
+
+function renderStats(items, reviews) {
+  const dist = gradeBreakdown(items);
+  const started = GRADES.reduce((s, g) => s + dist[g], 0);
+
+  const today = startOfToday();
+  const todayCount = reviews.filter(r => r.ts >= today).length;
+
+  const graded = reviews.filter(r => typeof r.grade === 'number');
+  const kept = graded.filter(r => r.grade !== AGAIN).length;
+  const accuracy = graded.length ? Math.round(100 * kept / graded.length) : null;
+
+  const stats = [
+    [streakOf(reviews), 'day streak'],
+    [todayCount, 'today'],
+    [reviews.length, 'reviews'],
+    [accuracy === null ? '–' : accuracy + '%', 'kept'],
+    [started, 'started'],
+  ];
+
+  $('#stat-row').replaceChildren(...stats.map(([value, label]) => {
+    const cell = document.createElement('div');
+    cell.className = 'stat';
+    const b = document.createElement('b');
+    b.textContent = value;
+    const s = document.createElement('span');
+    s.textContent = label;
+    cell.append(b, s);
+    return cell;
+  }));
+}
+
+// Consecutive days ending today or yesterday. Yesterday still counts, so the
+// streak does not appear to break before the day is over.
+function streakOf(reviews) {
+  if (!reviews.length) return 0;
+  const days = new Set();
+  for (const r of reviews) {
+    const d = new Date(r.ts);
+    d.setHours(0, 0, 0, 0);
+    days.add(d.getTime());
+  }
+  let cursor = startOfToday();
+  if (!days.has(cursor)) {
+    cursor -= DAY;
+    if (!days.has(cursor)) return 0;
+  }
+  let n = 0;
+  while (days.has(cursor)) { n++; cursor -= DAY; }
+  return n;
+}
+
+// --- by grade ---
+
+function renderGrades(items) {
+  const dist = gradeBreakdown(items);
   const letterMax = Math.max(1, ...GRADES.map(g => dist[g]));
-  const rows = GRADES.map(g => bar(g, gradeRange(g), dist[g], letterMax, 'g-' + g.toLowerCase()));
+  const rows = GRADES.map(g =>
+    bar(g, gradeRange(g), dist[g], letterMax, 'g-' + g.toLowerCase()));
 
-  // New keeps its place in the chart but sits outside the scale -- drawn full
-  // length and striped, so it reads as "all of these, not to scale" rather
-  // than as a bar a hundred times longer than the rest.
+  // New keeps its place but sits outside the scale, drawn full length and
+  // striped: early on it outnumbers the rest by two orders of magnitude, and
+  // sharing a scale with it flattens every bar worth reading.
   rows.push(bar('New', 'never reviewed', 1, 1, 'g-new', String(dist.New)));
 
   const learned = GRADES.reduce((s, g) => s + dist[g], 0);
   const note = document.createElement('p');
   note.className = 'muted small chart-note';
-  // These counts follow the Deck filters, so drilling verbs makes the totals
-  // look wrong unless it says so.
-  const whole = state.deck.length * DIRECTIONS_COUNT;
-  const partial = state.items.length < whole ? ' · current Deck filters only' : '';
-  note.textContent = (learned
+  note.textContent = learned
     ? `${learned} of ${learned + dist.New} cards started`
-    : 'Nothing reviewed yet') + partial;
+    : 'Nothing reviewed yet';
   $('#grade-chart').replaceChildren(...rows, note);
+}
 
-  renderForecast(state.items);
+// --- recognition against production ---
+//
+// The one comparison this app exists to make. Reading Spanish and recalling
+// the Italian is recognition; going the other way is production, and it should
+// be harder. Seeing by how much is the useful part.
 
-  renderDays(await db.allReviews());
+function renderDirections(reviews) {
+  const rows = Object.entries(DIRECTIONS).map(([key, dir]) => {
+    const mine = reviews.filter(r => r.direction === key && typeof r.grade === 'number');
+    const kept = mine.filter(r => r.grade !== AGAIN).length;
+    return {
+      label: dir.label, kind: dir.kind, total: mine.length,
+      pct: mine.length ? Math.round(100 * kept / mine.length) : null,
+    };
+  });
+
+  $('#direction-chart').replaceChildren(...rows.map(r => {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    const name = document.createElement('span');
+    name.className = 'bar-label';
+    name.textContent = r.label;
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+    const fill = document.createElement('div');
+    fill.className = 'bar-fill ' + (r.kind === 'production' ? 'g-b' : 'g-a');
+    fill.style.width = (r.pct === null ? 0 : r.pct) + '%';
+    track.append(fill);
+    const value = document.createElement('span');
+    value.className = 'bar-value';
+    value.textContent = r.pct === null ? '–' : r.pct + '%';
+    row.append(name, track, value);
+    return row;
+  }));
+
+  const [recog, prod] = rows;
+  $('#direction-note').textContent =
+    recog.pct === null || prod.pct === null
+      ? 'Not enough reviews in both directions yet.'
+      : prod.pct < recog.pct
+        ? `Production is ${recog.pct - prod.pct} points behind recognition, which is `
+          + 'the usual way round.'
+        : 'Production is holding up with recognition, which is unusual and good.';
+}
+
+// --- words that keep going wrong ---
+
+function renderTrouble(progress, items) {
+  const inScope = new Set(items.map(i => i.key));
+  const byCard = new Map();
+  for (const p of progress) {
+    if (!p.lapses || !inScope.has(p.key)) continue;
+    byCard.set(p.cardId, (byCard.get(p.cardId) || 0) + p.lapses);
+  }
+  const deck = new Map(state.deck.map(c => [c.es, c]));
+  const worst = [...byCard.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([id, lapses]) => ({ card: deck.get(id), lapses }))
+    .filter(r => r.card);
+
+  $('#trouble-list').replaceChildren(...worst.map(({ card, lapses }) => {
+    const row = document.createElement('div');
+    row.className = 'trouble-row';
+    const es = document.createElement('b');
+    es.textContent = card.es;
+    const it = document.createElement('span');
+    it.className = 'trouble-it';
+    it.textContent = card.senses.join(' · ');
+    const n = document.createElement('span');
+    n.className = 'trouble-count';
+    n.textContent = lapses;
+    row.append(es, it, n);
+    return row;
+  }));
+  $('#trouble-note').textContent = worst.length
+    ? 'Times you pressed Again. These are the ones worth a second look.'
+    : 'Nothing has tripped you up yet.';
 }
 
 // What is coming, rather than what has happened. Overdue collapses into the
 // first column, because "how big is the hole I am in" is one number, not a
 // history lesson.
-function renderForecast(items, days = 30) {
+function renderForecast(items, days = 14) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const start = today.getTime();
@@ -825,38 +1008,104 @@ function renderForecast(items, days = 30) {
   cols[0].n += overdue;
 
   const peak = Math.max(1, ...cols.map(c => c.n));
+  const readout = $('#forecast-readout');
   $('#forecast-chart').replaceChildren(...cols.map(c => {
-    const col = document.createElement('div');
-    col.className = 'day-col';
-    const fill = document.createElement('div');
-    fill.className = 'day-fill';
-    fill.style.height = (100 * c.n / peak) + '%';
-    if (!c.n) fill.classList.add('empty');
-    if (c.i === 0 && overdue) fill.classList.add('overdue');
-    const when = c.i === 0 ? 'today' : `in ${c.i} day${c.i === 1 ? '' : 's'}`;
-    col.title = `${when} — ${c.n} due`;
-    col.append(fill);
-    return col;
+    const date = new Date(start + c.i * 86400000);
+    const when = c.i === 0 ? 'Today' : longDate(date);
+    return barColumn({
+      value: c.n, peak, readout,
+      label: dayTick(date, c.i === 0),
+      title: `${when} — ${c.n} due`
+             + (c.i === 0 && overdue ? ` (${overdue} overdue)` : ''),
+      cls: c.i === 0 && overdue ? 'overdue' : '',
+    });
   }));
+  readout.textContent = '';
 
   const total = cols.reduce((s, c) => s + c.n, 0);
   $('#forecast-summary').textContent = total || beyond
-    ? `${total} due in the next ${days} days` +
-      (overdue ? ` · ${overdue} overdue` : '') +
-      (beyond ? ` · ${beyond} further out` : '')
+    ? `${total} due in the next ${days} days`
+      + (overdue ? ` · ${overdue} overdue` : '')
+      + (beyond ? ` · ${beyond} further out` : '')
     : 'Nothing scheduled yet.';
 }
 
-function renderDays(reviews, days = 30) {
+// One column: the count above it, the bar, and a label beneath. Tapping it
+// writes the full date into the readout under the chart, since a title
+// attribute is invisible on a phone and the tick can only hold a number.
+function barColumn({ value, peak, label, title, cls, readout }) {
+  const col = document.createElement('div');
+  col.className = 'day-col';
+  col.title = title;
+  if (readout) {
+    col.addEventListener('click', () => {
+      readout.textContent = title;
+      [...readout.parentElement.querySelectorAll('.day-col.picked')]
+        .forEach(c => c.classList.remove('picked'));
+      col.classList.add('picked');
+    });
+  }
+
+  const count = document.createElement('span');
+  count.className = 'day-count';
+  count.textContent = value || '';
+  col.append(count);
+
+  const track = document.createElement('div');
+  track.className = 'day-track';
+  const fill = document.createElement('div');
+  fill.className = 'day-fill' + (value ? '' : ' empty') + (cls ? ' ' + cls : '');
+  fill.style.height = (100 * value / peak) + '%';
+  track.append(fill);
+  col.append(track);
+
+  const tick = document.createElement('span');
+  tick.className = 'day-tick';
+  tick.textContent = label;
+  col.append(tick);
+  return col;
+}
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function longDate(d) {
+  return `${WEEKDAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`;
+}
+
+// The tick under a column. Only the day number fits, so the month is added on
+// the first of it and today is named outright.
+function dayTick(d, isToday) {
+  if (isToday) return 'today';
+  if (d.getDate() === 1) return `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+  return String(d.getDate());
+}
+
+// Reviews per day, running left to right.
+//
+// The window starts at the first review rather than always a fixed number of
+// days back. Anchoring it to today meant an empty chart with everything
+// bunched against the right edge, growing leftwards as days passed, which
+// reads backwards however the dates actually run.
+function renderDays(reviews, maxDays = 14) {
   const byDay = new Map();
+  let earliest = null;
   for (const r of reviews) {
     const d = new Date(r.ts);
     d.setHours(0, 0, 0, 0);
-    byDay.set(d.getTime(), (byDay.get(d.getTime()) || 0) + 1);
+    const key = d.getTime();
+    byDay.set(key, (byDay.get(key) || 0) + 1);
+    if (earliest === null || key < earliest) earliest = key;
   }
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const span = earliest === null
+    ? 1
+    : Math.floor((today.getTime() - earliest) / 86400000) + 1;
+  const days = Math.max(1, Math.min(maxDays, span));
+
   const cols = [];
   for (let i = days - 1; i >= 0; i--) {
     const t = today.getTime() - i * 86400000;
@@ -864,22 +1113,25 @@ function renderDays(reviews, days = 30) {
   }
   const peak = Math.max(1, ...cols.map(c => c.n));
 
-  $('#day-chart').replaceChildren(...cols.map(c => {
-    const col = document.createElement('div');
-    col.className = 'day-col';
-    const fill = document.createElement('div');
-    fill.className = 'day-fill';
-    fill.style.height = (100 * c.n / peak) + '%';
-    if (!c.n) fill.classList.add('empty');
-    col.title = new Date(c.t).toDateString() + ' — ' + c.n + ' reviews';
-    col.append(fill);
-    return col;
+  const readout = $('#day-readout');
+  $('#day-chart').replaceChildren(...cols.map((c, i) => {
+    const date = new Date(c.t);
+    const last = i === cols.length - 1;
+    return barColumn({
+      value: c.n, peak, readout,
+      label: dayTick(date, last),
+      title: (last ? 'Today' : longDate(date))
+             + ` — ${c.n} review${c.n === 1 ? '' : 's'}`,
+    });
   }));
+  readout.textContent = '';
 
   const active = cols.filter(c => c.n).length;
   const total = cols.reduce((s, c) => s + c.n, 0);
+  const from = new Date(cols[0].t), to = new Date(cols[cols.length - 1].t);
   $('#day-summary').textContent = total
-    ? `${total} reviews over ${active} day${active === 1 ? '' : 's'} · busiest ${peak}`
+    ? `${longDate(from)} to ${longDate(to)} · ${total} reviews over `
+      + `${active} day${active === 1 ? '' : 's'} · busiest ${peak}`
     : 'No reviews recorded yet.';
 }
 

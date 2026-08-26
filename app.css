@@ -241,13 +241,28 @@ button.secondary {
 }
 
 .day-chart {
-  display: flex; align-items: flex-end; gap: 2px;
-  height: 6rem; padding: .4rem 0;
+  display: flex; align-items: flex-end; gap: 3px;
+  padding: .4rem 0 0;
+}
+.day-col {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+}
+.day-count {
+  font-size: .6rem; color: var(--muted); line-height: 1;
+  font-variant-numeric: tabular-nums; min-height: .7rem;
+}
+.day-track {
+  width: 100%; height: 4.5rem;
+  display: flex; align-items: flex-end;
   border-bottom: 1px solid var(--line);
 }
-.day-col { flex: 1; height: 100%; display: flex; align-items: flex-end; }
 .day-fill { width: 100%; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 2px; }
-.day-fill.empty { background: var(--line); }
+.day-fill.empty { background: var(--line); min-height: 1px; }
+.day-tick {
+  font-size: .55rem; color: var(--muted); line-height: 1;
+  white-space: nowrap; overflow: hidden; max-width: 100%;
+}
 
 .chart-note { margin: .7rem 0 0; text-align: center; }
 .bar-value { min-width: 2.6rem; width: auto; white-space: nowrap; }
@@ -579,3 +594,43 @@ button.secondary {
   letter-spacing: .02em;
 }
 .answers .gender-mark { color: color-mix(in srgb, var(--accent) 70%, var(--muted)); }
+
+.chart-readout {
+  min-height: 1.1rem; margin: .5rem 0 .1rem;
+  font-size: .82rem; font-weight: 600; color: var(--accent); text-align: center;
+}
+.day-col { cursor: pointer; }
+.day-col.picked .day-fill { outline: 2px solid var(--ink); outline-offset: 1px; }
+.day-col.picked .day-count, .day-col.picked .day-tick { color: var(--ink); font-weight: 700; }
+
+/* --- progress: scope and headline stats --- */
+.scope-toggle { justify-content: center; margin-bottom: 1.1rem; }
+.stat-row {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem;
+  margin-bottom: .4rem;
+}
+.stat {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .55rem .2rem; text-align: center;
+}
+.stat b {
+  display: block; font-size: 1.15rem; line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.stat span {
+  display: block; margin-top: .15rem;
+  font-size: .58rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .03em;
+}
+
+/* --- trouble words --- */
+.trouble-row {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: .6rem; align-items: baseline;
+  padding: .45rem 0; border-bottom: 1px solid var(--line);
+}
+.trouble-it { font-size: .85rem; color: var(--muted); }
+.trouble-count {
+  font-size: .8rem; font-variant-numeric: tabular-nums;
+  color: var(--again); font-weight: 700;
+}
