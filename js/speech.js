@@ -189,6 +189,26 @@ export async function speakSequence(words, which, { rate = 0.85, gap = 260 } = {
   }
 }
 
+// Walks a mixed-language script: a Spanish word, then its Italian glosses,
+// then a longer pause before the next entry. Each step reports back so the
+// caller can follow along and so a pause can take effect between words rather
+// than cutting one off mid-syllable.
+export async function speakSteps(steps, { onStep } = {}) {
+  if (!available() || !steps.length) return;
+  speechSynthesis.cancel();
+  const mine = ++runId;
+  for (let i = 0; i < steps.length; i++) {
+    if (mine !== runId) return;
+    const { text, lang, gap = 220, index } = steps[i];
+    if (onStep) onStep(index, i);
+    const locale = localeFor(lang);
+    await utter(text, bestVoice(locale), locale, 0.9);
+    if (mine !== runId) return;
+    await new Promise(r => setTimeout(r, gap));
+  }
+  if (mine === runId && onStep) onStep(null, steps.length);
+}
+
 export function stop() {
   runId++;
   if (available()) speechSynthesis.cancel();

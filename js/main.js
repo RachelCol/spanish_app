@@ -5,7 +5,7 @@ import { loadDeck, loadSentences, loadConjugations, loadGender, buildItems, DIRE
          POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initSections } from './sections.js';
-import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE,
+import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE, speakSteps,
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, speakSequence, stop as stopSpeech } from './speech.js';
 
@@ -240,6 +240,131 @@ function toggle(arr, val, on) {
 async function save() {
   await db.setMeta('settings', state.settings);
   await refresh();
+  // The list is a view of the filters, so it has to follow them.
+  if ($('#word-list-panel').open) renderWordList();
+}
+
+// ---------- the word list ----------
+//
+// Everything the current filters admit, in the order the deck introduces it:
+// most frequent first, which is the order it will actually reach you in.
+//
+// Built only when the panel is opened. The unfiltered deck is several thousand
+// rows, and there is no reason to hold them all in the document until asked.
+
+const POS_SHORT = {
+  n: 'Noun', vblex: 'Verb', adj: 'Adj', adv: 'Adv',
+  pr: 'Prep', prn: 'Pron', cnj: 'Conj',
+};
+
+let listPlaying = false;
+
+function uniqueCards() {
+  const seen = new Set();
+  const out = [];
+  for (const item of state.items) {
+    if (seen.has(item.card.es)) continue;
+    seen.add(item.card.es);
+    out.push(item.card);
+  }
+  return out.sort((a, b) => b.zipf - a.zipf);
+}
+
+// "casa - la casa" for a single sense; "(Noun) partito, partita; (Adj)
+// tagliato" where the senses split by part of speech.
+function glossOf(card) {
+  if (card.by_pos) {
+    return Object.entries(card.by_pos)
+      .map(([group, words]) =>
+        `(${POS_SHORT[group] || group}) ${words.join(', ')}`)
+      .join('; ');
+  }
+  return card.senses.join(', ');
+}
+
+function renderWordList() {
+  const cards = uniqueCards();
+  $('#word-list-count').textContent =
+    `${cards.length} word${cards.length === 1 ? '' : 's'}`;
+
+  $('#word-list').replaceChildren(...cards.map((card, i) => {
+    const row = document.createElement('div');
+    row.className = 'word-row-item';
+    row.dataset.index = i;
+
+    const es = document.createElement('b');
+    es.className = 'word-es';
+    es.textContent = card.es;
+
+    const dash = document.createElement('span');
+    dash.className = 'word-dash';
+    dash.textContent = ' - ';
+
+    const it = document.createElement('span');
+    it.className = 'word-it';
+    it.textContent = glossOf(card);
+
+    row.append(es, dash, it);
+    row.addEventListener('click', () => speak(card.es, 'es'));
+    return row;
+  }));
+  return cards;
+}
+
+// The Spanish word, then each gloss, then a longer breath before the next
+// entry. Multiword glosses like "davanti a" are read whole.
+function listScript(cards) {
+  const steps = [];
+  cards.forEach((card, index) => {
+    steps.push({ text: card.es, lang: 'es', index, gap: 260 });
+    const senses = card.by_pos
+      ? Object.values(card.by_pos).flat()
+      : card.senses;
+    senses.forEach((sense, k) => {
+      steps.push({
+        text: sense, lang: 'it', index,
+        gap: k === senses.length - 1 ? 900 : 220,
+      });
+    });
+  });
+  return steps;
+}
+
+function setListButton(playing) {
+  listPlaying = playing;
+  const b = $('#word-list-play');
+  b.textContent = playing ? '❚❚ Pause' : '▶ Read the list';
+  b.classList.toggle('playing', playing);
+}
+
+function highlightListRow(index) {
+  const list = $('#word-list');
+  const previous = list.querySelector('.word-row-item.speaking');
+  if (previous) previous.classList.remove('speaking');
+  if (index === null || index === undefined) return;
+  const row = list.querySelector(`.word-row-item[data-index="${index}"]`);
+  if (row) {
+    row.classList.add('speaking');
+    row.scrollIntoView({ block: 'nearest' });
+  }
+}
+
+async function toggleListPlayback() {
+  if (listPlaying) {
+    stopSpeech();
+    setListButton(false);
+    highlightListRow(null);
+    return;
+  }
+  const cards = uniqueCards();
+  if (!cards.length) return;
+  setListButton(true);
+  await speakSteps(listScript(cards), {
+    onStep: index => {
+      if (index === null) { setListButton(false); highlightListRow(null); }
+      else highlightListRow(index);
+    },
+  });
 }
 
 // ---------- review ----------
@@ -1217,7 +1342,15 @@ function wire() {
   $('#open-progress').addEventListener('click', openProgress);
   $('#close-progress').addEventListener('click', () => show('home'));
   $('#open-deck').addEventListener('click', () => show('deck'));
-  $('#close-deck').addEventListener('click', () => show('home'));
+  $('#close-deck').addEventListener('click', () => {
+    if (listPlaying) { stopSpeech(); setListButton(false); }
+    show('home');
+  });
+  $('#word-list-panel').addEventListener('toggle', e => {
+    if (e.target.open) renderWordList();
+    else if (listPlaying) { stopSpeech(); setListButton(false); }
+  });
+  $('#word-list-play').addEventListener('click', toggleListPlayback);
   $('#open-settings').addEventListener('click', () => show('settings'));
   $('#close-settings').addEventListener('click', () => show('home'));
   $('#grade-row').addEventListener('click', e => {
