@@ -453,7 +453,10 @@ function reveal() {
       play.className = 'say';
       play.textContent = '▶';
       play.setAttribute('aria-label', 'Hear ' + w);
-      play.addEventListener('click', e => { e.preventDefault(); speak(w, which); });
+      play.addEventListener('click', e => {
+        e.preventDefault();
+        speak(spokenForm(w, genderFor(state.gender, card, w, which)), which);
+      });
       row.append(play);
     }
     return row;
@@ -511,7 +514,9 @@ function reveal() {
   // Only the Spanish. With several Italian senses on screen, reading them all
   // aloud is noise -- and the Italian is the side already known. Each sense
   // has its own button for the pairs that sound nearly identical.
-  if (state.settings.autoSpeak && canSpeak()) speak(card.es, 'es');
+  if (state.settings.autoSpeak && canSpeak()) {
+    speak(spokenForm(card.es, genderFor(state.gender, card, card.es, 'es')), 'es');
+  }
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
 
@@ -658,6 +663,13 @@ function withGender(word, info, lang) {
   mark.textContent = info.g;
   frag.append(mark);
   return frag;
+}
+
+// What the voice should say. A noun is spoken with its article, because that
+// is how it is learned and how it is said -- `la casa`, not `casa`.
+function spokenForm(word, info) {
+  if (!info) return word;
+  return info.art.endsWith("'") ? info.art + word : info.art + ' ' + word;
 }
 
 function genderFor(all, card, word, which) {
@@ -955,7 +967,7 @@ function renderProgress(progress, reviews) {
   renderDirections(seen);
   renderForecast(items);
   renderDays(seen);
-  renderTrouble(progress, items);
+  renderTrouble(seen);
 }
 
 // --- the headline numbers ---
@@ -975,9 +987,13 @@ function renderStats(items, reviews) {
     [streakOf(reviews), 'day streak'],
     [todayCount, 'today'],
     [reviews.length, 'reviews'],
-    [accuracy === null ? '–' : accuracy + '%', 'kept'],
+    [accuracy === null ? '–' : accuracy + '%', 'recalled'],
     [started, 'started'],
   ];
+
+  $('#stat-note').textContent = accuracy === null
+    ? 'Recalled is the share of reviews you did not send back to Again.'
+    : `Recalled: ${kept} of ${graded.length} reviews you did not send back to Again.`;
 
   $('#stat-row').replaceChildren(...stats.map(([value, label]) => {
     const cell = document.createElement('div');
@@ -1079,18 +1095,44 @@ function renderDirections(reviews) {
 }
 
 // --- words that keep going wrong ---
+//
+// Counted from the review log rather than from the running lapse total on each
+// card, because only the log knows when. That is what lets the window switch.
 
-function renderTrouble(progress, items) {
-  const inScope = new Set(items.map(i => i.key));
+const TROUBLE_WINDOWS = [
+  { key: 'all', label: 'All time', since: () => 0 },
+  { key: 'today', label: 'Today', since: () => startOfToday() },
+  { key: 'week', label: 'Last 7 days', since: () => startOfToday() - 6 * DAY },
+  { key: 'month', label: 'Last 30 days', since: () => startOfToday() - 29 * DAY },
+];
+let troubleWindow = 'all';
+
+function renderTrouble(reviews) {
+  const win = TROUBLE_WINDOWS.find(w => w.key === troubleWindow) || TROUBLE_WINDOWS[0];
+  const since = win.since();
+
   const byCard = new Map();
-  for (const p of progress) {
-    if (!p.lapses || !inScope.has(p.key)) continue;
-    byCard.set(p.cardId, (byCard.get(p.cardId) || 0) + p.lapses);
+  for (const r of reviews) {
+    if (r.grade !== AGAIN || r.ts < since) continue;
+    byCard.set(r.cardId, (byCard.get(r.cardId) || 0) + 1);
   }
+
+  $('#trouble-window').replaceChildren(...TROUBLE_WINDOWS.map(w => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = w.label;
+    b.setAttribute('aria-pressed', String(w.key === troubleWindow));
+    b.addEventListener('click', () => {
+      troubleWindow = w.key;
+      renderTrouble(reviews);
+    });
+    return b;
+  }));
+
   const deck = new Map(state.deck.map(c => [c.es, c]));
   const worst = [...byCard.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 8)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([id, lapses]) => ({ card: deck.get(id), lapses }))
     .filter(r => r.card);
 
@@ -1106,11 +1148,17 @@ function renderTrouble(progress, items) {
     n.className = 'trouble-count';
     n.textContent = lapses;
     row.append(es, it, n);
+    row.addEventListener('click', () => speak(card.es, 'es'));
     return row;
   }));
+
+  const total = worst.reduce((s, r) => s + r.lapses, 0);
   $('#trouble-note').textContent = worst.length
-    ? 'Times you pressed Again. These are the ones worth a second look.'
-    : 'Nothing has tripped you up yet.';
+    ? `${worst.length} word${worst.length === 1 ? '' : 's'} · ${total} `
+      + `time${total === 1 ? '' : 's'} you pressed Again`
+    : win.key === 'all'
+      ? 'Nothing has tripped you up yet.'
+      : 'Nothing tripped you up in this window.';
 }
 
 // What is coming, rather than what has happened. Overdue collapses into the
@@ -1360,7 +1408,9 @@ function wire() {
   $('#say-prompt').addEventListener('click', () => {
     const item = state.queue[state.index];
     const dir = DIRECTIONS[item.direction];
-    speak(item.card[dir.prompt], dir.prompt);
+    const word = item.card[dir.prompt];
+    speak(spokenForm(word, genderFor(state.gender, item.card, word, dir.prompt)),
+          dir.prompt);
   });
   $('#accents').addEventListener('click', () => {
     speakOtherAccent(state.queue[state.index].card.es);

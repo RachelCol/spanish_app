@@ -584,7 +584,7 @@ button.secondary {
 .gender-article {
   color: var(--muted); font-weight: 400;
   font-size: .68em;          /* relative, so it scales with prompt and answers */
-  margin-right: .5em;        /* in em, so the gap grows with the type */
+  margin-right: .34em;       /* in em, so the gap grows with the type */
 }
 .gender-article.elided { margin-right: 0; }   /* l'acqua, never l' acqua */
 .gender-mark {
@@ -658,3 +658,13 @@ button.secondary {
   border-radius: 6px;
 }
 .word-row-item.speaking .word-es { color: var(--accent); }
+
+/* --- headline caption --- */
+.stat-note { margin: .5rem 0 0; text-align: center; line-height: 1.45; }
+
+/* --- trouble list --- */
+#trouble-panel { margin-top: 1.6rem; }
+.trouble-window { justify-content: center; margin: .8rem 0; }
+.trouble-list { max-height: 55vh; overflow-y: auto; }
+.trouble-row { cursor: pointer; }
+.trouble-row:active { background: var(--bg); }

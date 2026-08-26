@@ -168,6 +168,7 @@
 
     <div id="scope-toggle" class="chips scope-toggle"></div>
     <div id="stat-row" class="stat-row"></div>
+    <p id="stat-note" class="muted small stat-note"></p>
 
     <h3 class="section-label">By grade</h3>
     <div id="grade-chart" class="grade-chart"></div>
@@ -186,9 +187,12 @@
     <p id="day-readout" class="chart-readout"></p>
     <p id="day-summary" class="muted small"></p>
 
-    <h3 class="section-label">Keeps catching you out</h3>
-    <div id="trouble-list"></div>
-    <p id="trouble-note" class="muted small"></p>
+    <details id="trouble-panel" class="mood">
+      <summary>Keeps catching you out</summary>
+      <div id="trouble-window" class="chips trouble-window"></div>
+      <div id="trouble-list" class="trouble-list"></div>
+      <p id="trouble-note" class="muted small"></p>
+    </details>
   </section>
 
   <!-- Conjugation -->
