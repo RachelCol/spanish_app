@@ -522,9 +522,10 @@ function withGender(word, info, lang) {
     return frag;
   }
   const article = document.createElement('span');
-  article.className = 'gender-article';
-  // l' binds to the word; every other article takes a space.
-  article.textContent = info.art.endsWith("'") ? info.art : info.art + ' ';
+  // l' binds tight to its word; every other article stands off from it.
+  const elided = info.art.endsWith("'");
+  article.className = 'gender-article' + (elided ? ' elided' : '');
+  article.textContent = info.art;
   frag.append(article, word);
 
   const mark = document.createElement('i');

@@ -569,7 +569,9 @@ button.secondary {
 .gender-article {
   color: var(--muted); font-weight: 400;
   font-size: .68em;          /* relative, so it scales with prompt and answers */
+  margin-right: .5em;        /* in em, so the gap grows with the type */
 }
+.gender-article.elided { margin-right: 0; }   /* l'acqua, never l' acqua */
 .gender-mark {
   font-style: italic; color: var(--accent);
   font-size: .42em; font-weight: 600;
