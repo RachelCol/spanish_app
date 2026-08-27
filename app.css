@@ -787,3 +787,60 @@ button.secondary {
   font-size: .72rem; color: var(--muted);
 }
 .check-drop:hover { color: var(--ink); border-color: var(--muted); }
+
+/* --- saying what looks wrong --- */
+.flag-form {
+  max-width: 26rem; margin: 1rem auto 0; text-align: left;
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.flag-label { font-size: .78rem; color: var(--muted); letter-spacing: .03em; }
+.flag-note {
+  width: 100%; font: inherit; font-size: .9rem; line-height: 1.5;
+  padding: .6rem .7rem; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  resize: vertical;
+}
+.flag-note:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.flag-actions { display: flex; gap: .6rem; justify-content: flex-end; }
+.flag-cancel, .flag-confirm {
+  font: inherit; font-size: .82rem; cursor: pointer;
+  border-radius: 20px; padding: .35rem .95rem; border: 1px solid var(--line);
+}
+.flag-cancel { background: none; color: var(--muted); }
+.flag-cancel:hover { color: var(--ink); }
+.flag-confirm { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.flag-confirm:hover { filter: brightness(1.06); }
+
+/* --- the check pile, two columns --- */
+.check-table { width: 100%; border-collapse: collapse; margin-top: .7rem; font-size: .9rem; }
+.check-table th {
+  text-align: left; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; padding: .3rem .6rem .45rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.check-table td {
+  padding: .6rem .6rem .6rem 0; border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.check-table tr:last-child td { border-bottom: 0; }
+.check-word {
+  background: none; border: 0; padding: 0; font: inherit; font-weight: 700;
+  color: var(--ink); cursor: pointer;
+  border-bottom: 1px dotted var(--accent);
+}
+.check-word:hover { color: var(--accent); }
+.check-note { color: var(--muted); line-height: 1.5; }
+
+/* --- the flagged card, shown again --- */
+.preview { margin-top: 1rem; text-align: center; }
+.preview-prompt { font-size: 1.6rem; font-weight: 700; color: var(--ink); }
+.preview-pos {
+  font-style: italic; font-size: .8rem; margin: .25rem 0 .8rem;
+  color: color-mix(in srgb, var(--accent) 55%, var(--muted));
+}
+.preview-answer { font-size: 1.15rem; font-weight: 600; padding: .12rem 0; }
+.preview .detail-pos { text-align: center; }
+.preview-note {
+  margin: 1rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line);
+  font-size: .85rem; color: var(--muted); text-align: left;
+}

@@ -312,12 +312,13 @@ async function loadCheckPile() {
   return (await db.getMeta('checkPile')) || {};
 }
 
-async function flagForCheck(item) {
+async function flagForCheck(item, note) {
   const pile = await loadCheckPile();
   pile[item.prompt] = {
     ts: Date.now(),
     sig: promptSignature(answersFor(item)),
     answers: answersFor(item).map(a => a.es),
+    note: (note || '').trim(),
   };
   await db.setMeta('checkPile', pile);
   state.checkPile = pile;
@@ -345,33 +346,42 @@ async function releaseFixedChecks() {
 }
 
 function renderCheckPile() {
-  const host = $('#check-list');
+  const host = $('#check-table');
   const rows = Object.entries(state.checkPile || {}).sort((a, b) => b[1].ts - a[1].ts);
 
   if (!rows.length) {
-    const p = document.createElement('p');
-    p.className = 'muted small';
-    p.textContent = 'Nothing flagged.';
-    host.replaceChildren(p);
+    host.replaceChildren();
+    const cap = document.createElement('caption');
+    cap.className = 'muted small';
+    cap.textContent = 'Nothing flagged.';
+    host.append(cap);
     return;
   }
 
-  host.replaceChildren(...rows.map(([prompt, entry]) => {
-    const row = document.createElement('div');
-    row.className = 'check-row';
+  const head = document.createElement('tr');
+  for (const label of ['Word', 'What looks wrong', '']) {
+    const th = document.createElement('th');
+    th.textContent = label;
+    head.append(th);
+  }
 
-    const words = document.createElement('div');
-    words.className = 'check-words';
-    const it = document.createElement('b');
-    it.textContent = prompt;
-    const arrow = document.createElement('span');
-    arrow.className = 'check-arrow';
-    arrow.textContent = '\u2192';
-    const es = document.createElement('span');
-    es.className = 'check-es';
-    es.textContent = (entry.answers || []).join(', ');
-    words.append(it, arrow, es);
+  const body = rows.map(([prompt, entry]) => {
+    const tr = document.createElement('tr');
 
+    const tdWord = document.createElement('td');
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.className = 'check-word';
+    open.textContent = prompt;
+    open.setAttribute('aria-label', 'Show the card for ' + prompt);
+    open.addEventListener('click', () => openCardPreview(prompt));
+    tdWord.append(open);
+
+    const tdNote = document.createElement('td');
+    tdNote.className = 'check-note';
+    tdNote.textContent = entry.note || '\u2014';
+
+    const tdAct = document.createElement('td');
     const drop = document.createElement('button');
     drop.type = 'button';
     drop.className = 'check-drop';
@@ -382,10 +392,69 @@ function renderCheckPile() {
       renderCheckPile();
       await refresh();
     });
+    tdAct.append(drop);
 
-    row.append(words, drop);
-    return row;
-  }));
+    tr.append(tdWord, tdNote, tdAct);
+    return tr;
+  });
+
+  host.replaceChildren(head, ...body);
+}
+
+// The flagged card, shown again so you can see what you were looking at when
+// you flagged it. Read-only: no grading, nothing scheduled.
+function openCardPreview(prompt) {
+  const answers = state.prompts[prompt];
+  if (!answers) return;
+  const panel = $('#preview');
+  const parts = [];
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'detail-close';
+  close.textContent = '\u2715';
+  close.setAttribute('aria-label', 'Close');
+  close.addEventListener('click', () => panel.classList.add('hidden'));
+  parts.push(close);
+
+  const word = document.createElement('div');
+  word.className = 'preview-prompt';
+  word.textContent = prompt;
+  parts.push(word);
+
+  const pos = document.createElement('div');
+  pos.className = 'preview-pos';
+  pos.textContent = posWords(answers.map(a => a.pos));
+  parts.push(pos);
+
+  const byPos = {};
+  for (const a of answers) (byPos[a.pos] = byPos[a.pos] || []).push(a.es);
+  const grouped = Object.keys(byPos).length > 1;
+  for (const [g, words] of Object.entries(byPos)) {
+    if (grouped) {
+      const label = document.createElement('div');
+      label.className = 'sense-pos detail-pos';
+      label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
+      parts.push(label);
+    }
+    for (const w of words) {
+      const row = document.createElement('div');
+      row.className = 'preview-answer';
+      row.replaceChildren(withGender(w, genderFor(state.gender, null, w, 'es'), 'es'));
+      parts.push(row);
+    }
+  }
+
+  const note = (state.checkPile[prompt] || {}).note;
+  if (note) {
+    const n = document.createElement('p');
+    n.className = 'preview-note';
+    n.textContent = note;
+    parts.push(n);
+  }
+
+  panel.replaceChildren(...parts);
+  panel.classList.remove('hidden');
 }
 
 // ---------- review ----------
@@ -437,6 +506,7 @@ function renderCard() {
   $('#examples').classList.add('hidden');
   $('#examples').replaceChildren();
   $('#flag-btn').classList.add('hidden');
+  $('#flag-form').classList.add('hidden');
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -1627,10 +1697,21 @@ function wire() {
   $('#check-panel').addEventListener('toggle', e => {
     if (e.target.open) renderCheckPile();
   });
-  $('#flag-btn').addEventListener('click', async () => {
+  $('#flag-btn').addEventListener('click', () => {
+    $('#flag-btn').classList.add('hidden');
+    $('#flag-form').classList.remove('hidden');
+    $('#flag-note').value = '';
+    $('#flag-note').focus();
+  });
+  $('#flag-cancel').addEventListener('click', () => {
+    $('#flag-form').classList.add('hidden');
+    $('#flag-btn').classList.remove('hidden');
+  });
+  $('#flag-confirm').addEventListener('click', async () => {
     const item = state.queue[state.index];
     if (!item) return;
-    await flagForCheck(item);
+    await flagForCheck(item, $('#flag-note').value);
+    $('#flag-form').classList.add('hidden');
     // Straight past it. A card you have just called wrong should not go on to
     // ask how well you remembered it, nor be scheduled on the way out.
     state.queue = state.queue.filter(q => q.prompt !== item.prompt);

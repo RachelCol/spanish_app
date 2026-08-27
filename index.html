@@ -108,10 +108,12 @@
     <details id="check-panel" class="mood">
       <summary>Check pile</summary>
       <p class="muted small">
-        Cards you have flagged as wrong. They stay out of review until the
-        pairing changes, and then come back on their own.
+        Cards you have flagged as wrong, with what you said about them. They
+        stay out of review until the pairing changes, and then come back on
+        their own. Tap a word to see the card again.
       </p>
-      <div id="check-list" class="check-list"></div>
+      <div class="scroller"><table id="check-table" class="check-table"></table></div>
+      <div id="preview" class="detail preview hidden" role="dialog" aria-label="Flagged card"></div>
     </details>
   </section>
 
@@ -283,6 +285,15 @@
         <button id="conj-btn" class="compare hidden">Conjugation</button>
       </div>
       <button id="flag-btn" class="flag-btn hidden" type="button">Send to check pile</button>
+      <div id="flag-form" class="flag-form hidden">
+        <label for="flag-note" class="flag-label">What looks wrong?</label>
+        <textarea id="flag-note" class="flag-note" rows="3"
+                  placeholder="e.g. dovere should be deber, not tener"></textarea>
+        <div class="flag-actions">
+          <button id="flag-cancel" class="flag-cancel" type="button">Cancel</button>
+          <button id="flag-confirm" class="flag-confirm" type="button">Confirm</button>
+        </div>
+      </div>
 
       <div id="examples" class="examples hidden"></div>
 
