@@ -454,11 +454,6 @@ function reveal() {
   // five verbs is a list.
   const answers = answersFor(item);
   const groups = answerGroups(item);
-  const single = answers.length === 1;
-  // Two separate questions. Inline the links when there is one answer, so the
-  // common path never costs a tap. Offer the entry whenever it knows more --
-  // several answers, or one answer that means more than the prompt showed.
-  const openable = !single || hasEntry(card);
 
   if (groups) {
     const blocks = [];
@@ -466,29 +461,26 @@ function reveal() {
       const label = document.createElement('div');
       label.className = 'sense-pos';
       label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
-      blocks.push(label, ...words.map(w => answerRow(w, !openable)));
+      blocks.push(label, ...words.map(w => answerRow(w)));
     }
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
-    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es, !openable)));
+    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
   $('#meta').classList.remove('hidden');
   $('#pos-line').classList.add('hidden');
 
-  // Links, examples and the conjugation table belong to a Spanish word, not to
-  // the card. With one answer that distinction is invisible and they sit on
-  // the back as always. With several they move into each word's own entry --
-  // three stacked link rows on one card face is not a card any more.
-  if (single) {
-    inlineDetail(card);
-  } else {
-    $('#card-links').classList.add('hidden');
-    $('#examples-btn').classList.add('hidden');
-    $('#conj-btn').classList.add('hidden');
-  }
+  // Links and example sentences belong to a word, not to a card, and every
+  // answer now opens its own entry -- so they live there and nowhere else.
+  // The conjugation tables stay: a paradigm is glanceable, and wanting one is
+  // not the same as wanting to look a word up.
+  $('#card-links').classList.add('hidden');
+  $('#examples-btn').classList.add('hidden');
+  $('#conj-btn').classList.add('hidden');
+  renderPresentTables(answers);
 
   // A footnote on the word rather than a headline action, and only on the
   // ~1 in 5 words the two accents actually pronounce differently.
@@ -518,18 +510,15 @@ function reveal() {
 // side can show it the way the Spanish -> Italian side shows its senses.
 // One Spanish answer. Tappable whenever there is more than one on the card:
 // the word opens its own entry, which knows more than the card face does.
-function answerRow(word, single) {
+function answerRow(word) {
   const row = document.createElement('div');
   row.className = 'word-row';
 
-  const span = document.createElement(single ? 'span' : 'button');
-  span.className = 'answer';
-  if (!single) {
-    span.type = 'button';
-    span.classList.add('answer-link');
-    span.setAttribute('aria-label', word + ' \u2014 see this word');
-    span.addEventListener('click', () => openDetail(word));
-  }
+  const span = document.createElement('button');
+  span.className = 'answer answer-link';
+  span.type = 'button';
+  span.setAttribute('aria-label', word + ' \u2014 see this word');
+  span.addEventListener('click', () => openDetail(word));
   span.replaceChildren(
     withGender(word, genderFor(state.gender, null, word, 'es'), 'es'));
   row.append(span);
@@ -566,35 +555,20 @@ function detailLinks(es) {
   };
 }
 
-// With one answer there is nothing to disambiguate, so the entry's contents sit
-// on the card back exactly as they always have -- no tap to reach them.
-function inlineDetail(card) {
-  const l = detailLinks(card.es);
-  $('#link-wr').href = l.wr;
-  $('#link-rev').href = l.rev;
-  $('#link-yg').href = l.yg;
-  $('#card-links').classList.remove('hidden');
-
-  if (posGroups(card).includes('vblex')) {
-    loadConjugations().then(all => {
-      const cur = state.queue[state.index];
-      if (!cur || cur.card.es !== card.es) return;
-      const entry = all.verbs[card.es];
-      $('#conj-btn').classList.toggle('hidden', !entry);
-      renderPresentTable(entry);
-    });
-  }
-  loadSentences().then(all => {
-    const cur = state.queue[state.index];
-    if (cur && cur.card.es === card.es) {
-      $('#examples-btn').classList.toggle('hidden', !(all[card.es] || []).length);
-    }
-  });
+// Clicking away closes it. Clicking another answer is not "away" -- that word
+// opens its own entry, which is what the click was for.
+function detailOutsideClick(e) {
+  const panel = $('#detail');
+  if (panel.classList.contains('hidden')) return;
+  if (panel.contains(e.target)) return;
+  if (e.target.closest && e.target.closest('.answer-link')) return;
+  closeDetail();
 }
 
 function closeDetail() {
   const p = $('#detail');
   if (!p) return;
+  document.removeEventListener('click', detailOutsideClick);
   p.classList.add('hidden');
   p.replaceChildren();
 }
@@ -631,7 +605,7 @@ function openDetail(es) {
   const groups = card.by_pos || { [posGroups(card)[0]]: card.senses || [card.it] };
   for (const [g, words] of Object.entries(groups)) {
     const label = document.createElement('div');
-    label.className = 'sense-pos';
+    label.className = 'sense-pos detail-pos';
     label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
     parts.push(label);
     for (const w of words) {
@@ -659,6 +633,8 @@ function openDetail(es) {
   panel.replaceChildren(...parts);
   panel.classList.remove('hidden');
   panel.scrollTop = 0;
+  // added on open, removed on close, so a stray listener never accumulates
+  setTimeout(() => document.addEventListener('click', detailOutsideClick), 0);
 
   loadSentences().then(all => {
     const rows = all[es] || [];
@@ -691,14 +667,6 @@ function openDetail(es) {
       extra.append(b);
     });
   }
-}
-
-// Does this word's entry hold anything the card face does not? A Spanish word
-// with a second Italian sense does -- `mejor` is `meglio` and `migliore`, and
-// the card only ever showed the one that prompted you. That is the case for
-// 615 prompts, and it is why one answer is not the same as nothing to open.
-function hasEntry(card) {
-  return !!card && ((card.senses || []).length > 1 || !!card.by_pos);
 }
 
 function answersFor(item) {
@@ -921,9 +889,43 @@ function playAllButton(forms, label) {
 // did so inconsistently: `está` and `están` differ from a regular esta/estan
 // by an accent and were marked, while `estáis` matches the regular -áis and
 // was not. estar's stem never changes, so it is now unmarked throughout.
-function renderPresentTable(entry) {
+// One table per verb the card answers with. `dovere` answers both `tener` and
+// `haber`, and seeing the two paradigms under each other is most of the point
+// of that card, so they sit beneath the definitions rather than behind a tap.
+function renderPresentTables(answers) {
   const host = $('#present-table');
-  if (!entry || !entry.present) { host.classList.add('hidden'); return; }
+  host.replaceChildren();
+  host.classList.add('hidden');
+
+  const verbs = answers
+    .map(a => state.deck.find(c => c.es === a.es))
+    .filter(c => c && posGroups(c).includes('vblex'));
+  if (!verbs.length) return;
+
+  loadConjugations().then(all => {
+    const cur = state.queue[state.index];
+    if (!cur || cur.prompt !== state.queue[state.index].prompt) return;
+    const blocks = [];
+    for (const card of verbs) {
+      const entry = all.verbs[card.es];
+      const grid = presentGrid(entry);
+      if (!grid) continue;
+      if (verbs.length > 1) {
+        const label = document.createElement('div');
+        label.className = 'present-label';
+        label.textContent = card.es;
+        blocks.push(label);
+      }
+      blocks.push(grid);
+    }
+    if (!blocks.length) return;
+    host.replaceChildren(...blocks);
+    host.classList.remove('hidden');
+  });
+}
+
+function presentGrid(entry) {
+  if (!entry || !entry.present) return null;
 
   const forms = entry.present;
   const marks = entry.marks || [];
@@ -952,9 +954,11 @@ function renderPresentTable(entry) {
     return cell;
   }));
 
-  host.replaceChildren(grid);
-  if (canSpeak()) host.append(playAllButton(forms, 'Hear the whole present tense'));
-  host.classList.remove('hidden');
+  const box = document.createElement('div');
+  box.className = 'present-block';
+  box.append(grid);
+  if (canSpeak()) box.append(playAllButton(forms, 'Hear the whole present tense'));
+  return box;
 }
 
 const MOODS = [

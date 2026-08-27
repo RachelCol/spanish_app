@@ -103,6 +103,14 @@ SENSE_OVERRIDES = {
     # being right for the last of those. `organico` beats `personale`, which
     # in Italian also means "personal".
     'plantilla': ['organico', 'modello', 'soletta'],
+    # Apertium links `estar` to `essere` only through the phrase `essere per`,
+    # so fixing the multiword parser correctly removed it -- and left the deck
+    # claiming `estar` is `stare` and nothing else. That is the one distinction
+    # this whole app exists to teach: Italian `essere` splits into `ser` and
+    # `estar`, and a learner who never meets that split learns Spanish wrong.
+    # Asserted here rather than inferred, because the dictionary cannot say it.
+    'estar':   ['stare', 'essere'],
+    'ser':     ['essere'],
 }
 
 # Two different problems, two different rules.
@@ -139,15 +147,31 @@ NOISE_GAP_PHRASE = 0.8   # phrases only: register rather than meaning
 
 
 def _surface(node):
-    """Flatten an <l>/<r> node into its lemma string and first POS tag."""
-    parts = [node.text or ""]
+    """Flatten an <l>/<r> node into its lemma string and first POS tag.
+
+    Multiwords are wrapped in <g>, as in `<l>dar<g><b/>lugar</g><s n="vblex"/></l>`.
+    Walking only the direct children misses everything inside that group, which
+    silently turned `dar lugar` into `dar` and then handed `dar` the gloss
+    `avvenire`. Same for `echar de menos`, `base de datos`, `codigo de barras`
+    and twenty-six others. Descend.
+    """
+    parts = []
     pos = None
-    for child in node:
-        if child.tag == "b":
-            parts.append(" ")
-        elif child.tag == "s" and pos is None:
-            pos = child.get("n")
-        parts.append(child.tail or "")
+    def walk(n, top=False):
+        nonlocal pos
+        if n.text:
+            parts.append(n.text)
+        for child in n:
+            if child.tag == "b":
+                parts.append(" ")
+            elif child.tag == "s":
+                if pos is None:
+                    pos = child.get("n")
+            else:
+                walk(child)
+            if child.tail:
+                parts.append(child.tail)
+    walk(node, top=True)
     return "".join(parts).strip(), pos
 
 

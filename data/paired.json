@@ -802,8 +802,7 @@
   ],
   "pos": "vblex",
   "pos_all": [
-   "vblex",
-   "vbmod"
+   "vblex"
   ],
   "sim": 0.2,
   "bucket": "distinct",
@@ -1731,13 +1730,11 @@
   "tier": "common",
   "it": "avere",
   "senses": [
-   "avere",
-   "dovere"
+   "avere"
   ],
   "pos": "vbhaver",
   "pos_all": [
-   "vbhaver",
-   "vbmod"
+   "vbhaver"
   ],
   "sim": 0.4,
   "bucket": "distinct",
@@ -2149,8 +2146,7 @@
   "tier": "common",
   "it": "dare",
   "senses": [
-   "dare",
-   "avvenire"
+   "dare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -3290,8 +3286,7 @@
   "tier": "common",
   "it": "passare",
   "senses": [
-   "passare",
-   "sfuggire"
+   "passare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -3469,8 +3464,7 @@
   "tier": "common",
   "it": "senso",
   "senses": [
-   "senso",
-   "buonsenso"
+   "senso"
   ],
   "pos": "n",
   "pos_all": [
@@ -3745,8 +3739,7 @@
   "tier": "common",
   "it": "base",
   "senses": [
-   "base",
-   "database"
+   "base"
   ],
   "pos": "n",
   "pos_all": [
@@ -4933,8 +4926,7 @@
   "it": "diventare",
   "senses": [
    "diventare",
-   "tornare",
-   "ripulire"
+   "tornare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -5570,8 +5562,7 @@
   "tier": "common",
   "it": "capo",
   "senses": [
-   "capo",
-   "caporedattore"
+   "capo"
   ],
   "pos": "n",
   "pos_all": [
@@ -5619,7 +5610,8 @@
   "tier": "common",
   "it": "portare",
   "senses": [
-   "portare"
+   "portare",
+   "portare via"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -7159,8 +7151,7 @@
   "it": "fondo",
   "senses": [
    "fondo",
-   "sfondo",
-   "fondale"
+   "sfondo"
   ],
   "pos": "n",
   "pos_all": [
@@ -8059,8 +8050,7 @@
   "tier": "common",
   "it": "iniziare",
   "senses": [
-   "iniziare",
-   "ricominciare"
+   "iniziare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -8952,8 +8942,7 @@
   "tier": "useful",
   "it": "vestiti",
   "senses": [
-   "vestiti",
-   "biancheria"
+   "vestiti"
   ],
   "pos": "n",
   "pos_all": [
@@ -10097,8 +10086,7 @@
   "tier": "useful",
   "it": "sala",
   "senses": [
-   "sala",
-   "salotto"
+   "sala"
   ],
   "pos": "n",
   "pos_all": [
@@ -11533,8 +11521,7 @@
   "tier": "useful",
   "it": "trattare",
   "senses": [
-   "trattare",
-   "tentare"
+   "trattare"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -12996,7 +12983,8 @@
   "tier": "useful",
   "it": "riuscire",
   "senses": [
-   "riuscire"
+   "riuscire",
+   "riuscire a"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -16328,18 +16316,17 @@
   "es": "formar",
   "zipf_es": 4.68,
   "tier": "useful",
-  "it": "fare",
+  "it": "formare",
   "senses": [
-   "fare",
    "formare"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.33,
-  "bucket": "distinct",
-  "zipf_it": 6.15
+  "sim": 0.86,
+  "bucket": "near",
+  "zipf_it": 4.43
  },
  {
   "es": "frase",
@@ -16409,17 +16396,17 @@
   "es": "intentar",
   "zipf_es": 4.68,
   "tier": "useful",
-  "it": "cercare",
+  "it": "cercare di",
   "senses": [
-   "cercare",
-   "provare",
+   "cercare di",
+   "provare a",
    "tentare"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.25,
+  "sim": 0.1,
   "bucket": "distinct",
   "zipf_it": 5.08
  },
@@ -20624,22 +20611,6 @@
   "zipf_it": 4.13
  },
  {
-  "es": "ama",
-  "zipf_es": 4.56,
-  "tier": "useful",
-  "it": "casalinga",
-  "senses": [
-   "casalinga"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.22,
-  "bucket": "distinct",
-  "zipf_it": 3.81
- },
- {
   "es": "apertura",
   "zipf_es": 4.56,
   "tier": "useful",
@@ -22810,19 +22781,17 @@
   "es": "echar",
   "zipf_es": 4.51,
   "tier": "useful",
-  "it": "fare",
+  "it": "gettare",
   "senses": [
-   "fare",
-   "mancare",
    "gettare"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.2,
+  "sim": 0.43,
   "bucket": "distinct",
-  "zipf_it": 6.15
+  "zipf_it": 3.88
  },
  {
   "es": "ejecución",
@@ -23816,22 +23785,6 @@
   "zipf_it": 4.31
  },
  {
-  "es": "puesta",
-  "zipf_es": 4.49,
-  "tier": "extended",
-  "it": "tramonto",
-  "senses": [
-   "tramonto"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.12,
-  "bucket": "distinct",
-  "zipf_it": 4.21
- },
- {
   "es": "rol",
   "zipf_es": 4.49,
   "tier": "extended",
@@ -24081,7 +24034,8 @@
   "tier": "extended",
   "it": "decidere",
   "senses": [
-   "decidere"
+   "decidere",
+   "decidere di"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -26425,7 +26379,7 @@
   "senses": [
    "dovere"
   ],
-  "pos": "vbmod",
+  "pos": "vblex",
   "pos_all": [
    "vblex",
    "n",
@@ -39083,23 +39037,6 @@
   "zipf_it": 4.49
  },
  {
-  "es": "recibo",
-  "zipf_es": 4.2,
-  "tier": "extended",
-  "it": "busta",
-  "senses": [
-   "busta",
-   "prospetto"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.0,
-  "bucket": "distinct",
-  "zipf_it": 4.17
- },
- {
   "es": "rincón",
   "zipf_es": 4.2,
   "tier": "extended",
@@ -45876,8 +45813,7 @@
   "tier": "extended",
   "it": "avere bisogno di",
   "senses": [
-   "avere bisogno di",
-   "avere bisogno che"
+   "avere bisogno di"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -49036,17 +48972,17 @@
   "es": "mascota",
   "zipf_es": 4.04,
   "tier": "extended",
-  "it": "animale",
+  "it": "animale da compagnia",
   "senses": [
-   "animale"
+   "animale da compagnia"
   ],
   "pos": "n",
   "pos_all": [
    "n"
   ],
-  "sim": 0.0,
+  "sim": 0.25,
   "bucket": "distinct",
-  "zipf_it": 4.59
+  "zipf_it": 4.44
  },
  {
   "es": "mineral",
@@ -51850,17 +51786,17 @@
   "es": "pasear",
   "zipf_es": 4.0,
   "tier": "extended",
-  "it": "fare",
+  "it": "fare una passeggiata",
   "senses": [
-   "fare"
+   "fare una passeggiata"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.33,
+  "sim": 0.25,
   "bucket": "distinct",
-  "zipf_it": 6.15
+  "zipf_it": 4.21
  },
  {
   "es": "plantilla",
@@ -55210,17 +55146,17 @@
   "es": "arrancar",
   "zipf_es": 3.95,
   "tier": "long_tail",
-  "it": "fare",
+  "it": "farepartire",
   "senses": [
-   "fare"
+   "farepartire"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.12,
+  "sim": 0.36,
   "bucket": "distinct",
-  "zipf_it": 6.15
+  "zipf_it": 0.0
  },
  {
   "es": "aula",

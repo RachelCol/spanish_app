@@ -20,7 +20,11 @@ export const BUCKET_LABEL = {
   distinct: 'completely different',
 };
 
-export const TIER_ORDER = ['common', 'useful', 'extended', 'long_tail'];
+// `core` was missing here, which meant the twenty-two most frequent words in
+// the language -- ser, así, no, más, hacer, nada, vez -- had no filter chip,
+// were absent from the defaults and were not even in the "Everything" scope.
+// They were unreachable.
+export const TIER_ORDER = ['core', 'common', 'useful', 'extended', 'long_tail'];
 
 // Apertium's tags, grouped the way a learner thinks about them. vbmod is a
 // single modal verb, which does not deserve a category of its own.
@@ -154,7 +158,7 @@ export function buildItems(deck, prompts, progressList, settings) {
 }
 
 export const DEFAULT_SETTINGS = {
-  tiers: ['common', 'useful'],
+  tiers: ['core', 'common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
   pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'],
   directions: ['it>es'],

@@ -734,3 +734,19 @@ button.secondary {
   margin: .2rem 0 0; font-size: .72rem; letter-spacing: .04em;
   color: var(--muted); opacity: .75;
 }
+
+/* --- the part of speech inside a word's entry --- */
+.detail-pos {
+  font-style: italic; text-transform: none; letter-spacing: .02em;
+  font-size: .78rem; font-weight: 500;
+  color: color-mix(in srgb, var(--accent) 60%, var(--muted));
+  margin: .95rem 0 .3rem;
+}
+.detail-pos:first-of-type { margin-top: .7rem; }
+
+/* --- a present tense per verb the card answers with --- */
+.present-block + .present-label { margin-top: 1rem; }
+.present-label {
+  font-size: .8rem; font-weight: 600; letter-spacing: .03em;
+  color: var(--accent); text-align: center; margin: .2rem 0 .35rem;
+}
