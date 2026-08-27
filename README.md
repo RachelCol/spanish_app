@@ -77,3 +77,29 @@ existing history lives; the app starts fresh alongside it.
 `python pipeline/make_lab.py --recreate` copies the app into `lab/` as a third,
 independently installable build to try disruptive changes in. A plain run only
 rebuilds generated data and leaves `lab/` app code alone.
+
+## Reviewing the pairings yourself
+
+    python pipeline/export_review.py
+
+writes `review.csv` -- every pairing in the deck, ordered by frequency band,
+with the cross-check's verdict beside it and two empty columns.
+
+Open it in Google Sheets (File > Import > Upload). Fill in:
+
+| column | what it does |
+|---|---|
+| `call` | `drop` removes that Italian sense from that Spanish card. Anything else leaves it alone. |
+| `note` | free text; read, never applied automatically |
+
+Then File > Download > Comma-separated values, save it as `content/review.csv`,
+and re-run the pipeline. Your calls are applied on every build from then on,
+and `export_review.py` carries them forward into the next export so nothing is
+retyped.
+
+`review.csv` in the project root is a generated scratch file and is ignored by
+git; `content/review.csv` is the reviewed one and is committed.
+
+Corrections are deliberately not applied from the sheet. Removing a sense can
+only cost a card; asserting one can teach a wrong word, which is how
+`dovere -> tener` shipped. Put those in `note` and they get checked first.

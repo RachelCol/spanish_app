@@ -178,6 +178,22 @@ DROP_SENSES = {
     ('costa',        'costo'),
 }
 
+
+def _reviewed_drops():
+    """Pairings you marked `drop` in content/review.csv, if it is there.
+
+    Kept separate from DROP_SENSES so the two stay legible: that list is what
+    I removed and why, this is what you did. Same effect, different author.
+    """
+    try:
+        from export_review import dropped
+        return dropped()
+    except Exception:
+        return set()
+
+
+REVIEWED_DROPS = _reviewed_drops()
+
 # Two different problems, two different rules.
 #
 # Archaic and junk glosses are rare in absolute terms, not merely rarer than
@@ -284,7 +300,7 @@ def load():
         # phrase that happened to be tagged adv.
         best = {}
         for ita, ps, pi in entries:
-            if (spa, ita) in DROP_SENSES:
+            if (spa, ita) in DROP_SENSES or (spa, ita) in REVIEWED_DROPS:
                 continue
             a = affinity.get(pi, NEUTRAL_AFFINITY)
             if ita not in best or a > best[ita]:
