@@ -150,6 +150,15 @@ DROP_SENSES = {
     ('menudo',       'che'),
     ('hacia',        'per'),
     ('todavía',      'comunque'),
+
+    # False friends: they look alike, which is why the dictionary pairs them,
+    # and they are the errors that cost most -- a learner has no way to catch
+    # one. English glosses separate them cleanly, which is how these surfaced.
+    ('éxito',        'esito'),        # esito is an outcome, not a success
+    ('continente',   'contenente'),   # contenente means "containing"
+    ('actuación',    'attuazione'),   # attuazione is implementation
+    ('recorrer',     'ricorrere'),    # ricorrere is to resort to, or recur
+    ('solicitar',    'sollecitare'),  # sollecitare is to urge, not to request
 }
 
 # Two different problems, two different rules.
@@ -280,6 +289,12 @@ def load():
             if " " in ita and zipf_frequency(ranked[0], "it") - z >= NOISE_GAP_PHRASE:
                 continue
             senses_all.add(ita)
+
+        # A card can be left with nothing once DROP_SENSES has had its say --
+        # `solicitar` offered only `sollecitare`, which is a false friend. A
+        # card with no gloss is not a card.
+        if not ranked:
+            continue
 
         senses = [ranked[0]]
         top_z = zipf_frequency(ranked[0], "it")

@@ -6778,8 +6778,7 @@
   "tier": "common",
   "it": "successo",
   "senses": [
-   "successo",
-   "esito"
+   "successo"
   ],
   "pos": "n",
   "pos_all": [
@@ -20536,8 +20535,7 @@
   "tier": "useful",
   "it": "spettacolo",
   "senses": [
-   "spettacolo",
-   "attuazione"
+   "spettacolo"
   ],
   "pos": "n",
   "pos_all": [
@@ -25385,23 +25383,13 @@
   "it": "continente",
   "senses": [
    "continente",
-   "terraferma",
-   "contenente"
+   "terraferma"
   ],
   "pos": "n",
   "pos_all": [
    "n",
    "adj"
   ],
-  "by_pos": {
-   "adj": [
-    "contenente"
-   ],
-   "n": [
-    "continente",
-    "terraferma"
-   ]
-  },
   "sim": 1.0,
   "bucket": "identical",
   "zipf_it": 4.25
@@ -36731,22 +36719,6 @@
   "zipf_it": 4.21
  },
  {
-  "es": "solicitar",
-  "zipf_es": 4.24,
-  "tier": "extended",
-  "it": "sollecitare",
-  "senses": [
-   "sollecitare"
-  ],
-  "pos": "vblex",
-  "pos_all": [
-   "vblex"
-  ],
-  "sim": 0.73,
-  "bucket": "shifted",
-  "zipf_it": 3.45
- },
- {
   "es": "solucionar",
   "zipf_es": 4.24,
   "tier": "extended",
@@ -47162,18 +47134,17 @@
   "es": "recorrer",
   "zipf_es": 4.07,
   "tier": "extended",
-  "it": "ricorrere",
+  "it": "percorrere",
   "senses": [
-   "ricorrere",
    "percorrere"
   ],
   "pos": "vblex",
   "pos_all": [
    "vblex"
   ],
-  "sim": 0.78,
-  "bucket": "near",
-  "zipf_it": 4.16
+  "sim": 0.7,
+  "bucket": "shifted",
+  "zipf_it": 3.91
  },
  {
   "es": "relevancia",
