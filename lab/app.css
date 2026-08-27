@@ -1,0 +1,693 @@
+/* Mobile-first. The review screen is the only one that matters in practice,
+   so it gets the whole viewport and thumb-reachable controls. */
+
+:root {
+  --bg: #fbf8f4;
+  --surface: #ffffff;
+  --ink: #23201d;
+  --muted: #7a726a;
+  --line: #e6ddd2;
+  --accent: #b23a2e;
+  --again: #c0392b;
+  --hard: #b7791f;
+  --good: #2f855a;
+  --easy: #2b6cb0;
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171513;
+    --surface: #211e1b;
+    --ink: #ece6df;
+    --muted: #9b918a;
+    --line: #35302b;
+    --accent: #e0705f;
+    --again: #e05a4c;
+    --hard: #d99a3a;
+    --good: #4fa87a;
+    --easy: #5b95d6;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem
+           max(1rem, env(safe-area-inset-bottom));
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.view { flex: 1; display: flex; flex-direction: column; }
+.hidden { display: none !important; }
+
+h1 { font-size: 1.5rem; margin: .5rem 0 1.25rem; font-weight: 650; letter-spacing: -.01em; }
+h1 .from { color: var(--muted); font-weight: 400; }
+h2 { font-size: 1.25rem; }
+
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+
+/* --- counts --- */
+.counts { display: flex; gap: .5rem; margin-bottom: 1.25rem; }
+.count {
+  flex: 1; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .75rem; text-align: center;
+}
+.count b { display: block; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.count span { font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+
+/* --- buttons --- */
+button {
+  font: inherit; cursor: pointer; border-radius: var(--radius);
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  padding: .7rem 1rem; transition: transform .06s ease, filter .15s ease;
+}
+button:active { transform: scale(.98); }
+
+button.primary {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff; font-weight: 600; padding: .95rem; width: 100%; font-size: 1.05rem;
+}
+button.ghost { border: none; background: none; color: var(--muted); padding: .4rem .6rem; font-size: 1.1rem; }
+
+/* --- panels --- */
+.panel {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); margin-top: 1rem; padding: .25rem .9rem;
+}
+.panel summary { cursor: pointer; padding: .65rem 0; font-weight: 600; }
+fieldset { border: none; padding: 0; margin: .5rem 0 1rem; }
+legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 0 0 .4rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: .35rem .8rem; font-size: .9rem; background: transparent;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip small { display: block; font-size: .7rem; opacity: .75; }
+
+.row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .5rem 0 1rem; }
+.row input { width: 5rem; padding: .5rem; font: inherit; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.row-buttons { display: flex; gap: .5rem; padding-bottom: .75rem; }
+.row-buttons button { flex: 1; }
+
+/* --- review --- */
+.review-bar { display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem; }
+.progress { flex: 1; height: 4px; background: var(--line); border-radius: 999px; overflow: hidden; }
+#progress-fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+
+.card {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; gap: .75rem;
+  padding: 1rem 0;
+}
+.direction { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.prompt { font-size: 2.5rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+.answer { font-size: 2rem; color: var(--accent); font-weight: 600; }
+.meta { font-size: .85rem; color: var(--muted); }
+.meta .pos { font-style: italic; }
+
+.actions { padding-top: 1rem; }
+.grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+.grades button { padding: .8rem .2rem; font-size: .9rem; font-weight: 600; }
+.grades small { display: block; font-weight: 400; font-size: .7rem; opacity: .7; margin-top: .15rem; }
+.g-again { color: var(--again); } .g-hard { color: var(--hard); }
+.g-good  { color: var(--good);  } .g-easy { color: var(--easy); }
+
+#view-done { align-items: center; justify-content: center; text-align: center; }
+#view-done button { margin-top: 1.5rem; max-width: 16rem; }
+
+/* --- pronunciation --- */
+.word-row { display: flex; align-items: center; justify-content: center; gap: .6rem; }
+
+.say {
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+  width: 2.1rem; height: 2.1rem; border-radius: 50%;
+  display: grid; place-items: center; padding: 0;
+  font-size: .7rem; line-height: 1; flex: none;
+}
+.say:active { color: var(--accent); border-color: var(--accent); }
+
+.compare {
+  margin-top: .5rem; font-size: .85rem; padding: .45rem 1rem;
+  color: var(--muted); border-radius: 999px;
+}
+.compare:active { color: var(--accent); border-color: var(--accent); }
+
+/* --- voice pickers --- */
+.voice-row { align-items: center; }
+.voice-control { display: flex; align-items: center; gap: .5rem; }
+.voice-control select {
+  font: inherit; font-size: .9rem; max-width: 11rem;
+  padding: .4rem .5rem; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+}
+
+/* --- voice chips --- */
+.voice-locale {
+  font-size: .72rem; color: var(--muted); letter-spacing: .04em;
+  text-transform: uppercase; margin: .6rem 0 .35rem;
+}
+.voice-more { margin: .9rem 0 .5rem; }
+#voice-rows fieldset { margin-bottom: .25rem; }
+
+.compare-row { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin-top: .5rem; }
+.compare-row .compare { margin-top: 0; }
+
+.voice-note { display: flex; align-items: center; gap: .5rem; margin-top: .9rem; }
+
+.accent-note {
+  display: flex; align-items: center; justify-content: center; gap: .45rem;
+  margin: .1rem 0 0; font-size: .8rem; color: var(--muted);
+}
+.accent-note .say { width: 1.7rem; height: 1.7rem; font-size: .6rem; }
+
+/* --- external lookups --- */
+.card-links {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+  margin: 1.25rem 0 0; font-size: .8rem;
+}
+.card-links a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+.card-links a:active { color: var(--accent); border-color: var(--accent); }
+
+/* --- example sentences --- */
+.examples { margin-top: 1rem; text-align: left; width: 100%; }
+.example {
+  border-top: 1px solid var(--line);
+  padding: .7rem 0;
+}
+.example-es {
+  margin: 0; font-size: 1rem; line-height: 1.45;
+  display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap;
+}
+.example-es b { color: var(--accent); font-weight: 650; }
+.example-es .say { align-self: center; }
+.example-it { margin: .2rem 0 0; font-size: .92rem; color: var(--muted); }
+.example-credit { margin: .8rem 0 0; font-size: .7rem; color: var(--muted); text-align: center; }
+.example-credit a { color: inherit; }
+
+/* --- session size --- */
+.session-size { padding: 0 0 1rem; }
+.session-size select {
+  font: inherit; font-size: .95rem; padding: .5rem .6rem;
+  border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink);
+}
+
+button.secondary {
+  width: 100%; margin-top: .75rem; font-weight: 600;
+  background: var(--surface); color: var(--ink);
+}
+
+/* --- progress --- */
+.progress-title { margin: 0; font-size: 1.15rem; }
+.section-label {
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--muted); font-weight: 600; margin: 1.6rem 0 .6rem;
+}
+
+.bar-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
+.bar-label { width: 8.5rem; font-size: .85rem; flex: none; }
+.bar-value { width: 2.6rem; text-align: right; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar-track { flex: 1; height: 1.1rem; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; min-width: 2px; transition: width .3s ease; }
+
+/* A well known, F barely -- warm as it gets worse */
+.g-a { background: #2f855a; }
+.g-b { background: #559a52; }
+.g-c { background: #a0a03c; }
+.g-d { background: #c98a2e; }
+.g-e { background: #cc6b33; }
+.g-f { background: #c0392b; }
+.g-new {
+  /* Striped, to signal this bar is not on the same scale as the letters. */
+  background: repeating-linear-gradient(
+    -45deg, var(--line), var(--line) 5px, transparent 5px, transparent 10px);
+  border: 1px solid var(--line);
+}
+
+.day-chart {
+  display: flex; align-items: flex-end; gap: 3px;
+  padding: .4rem 0 0;
+}
+.day-col {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+}
+.day-count {
+  font-size: .6rem; color: var(--muted); line-height: 1;
+  font-variant-numeric: tabular-nums; min-height: .7rem;
+}
+.day-track {
+  width: 100%; height: 4.5rem;
+  display: flex; align-items: flex-end;
+  border-bottom: 1px solid var(--line);
+}
+.day-fill { width: 100%; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 2px; }
+.day-fill.empty { background: var(--line); min-height: 1px; }
+.day-tick {
+  font-size: .55rem; color: var(--muted); line-height: 1;
+  white-space: nowrap; overflow: hidden; max-width: 100%;
+}
+
+.chart-note { margin: .7rem 0 0; text-align: center; }
+.bar-value { min-width: 2.6rem; width: auto; white-space: nowrap; }
+
+.day-fill.overdue { background: var(--again); }
+
+/* --- failure and backup notices --- */
+.fatal {
+  background: var(--again); color: #fff;
+  padding: .9rem 1rem; border-radius: var(--radius);
+  margin: 0 0 1rem; font-size: .9rem; line-height: 1.45;
+}
+.backup-warning {
+  margin: 0 0 .9rem; padding: .6rem .8rem; font-size: .82rem;
+  border: 1px solid var(--hard); border-radius: var(--radius);
+  color: var(--hard); text-align: center;
+}
+
+/* --- multiple senses --- */
+.answers { display: flex; flex-direction: column; align-items: center; gap: .25rem; }
+.answers .answer { font-size: 1.9rem; }
+/* The first sense is the primary one and usually dominates -- tener is avere
+   far more often than it is tenere -- so it leads. The step down is small on
+   purpose: the ranking is a heuristic, and for genuinely co-equal senses like
+   tiempo's tempo and meteo the later ones must still read as real answers
+   rather than footnotes. */
+.answers .word-row:not(:first-child) .answer {
+  font-size: 1.55rem;
+  color: color-mix(in srgb, var(--accent) 78%, var(--muted));
+}
+
+/* --- conjugation --- */
+.conj-sub { margin: 0 0 .5rem; }
+.conj-note { margin: 0 0 .5rem; }
+.conj-warn {
+  margin: 0 0 .6rem; padding: .55rem .7rem;
+  border-left: 3px solid var(--hard); border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--hard) 8%, transparent);
+  font-size: .82rem; line-height: 1.45; color: var(--ink);
+}
+.conj-table { margin-bottom: .5rem; }
+.conj-row {
+  display: grid; grid-template-columns: 7.2rem 1fr;
+  gap: .5rem; align-items: baseline;
+  padding: .3rem 0; border-bottom: 1px solid var(--line);
+}
+.conj-pron { font-size: .78rem; color: var(--muted); }
+.conj-es { font-weight: 600; }
+.conj-es.speakable { cursor: pointer; }
+.conj-es.speakable:active { color: var(--accent); }
+
+/* --- verb stem note --- */
+.stem-note {
+  margin: .15rem 0 0; font-size: .85rem; color: var(--muted);
+  letter-spacing: .01em;
+}
+.stem-note b { color: var(--accent); font-weight: 650; }
+
+/* --- home: backup line --- */
+.backup-line {
+  display: flex; justify-content: center; align-items: center; gap: .5rem;
+  margin: .6rem 0 0;
+}
+.linkish {
+  border: none; background: none; padding: .2rem .3rem;
+  color: var(--muted); font-size: .82rem;
+  border-bottom: 1px solid var(--line); border-radius: 0;
+}
+.linkish:active { color: var(--accent); border-color: var(--accent); }
+.backup-line .sep { color: var(--line); font-size: .82rem; }
+.centred { text-align: center; margin: .35rem 0 0; }
+
+/* --- home: a titled group of destinations --- */
+.group {
+  margin-top: 1.6rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); overflow: hidden;
+}
+.group-title {
+  margin: 0; padding: .6rem .9rem;
+  font-size: .72rem; font-weight: 650; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+.group-row { display: grid; grid-template-columns: repeat(3, 1fr); }
+.group-row button {
+  border: none; border-radius: 0; background: none;
+  padding: .95rem .4rem; font-size: .95rem; font-weight: 600;
+}
+.group-row button + button { border-left: 1px solid var(--line); }
+.group-row button:active { background: var(--bg); color: var(--accent); }
+
+/* settings and deck are full screens now, so their fieldsets need room */
+#view-deck fieldset, #view-settings fieldset { margin: 1.2rem 0; }
+
+/* --- senses grouped by part of speech --- */
+.answers.grouped { gap: 0; }
+.answers.grouped .sense-pos {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--muted); margin: .7rem 0 .1rem;
+}
+.answers.grouped .sense-pos:first-child { margin-top: 0; }
+.answers.grouped .answer { font-size: 1.6rem; }
+.answers.grouped .word-row:not(:first-child) .answer { color: var(--accent); }
+
+/* --- conjugation moods --- */
+.mood { margin-bottom: .5rem; }
+.mood > summary {
+  cursor: pointer; list-style: none;
+  padding: .7rem 0 .5rem;
+  font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink);
+  border-bottom: 2px solid var(--line);
+}
+.mood > summary::-webkit-details-marker { display: none; }
+.mood > summary::after { content: ' ▸'; color: var(--muted); font-weight: 400; }
+.mood[open] > summary::after { content: ' ▾'; }
+.conj-italian {
+  margin: 0 0 .6rem; font-size: .82rem; line-height: 1.45; color: var(--muted);
+  padding-left: .7rem; border-left: 2px solid var(--line);
+}
+
+/* --- present tense on the card --- */
+.present-table {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;          /* singulars down the left, plurals right */
+  gap: .1rem 1.6rem;
+  justify-content: center;
+  margin: .7rem 0 0;
+}
+.present-form {
+  font-size: .95rem; color: var(--muted); text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+.present-form.speakable { cursor: pointer; }
+.present-form.speakable:active { color: var(--accent); }
+
+/* --- play a whole paradigm --- */
+.play-all {
+  width: 1.7rem; height: 1.7rem; padding: 0; flex: none;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: var(--surface); color: var(--muted);
+  font-size: .6rem; line-height: 1;
+  display: inline-grid; place-items: center;
+}
+.play-all:active { color: var(--accent); border-color: var(--accent); }
+
+.present-table {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  margin: .7rem 0 0;
+}
+.present-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: .1rem 1.6rem;
+}
+.tense-head { display: flex; align-items: center; gap: .5rem; }
+
+.present-form u {
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  color: var(--ink); font-weight: 600;
+}
+
+/* --- shared section furniture --- */
+.section-intro { margin: 0 0 1.2rem; line-height: 1.5; }
+.wide { grid-column: 1 / -1; }
+.back-link { margin-top: 1.2rem; }
+
+/* --- lesson and conversation lists --- */
+.lesson-list { display: flex; flex-direction: column; gap: .5rem; }
+.lesson-row {
+  display: flex; align-items: flex-start; gap: .8rem; text-align: left;
+  padding: .8rem .9rem; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.lesson-row:active { border-color: var(--accent); }
+.lesson-num {
+  flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  background: var(--bg); color: var(--muted);
+  font-size: .75rem; display: grid; place-items: center;
+}
+.lesson-text { display: flex; flex-direction: column; gap: .15rem; }
+.lesson-summary { font-size: .82rem; color: var(--muted); line-height: 1.4; font-weight: 400; }
+
+/* --- lesson body --- */
+.lesson-para { line-height: 1.6; margin: 0 0 .9rem; }
+.lesson-para b { color: var(--accent); }
+.pair-table { margin: 1.2rem 0; }
+.pair-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: .1rem .8rem;
+  padding: .55rem 0; border-bottom: 1px solid var(--line);
+}
+.pair-it { color: var(--muted); font-size: .95rem; }
+.pair-es { font-weight: 600; font-size: .95rem; }
+.pair-note { grid-column: 1 / -1; font-size: .76rem; color: var(--muted); }
+.speakable { cursor: pointer; }
+.speakable:active { color: var(--accent); }
+
+/* --- drills --- */
+.drill-prompt { text-align: center; margin: 2rem 0 1.4rem; }
+.drill-verb { display: block; font-size: 2.2rem; font-weight: 650; letter-spacing: -.02em; }
+.drill-meta {
+  display: block; margin-top: .35rem; font-size: .8rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.drill-form { display: flex; justify-content: center; }
+.drill-input {
+  font: inherit; font-size: 1.4rem; text-align: center;
+  width: 100%; max-width: 18rem; padding: .6rem .8rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink);
+}
+.drill-input:focus { outline: none; border-color: var(--accent); }
+.drill-input:disabled { opacity: .6; }
+.drill-feedback {
+  text-align: center; min-height: 1.6rem; margin: .9rem 0 0;
+  font-size: 1.05rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+.drill-feedback.right { color: var(--good); }
+.drill-feedback.accents { color: var(--hard); }
+.drill-feedback.wrong { color: var(--again); }
+.drill-score { text-align: center; font-size: 2.4rem; font-weight: 650; margin: 2rem 0 .2rem; }
+.prep-prompt {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: 2rem 0 1.4rem; text-align: center;
+}
+.prep-sentence { font-size: 1.35rem; font-weight: 600; line-height: 1.4; }
+
+/* --- drill submit --- */
+.drill-form { gap: .5rem; align-items: stretch; }
+.drill-submit {
+  font-weight: 600; padding: .6rem 1.1rem; flex: none;
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+.drill-submit:active { filter: brightness(.92); }
+
+/* --- the paradigm shown after a wrong answer --- */
+.drill-paradigm {
+  margin: 1rem auto 0; max-width: 20rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: .6rem .8rem;
+}
+.paradigm-label {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--muted); margin-bottom: .4rem;
+}
+.paradigm-row {
+  display: grid; grid-template-columns: 7.5rem 1fr; gap: .5rem;
+  padding: .18rem 0; font-size: .92rem;
+}
+.paradigm-pron { color: var(--muted); font-size: .8rem; }
+/* The form being asked about, in green: it is the right answer, whether or
+   not it was the one typed. */
+.paradigm-row.this-one .paradigm-form { color: var(--good); font-weight: 700; }
+.paradigm-row.this-one .paradigm-pron { color: var(--good); }
+
+/* --- preposition reference --- */
+.use-label {
+  grid-column: 1 / -1; text-transform: uppercase; letter-spacing: .05em;
+  font-size: .68rem; margin-bottom: .1rem;
+}
+.split-target { color: var(--accent); text-transform: none; letter-spacing: 0; font-size: .8rem; }
+.split-row .pair-it { grid-column: 1; }
+.split-row .pair-es { grid-column: 2; font-weight: 600; }
+
+.group-row.two { grid-template-columns: repeat(2, 1fr); }
+
+/* --- gap-fill drills --- */
+.gap-italian {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: 1.8rem 0 .8rem; font-size: 1rem; color: var(--muted); text-align: center;
+}
+.gap-spanish {
+  text-align: center; font-size: 1.3rem; font-weight: 600; line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+.gap-slot {
+  display: inline-block; min-width: 3.4rem;
+  border-bottom: 2px solid var(--accent); margin: 0 .15rem;
+  vertical-align: baseline;
+}
+.gap-choices {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem;
+  max-width: 22rem; margin: 0 auto;
+}
+.gap-option {
+  padding: .8rem .4rem; font-size: 1.05rem; font-weight: 600;
+  background: var(--surface);
+}
+.gap-choices.answered .gap-option { opacity: .5; }
+.gap-choices.answered .chosen-right,
+.gap-choices.answered .is-answer {
+  opacity: 1; border-color: var(--good); color: var(--good);
+}
+.gap-choices.answered .chosen-wrong {
+  opacity: 1; border-color: var(--again); color: var(--again);
+}
+.gap-full {
+  text-align: center; margin: 1rem 0 0; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+
+/* --- drill feedback --- */
+.typed-answer { font-weight: 700; }
+.correct-answer {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  margin: .35rem 0 0; text-align: center;
+}
+.correct-word { color: var(--good); font-size: 1.15rem; font-weight: 700; }
+.correct-note { color: var(--hard); font-size: .8rem; }
+
+/* --- noun gender --- */
+.gender-article {
+  color: var(--muted); font-weight: 400;
+  font-size: .68em;          /* relative, so it scales with prompt and answers */
+  margin-right: .34em;       /* in em, so the gap grows with the type */
+}
+.gender-article.elided { margin-right: 0; }   /* l'acqua, never l' acqua */
+.gender-mark {
+  font-style: italic; color: var(--accent);
+  font-size: .42em; font-weight: 600;
+  margin-left: .3em; vertical-align: .55em;
+  letter-spacing: .02em;
+}
+.answers .gender-mark { color: color-mix(in srgb, var(--accent) 70%, var(--muted)); }
+
+.chart-readout {
+  min-height: 1.1rem; margin: .5rem 0 .1rem;
+  font-size: .82rem; font-weight: 600; color: var(--accent); text-align: center;
+}
+.day-col { cursor: pointer; }
+.day-col.picked .day-fill { outline: 2px solid var(--ink); outline-offset: 1px; }
+.day-col.picked .day-count, .day-col.picked .day-tick { color: var(--ink); font-weight: 700; }
+
+/* --- progress: scope and headline stats --- */
+.scope-toggle { justify-content: center; margin-bottom: 1.1rem; }
+.stat-row {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: .35rem;
+  margin-bottom: .4rem;
+}
+.stat {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .55rem .2rem; text-align: center;
+}
+.stat b {
+  display: block; font-size: 1.15rem; line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.stat span {
+  display: block; margin-top: .15rem;
+  font-size: .58rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .03em;
+}
+
+/* --- trouble words --- */
+.trouble-row {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: .6rem; align-items: baseline;
+  padding: .45rem 0; border-bottom: 1px solid var(--line);
+}
+.trouble-it { font-size: .85rem; color: var(--muted); }
+.trouble-count {
+  font-size: .8rem; font-variant-numeric: tabular-nums;
+  color: var(--again); font-weight: 700;
+}
+
+/* --- the word list under Deck --- */
+#word-list-panel { margin-top: 1.4rem; }
+.word-list-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .8rem; margin: .6rem 0 .8rem;
+}
+.word-list-head .compare { margin-top: 0; white-space: nowrap; }
+.word-list-head .compare.playing { color: var(--accent); border-color: var(--accent); }
+
+#word-list { max-height: 60vh; overflow-y: auto; }
+.word-row-item {
+  padding: .4rem .4rem; border-bottom: 1px solid var(--line);
+  font-size: .92rem; line-height: 1.45; cursor: pointer;
+}
+.word-row-item:active { background: var(--bg); }
+.word-es { font-weight: 650; }
+.word-dash { color: var(--line); }
+.word-it { color: var(--muted); }
+.word-row-item.speaking {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius: 6px;
+}
+.word-row-item.speaking .word-es { color: var(--accent); }
+
+/* --- headline caption --- */
+.stat-note { margin: .5rem 0 0; text-align: center; line-height: 1.45; }
+
+/* --- trouble list --- */
+#trouble-panel { margin-top: 1.6rem; }
+.trouble-window { justify-content: center; margin: .8rem 0; }
+.trouble-list { max-height: 55vh; overflow-y: auto; }
+.trouble-row { cursor: pointer; }
+.trouble-row:active { background: var(--bg); }
+
+
+
+/* --- part of speech, on the face of the card --- */
+.pos-mark {
+  font-style: italic; font-weight: 500;
+  font-size: .3em; letter-spacing: .03em;
+  color: color-mix(in srgb, var(--accent) 55%, var(--muted));
+  margin-left: .5em; vertical-align: .35em;
+  white-space: nowrap;
+}
+
+
+/* --- lab build --- */
+body[data-lab]::before {
+  content: 'LAB';
+  position: fixed; top: 0; left: 0; z-index: 99;
+  padding: .12rem .45rem .18rem;
+  font-size: .58rem; font-weight: 700; letter-spacing: .12em;
+  color: var(--surface); background: var(--easy);
+  border-bottom-right-radius: 6px;
+  pointer-events: none;
+}

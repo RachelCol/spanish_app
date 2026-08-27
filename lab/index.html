@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b23a2e">
+<title>Spanish from Italian</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-lab="1">
+
+<main id="app">
+
+  <p id="fatal" class="fatal hidden"></p>
+
+  <!-- Home -->
+  <section id="view-home" class="view">
+    <h1>Spanish <span class="from">from</span> Italian</h1>
+
+    <div class="counts">
+      <div class="count"><b id="c-due">–</b><span>due</span></div>
+      <div class="count"><b id="c-new">–</b><span>new</span></div>
+      <div class="count"><b id="reviews-today">–</b><span>today</span></div>
+      <div class="count"><b id="c-learned">–</b><span>learned</span></div>
+    </div>
+
+    <label class="row session-size">
+      Cards this session
+      <select id="f-size"></select>
+    </label>
+
+    <p id="backup-warning" class="backup-warning hidden"></p>
+
+    <button id="start" class="primary">Start review</button>
+    <p id="nothing-due" class="muted hidden"></p>
+
+    <p class="backup-line">
+      <button id="export" class="linkish">Export</button>
+      <span class="sep">·</span>
+      <button id="import-btn" class="linkish">Import</button>
+      <input id="import" type="file" accept="application/json" hidden>
+    </p>
+    <p id="backup-msg" class="muted small centred"></p>
+
+    <div class="group">
+      <h2 class="group-title">Flashcards</h2>
+      <div class="group-row">
+        <button id="open-deck">Deck</button>
+        <button id="open-progress">Progress</button>
+        <button id="open-settings">Settings</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="group-title">Grammar</h2>
+      <div class="group-row two">
+        <button id="open-grammar">Comparisons</button>
+        <button id="open-basics">Basics</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="group-title">Drills</h2>
+      <div class="group-row">
+        <button id="open-drill">Verbs</button>
+        <button id="open-prep">Prepositions</button>
+        <button id="open-articles">Articles</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deck: which cards get drilled -->
+  <section id="view-deck" class="view hidden">
+    <header class="review-bar">
+      <button id="close-deck" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Deck</h2>
+    </header>
+
+    <fieldset>
+      <legend>Frequency band</legend>
+      <div id="f-tiers" class="chips"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>How close to Italian</legend>
+      <div id="f-buckets" class="chips"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Part of speech</legend>
+      <div id="f-pos" class="chips"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Drill one grade</legend>
+      <div id="f-grades" class="chips"></div>
+      <p class="muted small">
+        Leave all off for the normal mixed session. Turning one on reviews
+        only those cards, due first, then whatever comes due soonest.
+      </p>
+    </fieldset>
+
+    <details id="word-list-panel" class="mood">
+      <summary>The words themselves</summary>
+      <div class="word-list-head">
+        <span id="word-list-count" class="muted small"></span>
+        <button id="word-list-play" class="compare" type="button">▶ Read the list</button>
+      </div>
+      <div id="word-list"></div>
+    </details>
+  </section>
+
+  <!-- Settings: how the cards behave -->
+  <section id="view-settings" class="view hidden">
+    <header class="review-bar">
+      <button id="close-settings" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Settings</h2>
+    </header>
+
+    <fieldset>
+      <legend>Direction</legend>
+      <div id="f-directions" class="chips"></div>
+      <p class="muted small">
+        Each direction is scheduled separately. Reading Spanish is recognition;
+        producing it is harder, and sharing one schedule would let the easy
+        direction hide the hard one.
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Sound</legend>
+      <div id="f-speech" class="chips"></div>
+      <div id="voice-rows"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Credits</legend>
+      <p class="muted small">
+        Example sentences from <a href="https://tatoeba.org" target="_blank"
+        rel="noopener noreferrer">Tatoeba</a>, CC BY 2.0 FR. Word pairs from
+        <a href="https://github.com/apertium/apertium-spa-ita" target="_blank"
+        rel="noopener noreferrer">Apertium</a>. Frequencies from
+        <a href="https://pypi.org/project/wordfreq/" target="_blank"
+        rel="noopener noreferrer">wordfreq</a>.
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Backup</legend>
+      <p class="muted small">
+        iOS can clear a web app's storage if it goes unused. Export now and
+        then — it is the only copy of your progress.
+      </p>
+      <p id="backup-when" class="muted small"></p>
+    </fieldset>
+  </section>
+
+  <!-- Progress -->
+  <section id="view-progress" class="view hidden">
+    <header class="review-bar">
+      <button id="close-progress" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title">Progress</h2>
+    </header>
+
+    <div id="scope-toggle" class="chips scope-toggle"></div>
+    <div id="stat-row" class="stat-row"></div>
+    <p id="stat-note" class="muted small stat-note"></p>
+
+    <h3 class="section-label">By grade</h3>
+    <div id="grade-chart" class="grade-chart"></div>
+
+    <h3 class="section-label">Recognition against production</h3>
+    <div id="direction-chart"></div>
+    <p id="direction-note" class="muted small"></p>
+
+    <h3 class="section-label">Coming due</h3>
+    <div id="forecast-chart" class="day-chart"></div>
+    <p id="forecast-readout" class="chart-readout"></p>
+    <p id="forecast-summary" class="muted small"></p>
+
+    <h3 class="section-label">Reviews per day</h3>
+    <div id="day-chart" class="day-chart"></div>
+    <p id="day-readout" class="chart-readout"></p>
+    <p id="day-summary" class="muted small"></p>
+
+    <details id="trouble-panel" class="mood">
+      <summary>Keeps catching you out</summary>
+      <div id="trouble-window" class="chips trouble-window"></div>
+      <div id="trouble-list" class="trouble-list"></div>
+      <p id="trouble-note" class="muted small"></p>
+    </details>
+  </section>
+
+  <!-- Conjugation -->
+  <section id="view-conj" class="view hidden">
+    <header class="review-bar">
+      <button id="close-conj" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="conj-title"></h2>
+    </header>
+    <div id="conj-body"></div>
+  </section>
+
+  <!-- Grammar -->
+  <section id="view-grammar" class="view hidden">
+    <header class="review-bar">
+      <button id="close-grammar" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="grammar-title">Grammar</h2>
+    </header>
+    <div id="grammar-body"></div>
+  </section>
+
+  <!-- Conjugation drill -->
+  <section id="view-drill" class="view hidden">
+    <header class="review-bar">
+      <button id="close-drill" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="drill-title">Conjugation drill</h2>
+    </header>
+    <div id="drill-body"></div>
+  </section>
+
+  <!-- Preposition drill -->
+  <section id="view-prep" class="view hidden">
+    <header class="review-bar">
+      <button id="close-prep" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="prep-title">Prepositions</h2>
+    </header>
+    <div id="prep-body"></div>
+  </section>
+
+  <!-- Basics -->
+  <section id="view-basics" class="view hidden">
+    <header class="review-bar">
+      <button id="close-basics" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="basics-title">Basics</h2>
+    </header>
+    <div id="basics-body"></div>
+  </section>
+
+  <!-- Article drill -->
+  <section id="view-articles" class="view hidden">
+    <header class="review-bar">
+      <button id="close-articles" class="ghost" aria-label="Back">✕</button>
+      <h2 class="progress-title" id="articles-title">Articles</h2>
+    </header>
+    <div id="articles-body"></div>
+  </section>
+
+  <!-- Review -->
+  <section id="view-review" class="view hidden">
+    <header class="review-bar">
+      <button id="quit" class="ghost" aria-label="End session">✕</button>
+      <div class="progress"><div id="progress-fill"></div></div>
+      <span id="remaining" class="muted small"></span>
+    </header>
+
+    <div class="card">
+      <div id="direction" class="direction"></div>
+
+      <div class="word-row">
+        <span id="prompt" class="prompt"></span>
+        <button id="say-prompt" class="say" aria-label="Hear this word">▶</button>
+      </div>
+
+      <div id="answers" class="answers hidden"></div>
+
+      <div id="meta" class="meta hidden"></div>
+      <div id="present-table" class="present-table hidden"></div>
+
+      <p id="accent-note" class="accent-note hidden">
+        <span id="accent-text"></span>
+        <button id="accents" class="say" aria-label="Hear the other accent">▶</button>
+      </p>
+
+      <div class="compare-row">
+        <button id="examples-btn" class="compare hidden">Examples</button>
+        <button id="conj-btn" class="compare hidden">Conjugation</button>
+      </div>
+
+      <div id="examples" class="examples hidden"></div>
+
+      <p id="card-links" class="card-links hidden">
+        <a id="link-wr"  target="_blank" rel="noopener noreferrer">WordReference</a>
+        <a id="link-rev" target="_blank" rel="noopener noreferrer">Reverso</a>
+        <a id="link-yg"  target="_blank" rel="noopener noreferrer">YouGlish</a>
+      </p>
+    </div>
+
+    <div id="reveal-row" class="actions">
+      <button id="reveal" class="primary">Show answer</button>
+    </div>
+
+    <div id="grade-row" class="actions grades hidden">
+      <button data-g="0" class="g-again">Again<small></small></button>
+      <button data-g="1" class="g-hard">Hard<small></small></button>
+      <button data-g="2" class="g-good">Good<small></small></button>
+      <button data-g="3" class="g-easy">Easy<small></small></button>
+    </div>
+  </section>
+
+  <!-- Done -->
+  <section id="view-done" class="view hidden">
+    <h2>Session complete</h2>
+    <p id="done-summary" class="muted"></p>
+    <button id="back-home" class="primary">Done</button>
+  </section>
+
+</main>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -53,3 +53,26 @@ to the repo, so the app costs nothing to run and works on a plane.
 
 A Claude-backed grader for free-form production is a deliberate later option;
 the content layer is shaped so it can slot in without a rewrite.
+
+## The lab build
+
+`lab/` is a second, independently installable copy of the app, for changes too
+disruptive to make in the one you use daily. Rebuild it from main with:
+
+    python pipeline/make_lab.py
+
+Three things deliberately diverge, and nothing else:
+
+| | main | lab |
+|---|---|---|
+| IndexedDB | `spanish_app` | `spanish_app_lab` |
+| cache | `spanish-app-vN` | `spanish-lab-vN` |
+| manifest id | *(none)* | `spanish-from-italian-lab` |
+
+They share an origin, so without the first of those the two copies would share
+your progress and a schema change in the lab would migrate your real data.
+
+To carry your progress across, Export from one and Import into the other --
+the file format is the same.
+
+`stable-v56` tags the app as it stood before the Italian-first experiments.
