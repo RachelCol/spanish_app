@@ -87,6 +87,17 @@ export async function loadGender() {
   return genderCache;
 }
 
+// Italian prompts that answer more than one Spanish card. Small, and needed
+// the moment an Italian->Spanish card flips, so it loads with the gender file.
+let collisionCache = null;
+
+export async function loadCollisions() {
+  if (collisionCache) return collisionCache;
+  const res = await fetch('data/collisions.json');
+  collisionCache = res.ok ? await res.json() : {};
+  return collisionCache;
+}
+
 let conjCache = null;
 
 export async function loadConjugations() {

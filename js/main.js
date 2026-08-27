@@ -1,7 +1,7 @@
 import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, loadSentences, loadConjugations, loadGender, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
+import { loadDeck, loadSentences, loadConjugations, loadGender, loadCollisions, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initSections } from './sections.js';
@@ -14,6 +14,7 @@ const $ = sel => document.querySelector(sel);
 const state = {
   deck: [],
   gender: {},
+  collisions: {},
   items: [],
   settings: { ...DEFAULT_SETTINGS },
   queue: [],
@@ -64,6 +65,7 @@ async function start() {
     .catch(() => {});
 
   loadGender().then(g => { state.gender = g; }).catch(() => {});
+  loadCollisions().then(c => { state.collisions = c; }).catch(() => {});
 
   initVoices();
   onVoicesReady(() => {
@@ -478,6 +480,7 @@ function reveal() {
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
+  renderAlsoCorrect(card, dir);
   $('#meta').classList.remove('hidden');
 
   // A footnote on the word rather than a headline action, and only on the
@@ -524,6 +527,43 @@ function reveal() {
   [AGAIN, HARD, GOOD, EASY].forEach(g => {
     $(`#grade-row button[data-g="${g}"] small`).textContent = intervalLabel(item, g);
   });
+}
+
+// Several Spanish words can share one Italian gloss, and the card only carries
+// one of them. Going to Spanish that makes the prompt ambiguous: `fare` asks
+// for `hacer`, but `echar` and `formar` are not wrong. Name them, so a right
+// answer is not graded as a lapse.
+function renderAlsoCorrect(card, dir) {
+  const el = $('#also-correct');
+  const alts = dir.answer === 'es' && state.collisions
+    ? (state.collisions[card.it] || []).filter(a => a.es !== card.es)
+    : [];
+  if (!alts.length) {
+    el.classList.add('hidden');
+    el.replaceChildren();
+    return;
+  }
+
+  const lead = document.createElement('span');
+  lead.className = 'also-lead';
+  lead.textContent = 'also correct: ';
+  const parts = [lead];
+  alts.forEach((a, i) => {
+    if (i) parts.push(document.createTextNode(' · '));
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'also-word';
+    b.textContent = a.es;
+    b.setAttribute('aria-label', 'Hear ' + a.es);
+    if (a.pos) b.title = a.pos;
+    b.addEventListener('click', e => {
+      e.preventDefault();
+      speak(spokenForm(a.es, genderFor(state.gender, card, a.es, 'es')), 'es');
+    });
+    parts.push(b);
+  });
+  el.replaceChildren(...parts);
+  el.classList.remove('hidden');
 }
 
 // Bold whatever in the sentence came from this word. A prefix match handles
