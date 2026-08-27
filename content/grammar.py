@@ -421,4 +421,43 @@ LESSONS += [
   "watch": "Using no diminutives at all reads as brusque in Mexico, in a way it "
            "would not in Italy.",
  },
+ {
+  "id": "possessives",
+  "title": "Possessives drop the article",
+  "summary": "Italian says il mio libro. Spanish says mi libro, and never the other way.",
+  "body": [
+   "Italian puts an article in front of a possessive almost everywhere: "
+   "*il mio libro*, *la tua casa*, *i nostri amici*. Spanish does not. The "
+   "possessive stands alone — **mi libro**, **tu casa**, **nuestros amigos** — "
+   "and adding *el* or *la* in front of it is simply wrong.",
+   "The short forms — mi, tu, su, nuestro — go before the noun and agree only "
+   "in number, except nuestro/vuestro which agree in gender too. There is no "
+   "masculine/feminine difference in mi, tu or su at all: *mi hermano* and "
+   "*mi hermana* both.",
+   "There is also a long form that goes after the noun — **mío, tuyo, suyo** — "
+   "used for emphasis, after ser, and in direct address. That one does agree "
+   "in gender and number.",
+   "**Su** is the one that will trip you. It covers his, her, your (usted), "
+   "their — everything Italian splits between *suo* and *loro*. Spanish leaves "
+   "it ambiguous and clarifies with *de él*, *de ella*, *de usted* when the "
+   "context does not.",
+  ],
+  "pairs": [
+   ["il mio libro", "mi libro", "no article, ever"],
+   ["la mia casa", "mi casa", "mi does not change for gender"],
+   ["i miei amici", "mis amigos", "only the number changes"],
+   ["la nostra casa", "nuestra casa", "nuestro does agree in gender"],
+   ["il nostro cane", "nuestro perro", "masculine"],
+   ["un mio amico", "un amigo mío", "long form, after the noun"],
+   ["\u00c8 mio.", "Es m\u00edo.", "after ser, long form"],
+   ["il suo libro", "su libro", "his, her, your or their"],
+   ["il loro libro", "su libro", "loro collapses into su as well"],
+   ["il libro di lui", "el libro de \u00e9l", "how you disambiguate su"],
+   ["Mamma mia!", "\u00a1Madre m\u00eda!", "the long form survives in exclamations"],
+  ],
+  "watch": "*El mi libro* and *la mi casa* are the errors to watch for, and they "
+           "will feel natural for a long time. The other one is reaching for a "
+           "plural to translate *loro* — Spanish has no separate word, and su "
+           "does that work too.",
+ },
 ]
