@@ -129,7 +129,28 @@ SENSE_OVERRIDES = {
 # offers for `oltre` -- the useful answers, `más allá de` and `además de`, are
 # phrases the deck does not carry. A card that answers `oltre` with `allende`
 # is worse than no card, so `oltre` simply is not prompted.
-DROP_CARDS = {'allende'}
+DROP_CARDS = {
+    'allende',   # literary; the useful glosses for `oltre` are all phrases
+    'da',        # not a lemma -- a form of `dar` that matched Italian `da`
+    'pienso',    # animal feed, or "I think"; neither is what `materia` means
+    'trámite',   # a false friend: Italian `tramite` is "via", not "paperwork"
+}
+
+# Individual pairings that are wrong, found by cross-checking every card
+# against English Wiktionary and reading what disagreed. These only remove --
+# unlike SENSE_OVERRIDES, which asserts, and which is how `dovere -> tener`
+# got in. A removal can be wrong and cost a card; an assertion can be wrong
+# and teach the wrong word.
+DROP_SENSES = {
+    ('confirmación', 'caso'),
+    ('fortaleza',    'potere'),
+    ('pintura',      'prodotto'),
+    ('suerte',       'regime'),
+    ('modo',         'altrimenti'),
+    ('menudo',       'che'),
+    ('hacia',        'per'),
+    ('todavía',      'comunque'),
+}
 
 # Two different problems, two different rules.
 #
@@ -237,6 +258,8 @@ def load():
         # phrase that happened to be tagged adv.
         best = {}
         for ita, ps, pi in entries:
+            if (spa, ita) in DROP_SENSES:
+                continue
             a = affinity.get(pi, NEUTRAL_AFFINITY)
             if ita not in best or a > best[ita]:
                 best[ita] = a

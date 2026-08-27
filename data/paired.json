@@ -1662,9 +1662,8 @@
   "es": "hacia",
   "zipf_es": 5.59,
   "tier": "common",
-  "it": "per",
+  "it": "verso",
   "senses": [
-   "per",
    "verso"
   ],
   "pos": "pr",
@@ -1673,7 +1672,7 @@
   ],
   "sim": 0.0,
   "bucket": "distinct",
-  "zipf_it": 7.15
+  "zipf_it": 5.61
  },
  {
   "es": "sino",
@@ -1690,22 +1689,6 @@
   "sim": 0.2,
   "bucket": "distinct",
   "zipf_it": 4.31
- },
- {
-  "es": "da",
-  "zipf_es": 5.58,
-  "tier": "common",
-  "it": "da",
-  "senses": [
-   "da"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 1.0,
-  "bucket": "identical",
-  "zipf_it": 6.84
  },
  {
   "es": "grupo",
@@ -3023,7 +3006,6 @@
   "it": "ancora",
   "senses": [
    "ancora",
-   "comunque",
    "tuttora",
    "tutt'ora"
   ],
@@ -4206,8 +4188,7 @@
   "tier": "common",
   "it": "fortuna",
   "senses": [
-   "fortuna",
-   "regime"
+   "fortuna"
   ],
   "pos": "n",
   "pos_all": [
@@ -5040,22 +5021,13 @@
   "tier": "common",
   "it": "modo",
   "senses": [
-   "modo",
-   "altrimenti"
+   "modo"
   ],
   "pos": "n",
   "pos_all": [
    "n",
    "adv"
   ],
-  "by_pos": {
-   "n": [
-    "modo"
-   ],
-   "adv": [
-    "altrimenti"
-   ]
-  },
   "sim": 1.0,
   "bucket": "identical",
   "zipf_it": 5.91
@@ -8837,22 +8809,6 @@
   "sim": 1.0,
   "bucket": "identical",
   "zipf_it": 4.92
- },
- {
-  "es": "pienso",
-  "zipf_es": 4.97,
-  "tier": "useful",
-  "it": "materia",
-  "senses": [
-   "materia"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.14,
-  "bucket": "distinct",
-  "zipf_it": 4.87
  },
  {
   "es": "post",
@@ -13483,18 +13439,17 @@
   "es": "menudo",
   "zipf_es": 4.78,
   "tier": "useful",
-  "it": "che",
+  "it": "minuto",
   "senses": [
-   "che",
    "minuto"
   ],
   "pos": "adj",
   "pos_all": [
    "adj"
   ],
-  "sim": 0.0,
-  "bucket": "distinct",
-  "zipf_it": 7.36
+  "sim": 0.67,
+  "bucket": "shifted",
+  "zipf_it": 4.73
  },
  {
   "es": "presupuesto",
@@ -21376,9 +21331,8 @@
   "es": "pintura",
   "zipf_es": 4.55,
   "tier": "useful",
-  "it": "prodotto",
+  "it": "pittura",
   "senses": [
-   "prodotto",
    "pittura",
    "vernice"
   ],
@@ -21386,9 +21340,9 @@
   "pos_all": [
    "n"
   ],
-  "sim": 0.12,
-  "bucket": "distinct",
-  "zipf_it": 5.11
+  "sim": 0.86,
+  "bucket": "near",
+  "zipf_it": 4.33
  },
  {
   "es": "pista",
@@ -33522,18 +33476,17 @@
   "es": "fortaleza",
   "zipf_es": 4.29,
   "tier": "extended",
-  "it": "potere",
+  "it": "fortezza",
   "senses": [
-   "potere",
    "fortezza"
   ],
   "pos": "n",
   "pos_all": [
    "n"
   ],
-  "sim": 0.33,
-  "bucket": "distinct",
-  "zipf_it": 5.25
+  "sim": 0.67,
+  "bucket": "shifted",
+  "zipf_it": 4.02
  },
  {
   "es": "integral",
@@ -49690,22 +49643,6 @@
   "zipf_it": 3.01
  },
  {
-  "es": "trámite",
-  "zipf_es": 4.03,
-  "tier": "extended",
-  "it": "tramite",
-  "senses": [
-   "tramite"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.86,
-  "bucket": "near",
-  "zipf_it": 5.14
- },
- {
   "es": "valorar",
   "zipf_es": 4.03,
   "tier": "extended",
@@ -55256,18 +55193,17 @@
   "es": "confirmación",
   "zipf_es": 3.95,
   "tier": "long_tail",
-  "it": "caso",
+  "it": "conferma",
   "senses": [
-   "caso",
    "conferma"
   ],
   "pos": "n",
   "pos_all": [
    "n"
   ],
-  "sim": 0.17,
-  "bucket": "distinct",
-  "zipf_it": 5.8
+  "sim": 0.58,
+  "bucket": "shifted",
+  "zipf_it": 4.74
  },
  {
   "es": "célebre",
