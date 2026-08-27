@@ -442,8 +442,11 @@ function reveal() {
   // and sotto as a preposition -- they are grouped under it, because a flat
   // list makes `sí` read as "sè · sì" with no hint that one means yes and the
   // other is a pronoun.
+  // Both directions group the same way. Going to Italian the split comes from
+  // the card's own senses; going to Spanish it comes from the words that share
+  // this Italian prompt.
   const toItalian = dir.answer === 'it';
-  const groups = toItalian && card.by_pos ? card.by_pos : null;
+  const groups = toItalian ? (card.by_pos || null) : collisionGroups(card);
 
   const speakable = (w, which) => {
     const row = document.createElement('div');
@@ -478,12 +481,13 @@ function reveal() {
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
-    const words = toItalian ? (card.senses || [card.it]) : [card.es];
+    const alts = toItalian ? null : collisionAnswers(card);
+    const words = toItalian ? (card.senses || [card.it])
+                            : (alts ? alts.map(a => a.es) : [card.es]);
     $('#answers').replaceChildren(...words.map(w => speakable(w, dir.answer)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
-  renderAlsoCorrect(card, dir);
   $('#meta').classList.remove('hidden');
 
   // A footnote on the word rather than a headline action, and only on the
@@ -532,41 +536,25 @@ function reveal() {
   });
 }
 
-// Several Spanish words can share one Italian gloss, and the card only carries
-// one of them. Going to Spanish that makes the prompt ambiguous: `fare` asks
-// for `hacer`, but `echar` and `formar` are not wrong. Name them, so a right
-// answer is not graded as a lapse.
-function renderAlsoCorrect(card, dir) {
-  const el = $('#also-correct');
-  const alts = dir.answer === 'es' && state.collisions
-    ? (state.collisions[card.it] || []).filter(a => a.es !== card.es)
-    : [];
-  if (!alts.length) {
-    el.classList.add('hidden');
-    el.replaceChildren();
-    return;
-  }
+// Several Spanish words can share one Italian gloss, and the card carries only
+// one of them: `fare` is on the card for `hacer`, but `echar` and `formar` are
+// not wrong. These two give the full answer set, so the Italian -> Spanish
+// side can show it the way the Spanish -> Italian side shows its senses.
+function collisionAnswers(card) {
+  const alts = (state.collisions && state.collisions[card.it]) || [];
+  return alts.length ? alts : null;
+}
 
-  const lead = document.createElement('span');
-  lead.className = 'also-lead';
-  lead.textContent = 'also correct: ';
-  const parts = [lead];
-  alts.forEach((a, i) => {
-    if (i) parts.push(document.createTextNode(' · '));
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'also-word';
-    b.textContent = a.es;
-    b.setAttribute('aria-label', 'Hear ' + a.es);
-    if (a.pos) b.title = a.pos;
-    b.addEventListener('click', e => {
-      e.preventDefault();
-      speak(spokenForm(a.es, genderFor(state.gender, card, a.es, 'es')), 'es');
-    });
-    parts.push(b);
-  });
-  el.replaceChildren(...parts);
-  el.classList.remove('hidden');
+// Grouped by part of speech, in the same shape as the deck's own `by_pos`, but
+// only where the split says something: `fare` answering five verbs is a list,
+// not a table.
+function collisionGroups(card) {
+  const alts = collisionAnswers(card);
+  if (!alts) return null;
+  if (new Set(alts.map(a => a.pos)).size < 2) return null;
+  const out = {};
+  for (const a of alts) (out[a.pos] = out[a.pos] || []).push(a.es);
+  return out;
 }
 
 // Bold whatever in the sentence came from this word. A prefix match handles
@@ -730,10 +718,12 @@ function spokenForm(word, info) {
 }
 
 function genderFor(all, card, word, which) {
-  const entry = all && all[card.es];
-  if (!entry) return null;
-  if (which === 'es') return word === card.es ? entry : null;
-  return (entry.it || {})[word] || null;
+  if (!all) return null;
+  // Spanish is keyed directly, which is what lets an alternative answer carry
+  // its own article. Italian is keyed under the card it was glossed from.
+  if (which === 'es') return all[word] || null;
+  const entry = all[card.es];
+  return entry ? (entry.it || {})[word] || null : null;
 }
 
 // A button that reads a whole paradigm aloud, first person singular through

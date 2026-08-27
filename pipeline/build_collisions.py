@@ -37,11 +37,15 @@ def pos_groups(card):
     return out
 
 
-def label_for(card):
-    """The part of speech, but only as a word a learner would recognise."""
+def group_for(card):
+    """The part-of-speech group, as the code the app already labels with.
+
+    A code rather than a word, so the card can render these with exactly the
+    same heading logic as the Spanish -> Italian side.
+    """
     for g in ('vblex', 'n', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'):
         if g in pos_groups(card):
-            return POS_LABEL[g]
+            return g
     return None
 
 
@@ -58,7 +62,7 @@ def build(deck):
         # named first.
         cards.sort(key=lambda c: -c.get('zipf', 0))
         out[prompt] = [
-            {'es': c['es'], 'pos': label_for(c)}
+            {'es': c['es'], 'pos': group_for(c)}
             for c in cards
         ]
     return out
@@ -75,7 +79,7 @@ def main():
     print(f'{cards} cards affected of {len(deck)}')
     worst = sorted(coll.items(), key=lambda kv: -len(kv[1]))[:8]
     for prompt, alts in worst:
-        shown = ', '.join(f"{a['es']} ({a['pos']})" for a in alts)
+        shown = ', '.join(f"{a['es']} ({POS_LABEL.get(a['pos'], a['pos'])})" for a in alts)
         print(f'  {prompt:14s} -> {shown}')
 
 
