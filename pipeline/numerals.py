@@ -27,8 +27,11 @@ from frequency import tier_for
 
 DIX = "vendor/apertium-spa-ita/apertium-spa-ita.spa-ita.dix"
 
-# One to twenty, then the tens, then a hundred. `cien` and `ciento` are the
-# same number in two shapes, and both are worth knowing.
+# One to twenty, then the tens, then a hundred and a thousand. `cien` and
+# `ciento` are the same number in two shapes, and both are worth knowing.
+# `mil` lands here rather than with the determiners: seventeen of its nineteen
+# dictionary entries are tagged `num`, and the two that are not offer only
+# Italian numerals to gloss it with.
 # One band for the whole set -- see the note above. `common` is on by default.
 TIER = "common"
 
@@ -36,7 +39,7 @@ WANTED = """
 uno dos tres cuatro cinco seis siete ocho nueve diez
 once doce trece catorce quince dieciséis diecisiete dieciocho diecinueve veinte
 treinta cuarenta cincuenta sesenta setenta ochenta noventa
-cien ciento
+cien ciento mil
 """.split()
 
 

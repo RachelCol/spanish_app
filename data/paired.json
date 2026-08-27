@@ -571,6 +571,23 @@
   "zipf_it": 6.1
  },
  {
+  "es": "cada",
+  "zipf_es": 5.9,
+  "tier": "common",
+  "it": "ogni",
+  "senses": [
+   "ogni",
+   "ciascuno"
+  ],
+  "pos": "det",
+  "pos_all": [
+   "det"
+  ],
+  "sim": 0.0,
+  "bucket": "distinct",
+  "zipf_it": 6.03
+ },
+ {
   "es": "después",
   "zipf_es": 5.9,
   "tier": "common",
@@ -678,7 +695,8 @@
   "pos": "prn",
   "pos_all": [
    "adj",
-   "prn"
+   "prn",
+   "det"
   ],
   "sim": 0.6,
   "bucket": "shifted",
@@ -765,7 +783,8 @@
   "pos_all": [
    "adj",
    "adv",
-   "prn"
+   "prn",
+   "det"
   ],
   "sim": 1.0,
   "bucket": "identical",
@@ -1395,7 +1414,8 @@
   ],
   "pos": "prn",
   "pos_all": [
-   "prn"
+   "prn",
+   "det"
   ],
   "sim": 0.75,
   "bucket": "near",
@@ -1468,6 +1488,23 @@
   "sim": 0.71,
   "bucket": "shifted",
   "zipf_it": 5.34
+ },
+ {
+  "es": "cualquier",
+  "zipf_es": 5.61,
+  "tier": "common",
+  "it": "qualsiasi",
+  "senses": [
+   "qualsiasi",
+   "qualunque"
+  ],
+  "pos": "det",
+  "pos_all": [
+   "det"
+  ],
+  "sim": 0.33,
+  "bucket": "distinct",
+  "zipf_it": 5.36
  },
  {
   "es": "dios",
@@ -2942,10 +2979,11 @@
   "senses": [
    "certo"
   ],
-  "pos": "adj",
+  "pos": "det",
   "pos_all": [
    "adj",
-   "adv"
+   "adv",
+   "det"
   ],
   "sim": 0.83,
   "bucket": "near",
@@ -3568,8 +3606,17 @@
   ],
   "pos": "prn",
   "pos_all": [
-   "prn"
+   "prn",
+   "det"
   ],
+  "by_pos": {
+   "det": [
+    "altri"
+   ],
+   "prn": [
+    "d'altro"
+   ]
+  },
   "sim": 0.14,
   "bucket": "distinct",
   "zipf_it": 5.76
@@ -3757,6 +3804,22 @@
   "sim": 0.75,
   "bucket": "near",
   "zipf_it": 5.14
+ },
+ {
+  "es": "hola",
+  "zipf_es": 5.28,
+  "tier": "common",
+  "it": "ciao",
+  "senses": [
+   "ciao"
+  ],
+  "pos": "ij",
+  "pos_all": [
+   "ij"
+  ],
+  "sim": 0.0,
+  "bucket": "distinct",
+  "zipf_it": 5.33
  },
  {
   "es": "paz",
@@ -4463,6 +4526,22 @@
   "zipf_it": 5.93
  },
  {
+  "es": "buenas",
+  "zipf_es": 5.22,
+  "tier": "common",
+  "it": "salve",
+  "senses": [
+   "salve"
+  ],
+  "pos": "ij",
+  "pos_all": [
+   "ij"
+  ],
+  "sim": 0.0,
+  "bucket": "distinct",
+  "zipf_it": 4.26
+ },
+ {
   "es": "control",
   "zipf_es": 5.22,
   "tier": "common",
@@ -4909,7 +4988,8 @@
   ],
   "pos": "prn",
   "pos_all": [
-   "prn"
+   "prn",
+   "det"
   ],
   "sim": 0.0,
   "bucket": "distinct",
@@ -5742,6 +5822,23 @@
   "sim": 0.83,
   "bucket": "near",
   "zipf_it": 5.13
+ },
+ {
+  "es": "vale",
+  "zipf_es": 5.14,
+  "tier": "common",
+  "it": "va bene",
+  "senses": [
+   "va bene",
+   "ok"
+  ],
+  "pos": "ij",
+  "pos_all": [
+   "ij"
+  ],
+  "sim": 0.43,
+  "bucket": "distinct",
+  "zipf_it": 5.51
  },
  {
   "es": "acción",
@@ -11702,8 +11799,18 @@
   ],
   "pos": "prn",
   "pos_all": [
-   "prn"
+   "prn",
+   "det"
   ],
+  "by_pos": {
+   "det": [
+    "alcun",
+    "qualche"
+   ],
+   "prn": [
+    "alcuno"
+   ]
+  },
   "sim": 0.83,
   "bucket": "near",
   "zipf_it": 3.75
@@ -12093,7 +12200,8 @@
   ],
   "pos": "prn",
   "pos_all": [
-   "prn"
+   "prn",
+   "det"
   ],
   "sim": 0.57,
   "bucket": "shifted",
@@ -14656,6 +14764,22 @@
   "sim": 0.83,
   "bucket": "near",
   "zipf_it": 4.81
+ },
+ {
+  "es": "ojalá",
+  "zipf_es": 4.73,
+  "tier": "useful",
+  "it": "magari",
+  "senses": [
+   "magari"
+  ],
+  "pos": "ij",
+  "pos_all": [
+   "ij"
+  ],
+  "sim": 0.17,
+  "bucket": "distinct",
+  "zipf_it": 5.23
  },
  {
   "es": "pantalla",
@@ -25801,9 +25925,10 @@
    "addio",
    "arrivederci"
   ],
-  "pos": "n",
+  "pos": "ij",
   "pos_all": [
-   "n"
+   "n",
+   "ij"
   ],
   "sim": 0.4,
   "bucket": "distinct",
@@ -28122,9 +28247,10 @@
    "vostro",
    "il vostro"
   ],
-  "pos": "adj",
+  "pos": "det",
   "pos_all": [
-   "adj"
+   "adj",
+   "det"
   ],
   "sim": 0.71,
   "bucket": "shifted",

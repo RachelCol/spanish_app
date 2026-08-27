@@ -24,13 +24,21 @@ DIX = "vendor/apertium-spa-ita/apertium-spa-ita.spa-ita.dix"
 # Tags worth making cards from. Prepositions are included because Spanish
 # prepositions are real vocabulary for an Italian speaker -- `ante`, `bajo`,
 # `hacia`, `según` -- and because dropping them is what lost `davanti`.
+#
+# `det` and `ij` are small closed classes and were left out at first as
+# grammar rather than vocabulary. That was wrong for this deck: between them
+# they hold `cada`, `cualquier`, `mil`, `hola`, `vale` and `ojalá`, which are
+# words you use hourly. Letting the two labels through adds eight cards and
+# nothing else -- the classes are that small.
 CONTENT_POS = {"n", "vblex", "adj", "adv", "vbmod", "vbhaver", "vbser", "pr",
-               "cnjcoo", "cnjsub", "cnjadv", "preadv", "prn"}
+               "cnjcoo", "cnjsub", "cnjadv", "preadv", "prn", "det", "ij"}
 
 # How the Spanish tag ranks Italian senses: a preposition should be glossed by
 # a preposition, not by an adverb that happens to be commoner.
 POS_AFFINITY = {
     "pr": {"pr": 3, "adv": 1},
+    "det": {"det": 3, "prn": 1, "adj": 1},
+    "ij": {"ij": 3, "adv": 1},
     "vblex": {"vblex": 3, "vbmod": 1, "vbhaver": 2, "vbser": 2},
     "vbhaver": {"vbhaver": 3, "vblex": 2, "vbmod": 0},
     "vbmod": {"vbmod": 3, "vblex": 2},
@@ -51,8 +59,8 @@ NEUTRAL_AFFINITY = 1
 # When a word carries several tags equally often, prefer the ordinary ones.
 # `bien` is tagged preadv, n and adv once each, and letting preadv win chose
 # the apocopated `ben` over `bene`.
-POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "cnjcoo", "cnjsub",
-                "cnjadv", "vbser", "vbhaver", "vbmod", "preadv"]
+POS_PRIORITY = ["vblex", "n", "adj", "adv", "pr", "prn", "det", "ij", "cnjcoo",
+                "cnjsub", "cnjadv", "vbser", "vbhaver", "vbmod", "preadv"]
 
 # Four, not three. A cap exists to stop Apertium's long tails filling the card,
 # but three was arbitrary enough to start costing real senses: `objetivo` is a

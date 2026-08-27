@@ -32,6 +32,8 @@ export const POS_LABEL = {
   pr: 'Prepositions',
   prn: 'Pronouns',
   cnj: 'Conjunctions',
+  det: 'Determiners',
+  ij: 'Expressions',
   num: 'Numbers',
 };
 
@@ -132,7 +134,7 @@ export function buildItems(deck, progressList, settings) {
 export const DEFAULT_SETTINGS = {
   tiers: ['common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
-  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'num'],
+  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'],
   directions: ['es>it', 'it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js

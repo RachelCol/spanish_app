@@ -16,6 +16,16 @@ from collections import defaultdict
 POS_LABEL = {
     'n': 'noun', 'vblex': 'verb', 'adj': 'adjective', 'adv': 'adverb',
     'pr': 'preposition', 'prn': 'pronoun', 'cnj': 'conjunction',
+    'det': 'determiner', 'ij': 'expression', 'num': 'number',
+}
+
+
+# Mirrors POS_GROUPS in js/deck.js: Apertium splits verbs and conjunctions
+# finer than a learner cares about, and `preadv` is just an adverb.
+GROUPS = {
+    'vblex': 'vblex', 'vbmod': 'vblex', 'vbhaver': 'vblex', 'vbser': 'vblex',
+    'adv': 'adv', 'preadv': 'adv',
+    'cnjcoo': 'cnj', 'cnjsub': 'cnj', 'cnjadv': 'cnj',
 }
 
 
@@ -23,13 +33,13 @@ def pos_groups(card):
     out = set()
     for tag in card.get('pos_all') or [card.get('pos')]:
         if tag:
-            out.add('vblex' if str(tag).startswith('vb') else str(tag))
+            out.add(GROUPS.get(str(tag), str(tag)))
     return out
 
 
 def label_for(card):
     """The part of speech, but only as a word a learner would recognise."""
-    for g in ('vblex', 'n', 'adj', 'adv', 'pr', 'prn', 'cnj'):
+    for g in ('vblex', 'n', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'):
         if g in pos_groups(card):
             return POS_LABEL[g]
     return None
