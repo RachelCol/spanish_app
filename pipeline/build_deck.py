@@ -50,3 +50,15 @@ if __name__ == "__main__":
     print()
     for k, v in collections.Counter(c["tier"] for c in deck).most_common():
         print(f"  {k:10s} {v}")
+
+    # Say what moved. A rebuild that changes the deck without saying so is how
+    # cards drift, and the only way anyone noticed used to be a card
+    # misbehaving mid-review.
+    try:
+        import changes
+        text = changes.report()
+        open("changes.md", "w").write(text)
+        head = text.splitlines()[2] if len(text.splitlines()) > 2 else ""
+        print(f"\n{head}   (full list in changes.md)")
+    except Exception as err:
+        print(f"\n(could not write the change log: {err})")

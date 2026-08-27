@@ -103,3 +103,18 @@ git; `content/review.csv` is the reviewed one and is committed.
 Corrections are deliberately not applied from the sheet. Removing a sense can
 only cost a card; asserting one can teach a wrong word, which is how
 `dovere -> tener` shipped. Put those in `note` and they get checked first.
+
+## Seeing what a rebuild did
+
+    python pipeline/changes.py            # against the last commit
+    python pipeline/changes.py HEAD~5     # against any earlier point
+    python pipeline/changes.py stable-v56 # against a tag
+
+Prints, and writes `changes.md`: cards gained and lost, definitions rewritten,
+parts of speech changed, and which Italian words can or can no longer be
+asked. `build_deck.py` runs it automatically, so no rebuild changes the deck
+without saying so.
+
+Git is the snapshot — there is no second copy of the deck to keep in step, and
+the comparison is always against the last state that was deliberately saved.
+Rebuild five times before committing and the report covers all five.

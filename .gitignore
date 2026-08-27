@@ -27,3 +27,4 @@ _t
 # verbecc writes a log wherever it runs
 verbecc.log
 review.csv
+changes.md
