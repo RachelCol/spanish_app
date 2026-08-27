@@ -737,3 +737,9 @@ body[data-lab]::before {
 .detail-actions a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 .detail-extra { display: flex; flex-direction: column; gap: .7rem; margin-top: .9rem; }
 .detail-examples .example + .example { margin-top: .7rem; }
+
+/* --- which build is on screen --- */
+.build-line {
+  margin: .2rem 0 0; font-size: .72rem; letter-spacing: .04em;
+  color: var(--muted); opacity: .75;
+}

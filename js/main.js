@@ -37,6 +37,21 @@ function fatal(msg) {
   document.querySelector('#view-home').classList.add('hidden');
 }
 
+// Which build is on screen. The two copies of this app are similar enough
+// that "am I looking at the right one?" is a fair question, and the service
+// worker's cache name is the one string that always answers it.
+async function renderBuildLine() {
+  const el = document.querySelector('#build-line');
+  if (!el) return;
+  let name = 'no service worker (served straight from the network)';
+  try {
+    const res = await fetch('sw.js', { cache: 'no-store' });
+    const m = (await res.text()).match(/const CACHE = '([^']+)'/);
+    if (m) name = m[1];
+  } catch { /* offline: leave the fallback */ }
+  el.textContent = name;
+}
+
 async function boot() {
   try {
     await start();
@@ -52,6 +67,7 @@ async function boot() {
 }
 
 async function start() {
+  renderBuildLine();
   state.deck = await loadDeck();
   const saved = await db.getMeta('settings');
   if (saved) state.settings = { ...DEFAULT_SETTINGS, ...saved };

@@ -62,6 +62,21 @@ async function migrateKeys() {
   if (moved.length) console.info(`lab: re-keyed ${moved.length} items onto prompts`);
 }
 
+// Which build is on screen. The two copies of this app are similar enough
+// that "am I looking at the right one?" is a fair question, and the service
+// worker's cache name is the one string that always answers it.
+async function renderBuildLine() {
+  const el = document.querySelector('#build-line');
+  if (!el) return;
+  let name = 'no service worker (served straight from the network)';
+  try {
+    const res = await fetch('sw.js', { cache: 'no-store' });
+    const m = (await res.text()).match(/const CACHE = '([^']+)'/);
+    if (m) name = m[1];
+  } catch { /* offline: leave the fallback */ }
+  el.textContent = name;
+}
+
 async function boot() {
   try {
     await start();
@@ -77,6 +92,7 @@ async function boot() {
 }
 
 async function start() {
+  renderBuildLine();
   state.deck = await loadDeck();
   state.prompts = await loadPrompts();
   await migrateKeys();
@@ -465,6 +481,10 @@ function reveal() {
   const answers = answersFor(item);
   const groups = answerGroups(item);
   const single = answers.length === 1;
+  // Two separate questions. Inline the links when there is one answer, so the
+  // common path never costs a tap. Offer the entry whenever it knows more --
+  // several answers, or one answer that means more than the prompt showed.
+  const openable = !single || hasEntry(card);
 
   if (groups) {
     const blocks = [];
@@ -472,12 +492,12 @@ function reveal() {
       const label = document.createElement('div');
       label.className = 'sense-pos';
       label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
-      blocks.push(label, ...words.map(w => answerRow(w, single)));
+      blocks.push(label, ...words.map(w => answerRow(w, !openable)));
     }
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
-    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es, single)));
+    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es, !openable)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
@@ -697,6 +717,14 @@ function openDetail(es) {
       extra.append(b);
     });
   }
+}
+
+// Does this word's entry hold anything the card face does not? A Spanish word
+// with a second Italian sense does -- `mejor` is `meglio` and `migliore`, and
+// the card only ever showed the one that prompted you. That is the case for
+// 615 prompts, and it is why one answer is not the same as nothing to open.
+function hasEntry(card) {
+  return !!card && ((card.senses || []).length > 1 || !!card.by_pos);
 }
 
 function answersFor(item) {

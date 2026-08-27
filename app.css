@@ -679,3 +679,9 @@ button.secondary {
   margin-left: .5em; vertical-align: .35em;
   white-space: nowrap;
 }
+
+/* --- which build is on screen --- */
+.build-line {
+  margin: .2rem 0 0; font-size: .72rem; letter-spacing: .04em;
+  color: var(--muted); opacity: .75;
+}
