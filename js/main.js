@@ -988,12 +988,16 @@ function renderPresentTables(answers) {
       const grid = presentGrid(entry);
       if (!grid) continue;
       if (verbs.length > 1) {
+        const section = document.createElement('div');
+        section.className = 'present-section';
         const label = document.createElement('div');
         label.className = 'present-label';
         label.textContent = card.es;
-        blocks.push(label);
+        section.append(label, grid);
+        blocks.push(section);
+      } else {
+        blocks.push(grid);
       }
-      blocks.push(grid);
     }
     if (!blocks.length) return;
     host.replaceChildren(...blocks);

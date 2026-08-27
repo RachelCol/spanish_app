@@ -413,8 +413,14 @@ button.secondary {
 .play-all:active { color: var(--accent); border-color: var(--accent); }
 
 .present-table {
-  display: flex; align-items: center; justify-content: center; gap: 1rem;
+  /* Column, so a card answering two verbs stacks their paradigms rather than
+     setting them side by side -- two six-form tables abreast do not read, and
+     do not fit a phone. */
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
   margin: .7rem 0 0;
+}
+.present-block {
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
 }
 .present-grid {
   display: grid;
@@ -693,7 +699,10 @@ button.secondary {
 
 /* --- a Spanish answer that opens its own entry --- */
 .answer-link {
-  background: none; border: 0; padding: 0; font: inherit; color: inherit;
+  /* No `color` here. `.answer` sets it, and a second rule tints the rows after
+     the first -- declaring `inherit` beat the former on row one and lost to
+     the latter on row two, so `ser` came out dark and `estar` red. */
+  background: none; border: 0; padding: 0; font: inherit;
   cursor: pointer; text-align: left;
   border-bottom: 1px dotted color-mix(in srgb, var(--accent) 50%, var(--muted));
 }
@@ -745,7 +754,6 @@ button.secondary {
 .detail-pos:first-of-type { margin-top: .7rem; }
 
 /* --- a present tense per verb the card answers with --- */
-.present-block + .present-label { margin-top: 1rem; }
 .present-label {
   font-size: .8rem; font-weight: 600; letter-spacing: .03em;
   color: var(--accent); text-align: center; margin: .2rem 0 .35rem;
@@ -844,3 +852,6 @@ button.secondary {
   margin: 1rem 0 0; padding-top: .8rem; border-top: 1px solid var(--line);
   font-size: .85rem; color: var(--muted); text-align: left;
 }
+
+/* one verb's label and paradigm, kept together */
+.present-section { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
