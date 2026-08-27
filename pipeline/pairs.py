@@ -168,6 +168,14 @@ DROP_SENSES = {
     ('oficina',      'capannone'),    # a capannone is a warehouse
     ('escolar',      'scolare'),      # scolare is to drain; the pupil is scolaro
     ('concierto',    'trattativa'),   # a trattativa is a negotiation
+
+    # A different failure: the gloss check agreed, because the two words do
+    # share a minor sense -- but the word's PRIMARY meaning was not on the
+    # card at all. `auto` is a car before it is a legal decree, and `costa` is
+    # a coast before it is an expense. Apertium offers only the minor reading
+    # for each, so the card cannot be corrected, only withdrawn.
+    ('auto',         'atto'),
+    ('costa',        'costo'),
 }
 
 # Two different problems, two different rules.

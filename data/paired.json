@@ -7915,22 +7915,6 @@
   "zipf_it": 6.03
  },
  {
-  "es": "costa",
-  "zipf_es": 5.02,
-  "tier": "common",
-  "it": "costo",
-  "senses": [
-   "costo"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.8,
-  "bucket": "near",
-  "zipf_it": 4.88
- },
- {
   "es": "crisis",
   "zipf_es": 5.02,
   "tier": "common",
@@ -8222,22 +8206,6 @@
   "sim": 0.78,
   "bucket": "near",
   "zipf_it": 4.85
- },
- {
-  "es": "auto",
-  "zipf_es": 5.0,
-  "tier": "common",
-  "it": "atto",
-  "senses": [
-   "atto"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.75,
-  "bucket": "near",
-  "zipf_it": 5.03
  },
  {
   "es": "carta",
