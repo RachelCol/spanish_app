@@ -96,7 +96,12 @@ def group_of(tag):
 # by any amount of rescoring.
 SENSE_OVERRIDES = {
     'partido': {'n': ['partito', 'partita'], 'adj': ['tagliato', 'spaccato', 'diviso']},
-    'tener':   ['avere', 'tenere', 'dovere'],
+    # `dovere` was here and should not have been. Apertium gives `tener` only
+    # `avere`; the basis for `dovere` is the phrase `tener que`, and asserting
+    # it on the bare verb was fine in one direction and wrong in the other --
+    # reversed, the card claimed `dovere` means `tener` when it means `deber`.
+    # A hand-written override is a claim in both directions now, not one.
+    'tener':   ['avere', 'tenere'],
     'guardar': ['conservare', 'tenere', 'salvare'],   # salvare is the file sense
     # Apertium offers only planning, maestranze and soletta. The real senses
     # are a staff complement, a template, and the insole of a shoe -- soletta
@@ -111,7 +116,20 @@ SENSE_OVERRIDES = {
     # Asserted here rather than inferred, because the dictionary cannot say it.
     'estar':   ['stare', 'essere'],
     'ser':     ['essere'],
+    # `successo` is commoner in Italian than `accaduto`, so frequency made it
+    # the primary -- and reversed, the card taught `successo -> suceso`, which
+    # is a false friend: Spanish `suceso` is an event, not a success. Apertium
+    # has both, and `successo` for `suceso` is marginal enough that keeping it
+    # as a second answer would still teach the trap.
+    'suceso':  ['accaduto'],
 }
+
+# Cards whose only available pairing teaches the wrong thing. `allende` is
+# real Spanish but literary, and it is the sole single-word gloss Apertium
+# offers for `oltre` -- the useful answers, `más allá de` and `además de`, are
+# phrases the deck does not carry. A card that answers `oltre` with `allende`
+# is worse than no card, so `oltre` simply is not prompted.
+DROP_CARDS = {'allende'}
 
 # Two different problems, two different rules.
 #
@@ -196,6 +214,8 @@ def load():
     out = {}
     for spa, entries in raw.items():
         tags = [ps for _, ps, _ in entries if ps]
+        if spa in DROP_CARDS:
+            continue
         if not any(t in CONTENT_POS for t in tags):
             continue
         # Majority across ALL tags, not just the content ones. Restricting the

@@ -40,16 +40,33 @@ function fatal(msg) {
 // Which build is on screen. There are two copies of this app on one origin
 // and they are similar enough that "am I looking at the right one?" is a fair
 // question; the service worker's cache name is the string that answers it.
-async function renderBuildLine() {
-  const el = document.querySelector('#build-line');
-  if (!el) return;
-  let name = 'no service worker (served straight from the network)';
+async function currentBuild() {
   try {
     const res = await fetch('sw.js', { cache: 'no-store' });
     const m = (await res.text()).match(/const CACHE = '([^']+)'/);
-    if (m) name = m[1];
-  } catch { /* offline: leave the fallback */ }
-  el.textContent = name;
+    if (m) return m[1];
+  } catch { /* offline */ }
+  return null;
+}
+
+async function renderBuildLine() {
+  const el = document.querySelector('#build-line');
+  const name = await currentBuild();
+  if (el) el.textContent = name || 'no service worker (served from the network)';
+
+  // Say so when the build changes. "Am I looking at the version you just
+  // shipped?" has been asked enough times that the app should answer without
+  // being asked -- a cached copy is otherwise indistinguishable from a current
+  // one until something looks wrong.
+  if (!name) return;
+  const seen = await db.getMeta('lastBuild');
+  if (seen === name) return;
+  await db.setMeta('lastBuild', name);
+  const note = document.querySelector('#update-note');
+  if (!note) return;
+  note.textContent = seen ? `Updated to ${name}` : `Running ${name}`;
+  note.classList.remove('hidden');
+  setTimeout(() => note.classList.add('hidden'), 6000);
 }
 
 async function boot() {
@@ -90,7 +107,13 @@ async function start() {
   });
   requestPersistence();
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // Ask the browser to re-check sw.js on every start. Without this a
+      // cached worker can serve an old build indefinitely, and the app gives
+      // no sign of it -- which is how a card kept saying `essere` is `estar`
+      // long after that was fixed.
+      reg.update().catch(() => {});
+    }).catch(() => {});
   }
 }
 

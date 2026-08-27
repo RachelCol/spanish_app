@@ -797,8 +797,7 @@
   "it": "avere",
   "senses": [
    "avere",
-   "tenere",
-   "dovere"
+   "tenere"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -49820,22 +49819,6 @@
   "zipf_it": 4.55
  },
  {
-  "es": "allende",
-  "zipf_es": 4.02,
-  "tier": "extended",
-  "it": "oltre",
-  "senses": [
-   "oltre"
-  ],
-  "pos": "adv",
-  "pos_all": [
-   "adv"
-  ],
-  "sim": 0.29,
-  "bucket": "distinct",
-  "zipf_it": 5.65
- },
- {
   "es": "animación",
   "zipf_es": 4.02,
   "tier": "extended",
@@ -53197,18 +53180,17 @@
   "es": "suceso",
   "zipf_es": 3.98,
   "tier": "long_tail",
-  "it": "successo",
+  "it": "accaduto",
   "senses": [
-   "successo",
    "accaduto"
   ],
   "pos": "n",
   "pos_all": [
    "n"
   ],
-  "sim": 0.75,
-  "bucket": "near",
-  "zipf_it": 5.44
+  "sim": 0.25,
+  "bucket": "distinct",
+  "zipf_it": 4.44
  },
  {
   "es": "síntesis",
