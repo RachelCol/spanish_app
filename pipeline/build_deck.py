@@ -6,6 +6,8 @@ intermediate files so the provenance is still there.
 """
 import json
 
+import numerals
+
 SUSPECT_DELTA = 1.2
 
 
@@ -28,6 +30,11 @@ def build():
             "tier": c["tier"],
             "zipf": c["zipf_es"],
         })
+    # Numerals arrive separately: Apertium tags them by paradigm reference, so
+    # the pair extractor never sees a part of speech and drops them.
+    have = {c["id"] for c in out}
+    out += [c for c in numerals.build() if c["id"] not in have]
+
     # Most frequent first: the deck should introduce useful words early.
     out.sort(key=lambda c: -c["zipf"])
     return out
