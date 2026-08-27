@@ -2,7 +2,7 @@ import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
 import { loadDeck, loadSentences, loadConjugations, loadGender, loadCollisions, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
-         POS_LABEL, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
+         POS_LABEL, POS_ABBR, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initSections } from './sections.js';
 import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE, speakSteps,
@@ -257,6 +257,7 @@ async function save() {
 const POS_SHORT = {
   n: 'Noun', vblex: 'Verb', adj: 'Adj', adv: 'Adv',
   pr: 'Prep', prn: 'Pron', cnj: 'Conj',
+  det: 'Det', ij: 'Expr', num: 'Num',
 };
 
 let listPlaying = false;
@@ -393,10 +394,12 @@ function renderCard() {
 
   $('#direction').textContent = dir.label;
   const promptWord = item.card[dir.prompt];
+  const mark = posMark(item.card);
   $('#prompt').replaceChildren(
     withGender(promptWord,
                genderFor(state.gender, item.card, promptWord, dir.prompt),
-               dir.prompt));
+               dir.prompt),
+    ...(mark ? [mark] : []));
   // Every part of speech the word has, not just the one that won the vote:
   // calling `bajo` an adjective and nothing else is a quiet lie.
   const posText = posGroups(item.card)
@@ -685,6 +688,20 @@ async function finish() {
 // out after it. Both, deliberately: the article is what you need in order to
 // say the word, and the letter is what tells you the truth when the article
 // lies -- `el agua` is feminine, and only the letter says so.
+// The part of speech, on the face of the card and in both directions. Going to
+// Spanish it is not decoration but the question itself: `caldo` asks for
+// `calor` as a noun and `caliente` as an adjective, and without the marker the
+// prompt has two right answers and no way to tell which one is wanted.
+function posMark(card) {
+  const groups = posGroups(card).filter(g => POS_ABBR[g]);
+  if (!groups.length) return null;
+  const el = document.createElement('span');
+  el.className = 'pos-mark';
+  el.textContent = groups.map(g => POS_ABBR[g]).join(' ');
+  el.title = groups.map(g => POS_LABEL[g]).join(' · ');
+  return el;
+}
+
 function withGender(word, info, lang) {
   const frag = document.createDocumentFragment();
   if (!info) {

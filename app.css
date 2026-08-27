@@ -681,3 +681,12 @@ button.secondary {
   border-bottom: 1px dotted var(--muted); cursor: pointer;
 }
 .also-word:hover, .also-word:focus-visible { opacity: 1; }
+
+/* --- part of speech, on the face of the card --- */
+.pos-mark {
+  font-style: italic; font-weight: 500;
+  font-size: .3em; letter-spacing: .03em;
+  color: color-mix(in srgb, var(--accent) 55%, var(--muted));
+  margin-left: .5em; vertical-align: .35em;
+  white-space: nowrap;
+}

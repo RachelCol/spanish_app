@@ -24,6 +24,14 @@ export const TIER_ORDER = ['common', 'useful', 'extended', 'long_tail'];
 
 // Apertium's tags, grouped the way a learner thinks about them. vbmod is a
 // single modal verb, which does not deserve a category of its own.
+// Abbreviations for the marker on the face of a card, where even a short word
+// would crowd out the word being learned. The word list wants its own, longer
+// set -- see POS_SHORT in main.js.
+export const POS_ABBR = {
+  n: 'n.', vblex: 'v.', adj: 'adj.', adv: 'adv.', pr: 'prep.',
+  prn: 'pron.', cnj: 'conj.', det: 'det.', ij: 'interj.', num: 'num.',
+};
+
 export const POS_LABEL = {
   n: 'Nouns',
   vblex: 'Verbs',
