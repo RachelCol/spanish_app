@@ -37,6 +37,10 @@ form forms sense senses figuratively literally transitive intransitive
 reflexive auxiliary plural singular masculine feminine noun verb adjective
 adverb pronoun preposition conjunction interjection archaic obsolete dated
 colloquial informal formal slang chiefly esp e g i e etc etc
+first second third person indicative subjunctive imperative conditional
+inflection inflected participle gerund infinitive present past future
+preterite imperfect affirmative negative alternative abbreviation clipping
+apocopic syncopic obsolete spelling misspelling eye dialect
 """.split())
 
 WORD = re.compile(r"[a-z]+")

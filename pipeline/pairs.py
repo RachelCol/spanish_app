@@ -122,6 +122,14 @@ SENSE_OVERRIDES = {
     # has both, and `successo` for `suceso` is marginal enough that keeping it
     # as a second answer would still teach the trap.
     'suceso':  ['accaduto'],
+
+    # Italian `costo` and `costa` are different words, as are `porto` and
+    # `porta`; `puerto/porto` and `puerta/porta` were already right, and these
+    # two were not. Both verified in each language's own Wiktionary entry:
+    # Italian `auto` is "clipping of automobile: car", Italian `costa` is the
+    # coast. Asserted, but asserted from a source that was checked.
+    'auto':    ['auto'],
+    'costa':   ['costa'],
 }
 
 # Cards whose only available pairing teaches the wrong thing. `allende` is
@@ -169,13 +177,13 @@ DROP_SENSES = {
     ('escolar',      'scolare'),      # scolare is to drain; the pupil is scolaro
     ('concierto',    'trattativa'),   # a trattativa is a negotiation
 
-    # A different failure: the gloss check agreed, because the two words do
-    # share a minor sense -- but the word's PRIMARY meaning was not on the
-    # card at all. `auto` is a car before it is a legal decree, and `costa` is
-    # a coast before it is an expense. Apertium offers only the minor reading
-    # for each, so the card cannot be corrected, only withdrawn.
-    ('auto',         'atto'),
-    ('costa',        'costo'),
+    # `auto -> atto` and `costa -> costo` were here. The gloss check agreed on
+    # them, because the words do share a minor sense -- a legal decree, an
+    # expense -- while each word's PRIMARY meaning was missing from the card
+    # entirely. Dropping them was the wrong fix; they are corrected in
+    # SENSE_OVERRIDES instead, since Italian has the right word in both cases.
+    # Left out of this list because a card whose senses are all dropped is
+    # skipped before an override can reach it.
 }
 
 

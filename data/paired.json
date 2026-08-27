@@ -7915,6 +7915,22 @@
   "zipf_it": 6.03
  },
  {
+  "es": "costa",
+  "zipf_es": 5.02,
+  "tier": "common",
+  "it": "costa",
+  "senses": [
+   "costa"
+  ],
+  "pos": "n",
+  "pos_all": [
+   "n"
+  ],
+  "sim": 1.0,
+  "bucket": "identical",
+  "zipf_it": 5.05
+ },
+ {
   "es": "crisis",
   "zipf_es": 5.02,
   "tier": "common",
@@ -8206,6 +8222,22 @@
   "sim": 0.78,
   "bucket": "near",
   "zipf_it": 4.85
+ },
+ {
+  "es": "auto",
+  "zipf_es": 5.0,
+  "tier": "common",
+  "it": "auto",
+  "senses": [
+   "auto"
+  ],
+  "pos": "n",
+  "pos_all": [
+   "n"
+  ],
+  "sim": 1.0,
+  "bucket": "identical",
+  "zipf_it": 5.18
  },
  {
   "es": "carta",
