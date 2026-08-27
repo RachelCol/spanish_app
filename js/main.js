@@ -15,6 +15,7 @@ const state = {
   deck: [],
   gender: {},
   prompts: {},
+  checkPile: {},
   items: [],
   settings: { ...DEFAULT_SETTINGS },
   queue: [],
@@ -87,6 +88,7 @@ async function start() {
   renderBuildLine();
   state.deck = await loadDeck();
   state.prompts = await loadPrompts();
+  await releaseFixedChecks();
   const saved = await db.getMeta('settings');
   if (saved) state.settings = { ...DEFAULT_SETTINGS, ...saved };
   await refresh();
@@ -130,7 +132,11 @@ async function refresh() {
     db.reviewsSince(startOfToday()),
     db.getMeta('lastBackup'),
   ]);
-  state.items = buildItems(state.deck, state.prompts, progress, state.settings);
+  // A flagged prompt is not offered until its pairing changes.
+  const pile = state.checkPile || {};
+  const studiable = Object.fromEntries(
+    Object.entries(state.prompts).filter(([p]) => !(p in pile)));
+  state.items = buildItems(state.deck, studiable, progress, state.settings);
   state.reviewsToday = today.length;
 
   const c = counts(state.items);
@@ -279,7 +285,7 @@ async function save() {
   await db.setMeta('settings', state.settings);
   await refresh();
   // The list is a view of the filters, so it has to follow them.
-  if ($('#word-list-panel').open) renderWordList();
+  if ($('#check-panel').open) renderCheckPile();
 }
 
 // ---------- the word list ----------
@@ -287,123 +293,99 @@ async function save() {
 // Everything the current filters admit, in the order the deck introduces it:
 // most frequent first, which is the order it will actually reach you in.
 //
-// Built only when the panel is opened. The unfiltered deck is several thousand
-// rows, and there is no reason to hold them all in the document until asked.
+// ---- the check pile ----
+//
+// Cards you have flagged as wrong. They are held out of review, and released
+// again on their own once the pairing changes -- the flag records what the
+// card said at the time, so a rebuild that alters the answers is the signal
+// that it has been looked at. Nothing to clear by hand, and no card left
+// stuck in the pile because clearing it was forgotten.
+//
+// Kept in `meta` rather than in a store of its own: the pile is small, and a
+// schema change costs a database upgrade that can block on an open tab.
 
-const POS_SHORT = {
-  n: 'Noun', vblex: 'Verb', adj: 'Adj', adv: 'Adv',
-  pr: 'Prep', prn: 'Pron', cnj: 'Conj',
-  det: 'Det', ij: 'Expr', num: 'Num',
-};
+function promptSignature(answers) {
+  return (answers || []).map(a => a.es).join('|');
+}
 
-let listPlaying = false;
+async function loadCheckPile() {
+  return (await db.getMeta('checkPile')) || {};
+}
 
-function uniqueCards() {
-  const seen = new Set();
-  const out = [];
-  for (const item of state.items) {
-    if (seen.has(item.card.es)) continue;
-    seen.add(item.card.es);
-    out.push(item.card);
+async function flagForCheck(item) {
+  const pile = await loadCheckPile();
+  pile[item.prompt] = {
+    ts: Date.now(),
+    sig: promptSignature(answersFor(item)),
+    answers: answersFor(item).map(a => a.es),
+  };
+  await db.setMeta('checkPile', pile);
+  state.checkPile = pile;
+}
+
+async function unflag(prompt) {
+  const pile = await loadCheckPile();
+  delete pile[prompt];
+  await db.setMeta('checkPile', pile);
+  state.checkPile = pile;
+}
+
+async function releaseFixedChecks() {
+  const pile = await loadCheckPile();
+  let changed = false;
+  for (const [prompt, entry] of Object.entries(pile)) {
+    const current = state.prompts[prompt];
+    if (!current || promptSignature(current) !== entry.sig) {
+      delete pile[prompt];
+      changed = true;
+    }
   }
-  return out.sort((a, b) => b.zipf - a.zipf);
+  if (changed) await db.setMeta('checkPile', pile);
+  state.checkPile = pile;
 }
 
-// "casa - la casa" for a single sense; "(Noun) partito, partita; (Adj)
-// tagliato" where the senses split by part of speech.
-function glossOf(card) {
-  if (card.by_pos) {
-    return Object.entries(card.by_pos)
-      .map(([group, words]) =>
-        `(${POS_SHORT[group] || group}) ${words.join(', ')}`)
-      .join('; ');
-  }
-  return card.senses.join(', ');
-}
+function renderCheckPile() {
+  const host = $('#check-list');
+  const rows = Object.entries(state.checkPile || {}).sort((a, b) => b[1].ts - a[1].ts);
 
-function renderWordList() {
-  const cards = uniqueCards();
-  $('#word-list-count').textContent =
-    `${cards.length} word${cards.length === 1 ? '' : 's'}`;
-
-  $('#word-list').replaceChildren(...cards.map((card, i) => {
-    const row = document.createElement('div');
-    row.className = 'word-row-item';
-    row.dataset.index = i;
-
-    const es = document.createElement('b');
-    es.className = 'word-es';
-    es.textContent = card.es;
-
-    const dash = document.createElement('span');
-    dash.className = 'word-dash';
-    dash.textContent = ' - ';
-
-    const it = document.createElement('span');
-    it.className = 'word-it';
-    it.textContent = glossOf(card);
-
-    row.append(es, dash, it);
-    row.addEventListener('click', () => speak(card.es, 'es'));
-    return row;
-  }));
-  return cards;
-}
-
-// The Spanish word, then each gloss, then a longer breath before the next
-// entry. Multiword glosses like "davanti a" are read whole.
-function listScript(cards) {
-  const steps = [];
-  cards.forEach((card, index) => {
-    steps.push({ text: card.es, lang: 'es', index, gap: 260 });
-    const senses = card.by_pos
-      ? Object.values(card.by_pos).flat()
-      : card.senses;
-    senses.forEach((sense, k) => {
-      steps.push({
-        text: sense, lang: 'it', index,
-        gap: k === senses.length - 1 ? 900 : 220,
-      });
-    });
-  });
-  return steps;
-}
-
-function setListButton(playing) {
-  listPlaying = playing;
-  const b = $('#word-list-play');
-  b.textContent = playing ? '❚❚ Pause' : '▶ Read the list';
-  b.classList.toggle('playing', playing);
-}
-
-function highlightListRow(index) {
-  const list = $('#word-list');
-  const previous = list.querySelector('.word-row-item.speaking');
-  if (previous) previous.classList.remove('speaking');
-  if (index === null || index === undefined) return;
-  const row = list.querySelector(`.word-row-item[data-index="${index}"]`);
-  if (row) {
-    row.classList.add('speaking');
-    row.scrollIntoView({ block: 'nearest' });
-  }
-}
-
-async function toggleListPlayback() {
-  if (listPlaying) {
-    stopSpeech();
-    setListButton(false);
-    highlightListRow(null);
+  if (!rows.length) {
+    const p = document.createElement('p');
+    p.className = 'muted small';
+    p.textContent = 'Nothing flagged.';
+    host.replaceChildren(p);
     return;
   }
-  const cards = uniqueCards();
-  if (!cards.length) return;
-  setListButton(true);
-  await speakSteps(listScript(cards), {
-    onStep: index => {
-      if (index === null) { setListButton(false); highlightListRow(null); }
-      else highlightListRow(index);
-    },
-  });
+
+  host.replaceChildren(...rows.map(([prompt, entry]) => {
+    const row = document.createElement('div');
+    row.className = 'check-row';
+
+    const words = document.createElement('div');
+    words.className = 'check-words';
+    const it = document.createElement('b');
+    it.textContent = prompt;
+    const arrow = document.createElement('span');
+    arrow.className = 'check-arrow';
+    arrow.textContent = '\u2192';
+    const es = document.createElement('span');
+    es.className = 'check-es';
+    es.textContent = (entry.answers || []).join(', ');
+    words.append(it, arrow, es);
+
+    const drop = document.createElement('button');
+    drop.type = 'button';
+    drop.className = 'check-drop';
+    drop.textContent = 'Put back';
+    drop.setAttribute('aria-label', 'Return ' + prompt + ' to review');
+    drop.addEventListener('click', async () => {
+      await unflag(prompt);
+      renderCheckPile();
+      await refresh();
+    });
+
+    row.append(words, drop);
+    return row;
+  }));
 }
 
 // ---------- review ----------
@@ -454,6 +436,7 @@ function renderCard() {
   $('#present-table').replaceChildren();
   $('#examples').classList.add('hidden');
   $('#examples').replaceChildren();
+  $('#flag-btn').classList.add('hidden');
   $('#say-prompt').classList.toggle('hidden', !canSpeak());
   $('#reveal-row').classList.remove('hidden');
   $('#grade-row').classList.add('hidden');
@@ -504,6 +487,7 @@ function reveal() {
   $('#examples-btn').classList.add('hidden');
   $('#conj-btn').classList.add('hidden');
   renderPresentTables(answers);
+  $('#flag-btn').classList.remove('hidden');
 
   // A footnote on the word rather than a headline action, and only on the
   // ~1 in 5 words the two accents actually pronounce differently.
@@ -1638,14 +1622,22 @@ function wire() {
   $('#close-progress').addEventListener('click', () => show('home'));
   $('#open-deck').addEventListener('click', () => show('deck'));
   $('#close-deck').addEventListener('click', () => {
-    if (listPlaying) { stopSpeech(); setListButton(false); }
     show('home');
   });
-  $('#word-list-panel').addEventListener('toggle', e => {
-    if (e.target.open) renderWordList();
-    else if (listPlaying) { stopSpeech(); setListButton(false); }
+  $('#check-panel').addEventListener('toggle', e => {
+    if (e.target.open) renderCheckPile();
   });
-  $('#word-list-play').addEventListener('click', toggleListPlayback);
+  $('#flag-btn').addEventListener('click', async () => {
+    const item = state.queue[state.index];
+    if (!item) return;
+    await flagForCheck(item);
+    // Straight past it. A card you have just called wrong should not go on to
+    // ask how well you remembered it, nor be scheduled on the way out.
+    state.queue = state.queue.filter(q => q.prompt !== item.prompt);
+    await refresh();
+    if (state.index >= state.queue.length) await finish();
+    else renderCard();
+  });
   $('#open-settings').addEventListener('click', () => show('settings'));
   $('#close-settings').addEventListener('click', () => show('home'));
   $('#grade-row').addEventListener('click', e => {

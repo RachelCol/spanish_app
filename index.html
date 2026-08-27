@@ -105,13 +105,13 @@
       </p>
     </fieldset>
 
-    <details id="word-list-panel" class="mood">
-      <summary>The words themselves</summary>
-      <div class="word-list-head">
-        <span id="word-list-count" class="muted small"></span>
-        <button id="word-list-play" class="compare" type="button">▶ Read the list</button>
-      </div>
-      <div id="word-list"></div>
+    <details id="check-panel" class="mood">
+      <summary>Check pile</summary>
+      <p class="muted small">
+        Cards you have flagged as wrong. They stay out of review until the
+        pairing changes, and then come back on their own.
+      </p>
+      <div id="check-list" class="check-list"></div>
     </details>
   </section>
 
@@ -282,6 +282,7 @@
         <button id="examples-btn" class="compare hidden">Examples</button>
         <button id="conj-btn" class="compare hidden">Conjugation</button>
       </div>
+      <button id="flag-btn" class="flag-btn hidden" type="button">Send to check pile</button>
 
       <div id="examples" class="examples hidden"></div>
 

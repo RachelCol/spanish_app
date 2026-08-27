@@ -759,3 +759,31 @@ button.secondary {
   border: 1px solid color-mix(in srgb, var(--good) 30%, transparent);
   border-radius: 20px; padding: .3rem .7rem;
 }
+
+/* --- flagging a card as wrong --- */
+.flag-btn {
+  display: block; margin: 1.2rem auto 0;
+  background: none; border: 0; cursor: pointer;
+  font-size: .78rem; letter-spacing: .03em; color: var(--muted);
+  border-bottom: 1px solid var(--line); padding: .1rem 0;
+}
+.flag-btn:hover, .flag-btn:focus-visible {
+  color: var(--again); border-bottom-color: var(--again);
+}
+
+/* --- the check pile --- */
+.check-list { display: flex; flex-direction: column; margin-top: .7rem; }
+.check-row {
+  display: flex; align-items: baseline; gap: .8rem;
+  padding: .6rem .1rem; border-bottom: 1px solid var(--line);
+}
+.check-row:last-child { border-bottom: 0; }
+.check-words { flex: 1; min-width: 0; line-height: 1.5; }
+.check-arrow { color: var(--muted); margin: 0 .35rem; }
+.check-es { color: var(--muted); }
+.check-drop {
+  flex: none; background: none; border: 1px solid var(--line);
+  border-radius: 20px; padding: .18rem .65rem; cursor: pointer;
+  font-size: .72rem; color: var(--muted);
+}
+.check-drop:hover { color: var(--ink); border-color: var(--muted); }
