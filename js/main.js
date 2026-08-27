@@ -1,7 +1,7 @@
 import { db, requestPersistence } from './db.js';
 import { grade, intervalLabel, gradeLetter, gradeRange, GRADES, isNew as isNewItem,
          AGAIN, HARD, GOOD, EASY } from './srs.js';
-import { loadDeck, loadSentences, loadConjugations, loadGender, loadCollisions, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
+import { loadDeck, loadSentences, loadConjugations, loadGender, loadPrompts, buildItems, DIRECTIONS, BUCKET_LABEL, TIER_ORDER,
          POS_LABEL, POS_ABBR, posGroup, posGroups, DEFAULT_SETTINGS, SESSION_SIZES } from './deck.js';
 import { buildQueue, counts, gradeBreakdown } from './session.js';
 import { initSections } from './sections.js';
@@ -14,7 +14,7 @@ const $ = sel => document.querySelector(sel);
 const state = {
   deck: [],
   gender: {},
-  collisions: {},
+  prompts: {},
   items: [],
   settings: { ...DEFAULT_SETTINGS },
   queue: [],
@@ -37,9 +37,9 @@ function fatal(msg) {
   document.querySelector('#view-home').classList.add('hidden');
 }
 
-// Which build is on screen. The two copies of this app are similar enough
-// that "am I looking at the right one?" is a fair question, and the service
-// worker's cache name is the one string that always answers it.
+// Which build is on screen. There are two copies of this app on one origin
+// and they are similar enough that "am I looking at the right one?" is a fair
+// question; the service worker's cache name is the string that answers it.
 async function renderBuildLine() {
   const el = document.querySelector('#build-line');
   if (!el) return;
@@ -69,6 +69,7 @@ async function boot() {
 async function start() {
   renderBuildLine();
   state.deck = await loadDeck();
+  state.prompts = await loadPrompts();
   const saved = await db.getMeta('settings');
   if (saved) state.settings = { ...DEFAULT_SETTINGS, ...saved };
   await refresh();
@@ -81,7 +82,6 @@ async function start() {
     .catch(() => {});
 
   loadGender().then(g => { state.gender = g; }).catch(() => {});
-  loadCollisions().then(c => { state.collisions = c; }).catch(() => {});
 
   initVoices();
   onVoicesReady(() => {
@@ -107,7 +107,7 @@ async function refresh() {
     db.reviewsSince(startOfToday()),
     db.getMeta('lastBackup'),
   ]);
-  state.items = buildItems(state.deck, progress, state.settings);
+  state.items = buildItems(state.deck, state.prompts, progress, state.settings);
   state.reviewsToday = today.length;
 
   const c = counts(state.items);
@@ -166,9 +166,6 @@ function renderFilters() {
     chip(POS_LABEL[p], state.deck.filter(c => posGroups(c).includes(p)).length,
          s.pos.includes(p), on => toggle(s.pos, p, on))));
 
-  const dirs = $('#f-directions');
-  dirs.replaceChildren(...Object.keys(DIRECTIONS).map(d =>
-    chip(DIRECTIONS[d].label, DIRECTIONS[d].kind, s.directions.includes(d), on => toggle(s.directions, d, on))));
 
   const speech = $('#f-speech');
   if (canSpeak()) {
@@ -409,22 +406,19 @@ function renderCard() {
   state.revealed = false;
 
   $('#direction').textContent = dir.label;
-  const promptWord = item.card[dir.prompt];
-  const mark = posMark(item.card);
   $('#prompt').replaceChildren(
-    withGender(promptWord,
-               genderFor(state.gender, item.card, promptWord, dir.prompt),
-               dir.prompt),
-    ...(mark ? [mark] : []));
-  // Every part of speech the word has, not just the one that won the vote:
-  // calling `bajo` an adjective and nothing else is a quiet lie.
-  const posText = posGroups(item.card)
-    .map(g => (POS_LABEL[g] || g).toLowerCase().replace(/s$/, ''))
-    .join(' · ');
-  $('#meta').innerHTML =
-    `<span class="pos">${posText}</span> · ${BUCKET_LABEL[item.card.bucket]}`;
+    withGender(item.prompt,
+               genderFor(state.gender, item.card, item.prompt, 'it'), 'it'));
+
+  // Pooled across every answer the card will show, not read off one of them.
+  // The front should never claim something the back contradicts: `vicino`
+  // answers an adverb, two adjectives and a noun, so it says all three.
+  $('#pos-line').textContent = posWords(answersFor(item).map(a => a.pos));
+  $('#meta').textContent = BUCKET_LABEL[item.card.bucket];
 
   stopSpeech();
+  closeDetail();
+  $('#pos-line').classList.remove('hidden');
   $('#answers').classList.add('hidden');
   $('#answers').classList.remove('grouped');
   $('#answers').replaceChildren();
@@ -455,36 +449,16 @@ function reveal() {
   // Going to Italian, show every sense: where a Spanish word does not map
   // one-to-one, that is the useful information and one gloss would hide it.
   // Where the senses split by part of speech -- bajo is basso as an adjective
-  // and sotto as a preposition -- they are grouped under it, because a flat
-  // list makes `sí` read as "sè · sì" with no hint that one means yes and the
-  // other is a pronoun.
-  // Both directions group the same way. Going to Italian the split comes from
-  // the card's own senses; going to Spanish it comes from the words that share
-  // this Italian prompt.
-  const toItalian = dir.answer === 'it';
-  const groups = toItalian ? (card.by_pos || null) : collisionGroups(card);
-
-  const speakable = (w, which) => {
-    const row = document.createElement('div');
-    row.className = 'word-row';
-    const span = document.createElement('span');
-    span.className = 'answer';
-    span.replaceChildren(withGender(w, genderFor(state.gender, card, w, which), which));
-    row.append(span);
-    if (canSpeak()) {
-      const play = document.createElement('button');
-      play.type = 'button';
-      play.className = 'say';
-      play.textContent = '▶';
-      play.setAttribute('aria-label', 'Hear ' + w);
-      play.addEventListener('click', e => {
-        e.preventDefault();
-        speak(spokenForm(w, genderFor(state.gender, card, w, which)), which);
-      });
-      row.append(play);
-    }
-    return row;
-  };
+  // Grouped by part of speech where the split says something. `dopo` answers
+  // two adverbs and a preposition, and that is the lesson; `fare` answering
+  // five verbs is a list.
+  const answers = answersFor(item);
+  const groups = answerGroups(item);
+  const single = answers.length === 1;
+  // Two separate questions. Inline the links when there is one answer, so the
+  // common path never costs a tap. Offer the entry whenever it knows more --
+  // several answers, or one answer that means more than the prompt showed.
+  const openable = !single || hasEntry(card);
 
   if (groups) {
     const blocks = [];
@@ -492,19 +466,29 @@ function reveal() {
       const label = document.createElement('div');
       label.className = 'sense-pos';
       label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
-      blocks.push(label, ...words.map(w => speakable(w, 'it')));
+      blocks.push(label, ...words.map(w => answerRow(w, !openable)));
     }
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
-    const alts = toItalian ? null : collisionAnswers(card);
-    const words = toItalian ? (card.senses || [card.it])
-                            : (alts ? alts.map(a => a.es) : [card.es]);
-    $('#answers').replaceChildren(...words.map(w => speakable(w, dir.answer)));
+    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es, !openable)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
   $('#meta').classList.remove('hidden');
+  $('#pos-line').classList.add('hidden');
+
+  // Links, examples and the conjugation table belong to a Spanish word, not to
+  // the card. With one answer that distinction is invisible and they sit on
+  // the back as always. With several they move into each word's own entry --
+  // three stacked link rows on one card face is not a card any more.
+  if (single) {
+    inlineDetail(card);
+  } else {
+    $('#card-links').classList.add('hidden');
+    $('#examples-btn').classList.add('hidden');
+    $('#conj-btn').classList.add('hidden');
+  }
 
   // A footnote on the word rather than a headline action, and only on the
   // ~1 in 5 words the two accents actually pronounce differently.
@@ -512,30 +496,6 @@ function reveal() {
   const showAccent = canSpeak() && hasAccentPair() && other && differsByAccent(card.es);
   if (showAccent) $('#accent-text').textContent = other.label + ' pronunciation differs';
   $('#accent-note').classList.toggle('hidden', !showAccent);
-
-  // Always look up the Spanish: it is the language being learned, and every
-  // one of these three has a Spanish-Italian mode.
-  const w = encodeURIComponent(card.es);
-  $('#link-wr').href  = `https://www.wordreference.com/esit/${w}`;
-  $('#link-rev').href = `https://context.reverso.net/translation/spanish-italian/${w}`;
-  $('#link-yg').href  = `https://youglish.com/pronounce/${w}/spanish`;
-  $('#card-links').classList.remove('hidden');
-
-  if (posGroups(card).includes('vblex')) {
-    loadConjugations().then(all => {
-      if (!state.queue[state.index] || state.queue[state.index].card.es !== card.es) return;
-      const entry = all.verbs[card.es];
-      $('#conj-btn').classList.toggle('hidden', !entry);
-      renderPresentTable(entry);
-    });
-  }
-
-  loadSentences().then(all => {
-    // The card may have moved on while the file was loading.
-    if (state.queue[state.index] && state.queue[state.index].card.es === card.es) {
-      $('#examples-btn').classList.toggle('hidden', !(all[card.es] || []).length);
-    }
-  });
 
   // Only the Spanish. With several Italian senses on screen, reading them all
   // aloud is noise -- and the Italian is the side already known. Each sense
@@ -556,17 +516,200 @@ function reveal() {
 // one of them: `fare` is on the card for `hacer`, but `echar` and `formar` are
 // not wrong. These two give the full answer set, so the Italian -> Spanish
 // side can show it the way the Spanish -> Italian side shows its senses.
-function collisionAnswers(card) {
-  const alts = (state.collisions && state.collisions[card.it]) || [];
-  return alts.length ? alts : null;
+// One Spanish answer. Tappable whenever there is more than one on the card:
+// the word opens its own entry, which knows more than the card face does.
+function answerRow(word, single) {
+  const row = document.createElement('div');
+  row.className = 'word-row';
+
+  const span = document.createElement(single ? 'span' : 'button');
+  span.className = 'answer';
+  if (!single) {
+    span.type = 'button';
+    span.classList.add('answer-link');
+    span.setAttribute('aria-label', word + ' \u2014 see this word');
+    span.addEventListener('click', () => openDetail(word));
+  }
+  span.replaceChildren(
+    withGender(word, genderFor(state.gender, null, word, 'es'), 'es'));
+  row.append(span);
+
+  if (canSpeak()) {
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.className = 'say';
+    play.textContent = '\u25B6';
+    play.setAttribute('aria-label', 'Hear ' + word);
+    play.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      speak(spokenForm(word, genderFor(state.gender, null, word, 'es')), 'es');
+    });
+    row.append(play);
+  }
+  return row;
+}
+
+// ---- the entry behind a Spanish word ----
+//
+// This is what used to be the Spanish -> Italian card: same word, same senses,
+// same examples, conjugation and links. It stopped being a question and became
+// a reference, and it carries more than the card face does -- the card only
+// showed the sense that prompted you.
+
+function detailLinks(es) {
+  const w = encodeURIComponent(es);
+  return {
+    wr:  `https://www.wordreference.com/esit/${w}`,
+    rev: `https://context.reverso.net/translation/spanish-italian/${w}`,
+    yg:  `https://youglish.com/pronounce/${w}/spanish`,
+  };
+}
+
+// With one answer there is nothing to disambiguate, so the entry's contents sit
+// on the card back exactly as they always have -- no tap to reach them.
+function inlineDetail(card) {
+  const l = detailLinks(card.es);
+  $('#link-wr').href = l.wr;
+  $('#link-rev').href = l.rev;
+  $('#link-yg').href = l.yg;
+  $('#card-links').classList.remove('hidden');
+
+  if (posGroups(card).includes('vblex')) {
+    loadConjugations().then(all => {
+      const cur = state.queue[state.index];
+      if (!cur || cur.card.es !== card.es) return;
+      const entry = all.verbs[card.es];
+      $('#conj-btn').classList.toggle('hidden', !entry);
+      renderPresentTable(entry);
+    });
+  }
+  loadSentences().then(all => {
+    const cur = state.queue[state.index];
+    if (cur && cur.card.es === card.es) {
+      $('#examples-btn').classList.toggle('hidden', !(all[card.es] || []).length);
+    }
+  });
+}
+
+function closeDetail() {
+  const p = $('#detail');
+  if (!p) return;
+  p.classList.add('hidden');
+  p.replaceChildren();
+}
+
+function openDetail(es) {
+  const card = state.deck.find(c => c.es === es);
+  if (!card) return;
+  const panel = $('#detail');
+  const parts = [];
+
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'detail-close';
+  close.textContent = '\u2715';
+  close.setAttribute('aria-label', 'Close');
+  close.addEventListener('click', closeDetail);
+  parts.push(close);
+
+  const head = document.createElement('div');
+  head.className = 'detail-word';
+  head.replaceChildren(withGender(es, genderFor(state.gender, null, es, 'es'), 'es'));
+  if (canSpeak()) {
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.className = 'say';
+    play.textContent = '\u25B6';
+    play.setAttribute('aria-label', 'Hear ' + es);
+    play.addEventListener('click', () =>
+      speak(spokenForm(es, genderFor(state.gender, null, es, 'es')), 'es'));
+    head.append(play);
+  }
+  parts.push(head);
+
+  const groups = card.by_pos || { [posGroups(card)[0]]: card.senses || [card.it] };
+  for (const [g, words] of Object.entries(groups)) {
+    const label = document.createElement('div');
+    label.className = 'sense-pos';
+    label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
+    parts.push(label);
+    for (const w of words) {
+      const row = document.createElement('div');
+      row.className = 'detail-sense';
+      row.replaceChildren(withGender(w, genderFor(state.gender, card, w, 'it'), 'it'));
+      parts.push(row);
+    }
+  }
+
+  const actions = document.createElement('div');
+  actions.className = 'detail-actions';
+  const l = detailLinks(es);
+  for (const [href, text] of [[l.wr, 'WordReference'], [l.rev, 'Reverso'], [l.yg, 'YouGlish']]) {
+    const a = document.createElement('a');
+    a.href = href; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = text;
+    actions.append(a);
+  }
+  parts.push(actions);
+
+  const extra = document.createElement('div');
+  extra.className = 'detail-extra';
+  parts.push(extra);
+  panel.replaceChildren(...parts);
+  panel.classList.remove('hidden');
+  panel.scrollTop = 0;
+
+  loadSentences().then(all => {
+    const rows = all[es] || [];
+    if (!rows.length || panel.classList.contains('hidden')) return;
+    const box = document.createElement('div');
+    box.className = 'detail-examples';
+    for (const r of rows) {
+      const b = document.createElement('div');
+      b.className = 'example';
+      const pes = document.createElement('p');
+      pes.className = 'example-es';
+      pes.append(highlight(r.es, es, null));
+      const pit = document.createElement('p');
+      pit.className = 'example-it';
+      pit.textContent = r.it;
+      b.append(pes, pit);
+      box.append(b);
+    }
+    extra.append(box);
+  });
+
+  if (posGroups(card).includes('vblex')) {
+    loadConjugations().then(all => {
+      if (!all.verbs[es] || panel.classList.contains('hidden')) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'compare';
+      b.textContent = 'Conjugation';
+      b.addEventListener('click', () => openConjugation(es));
+      extra.append(b);
+    });
+  }
+}
+
+// Does this word's entry hold anything the card face does not? A Spanish word
+// with a second Italian sense does -- `mejor` is `meglio` and `migliore`, and
+// the card only ever showed the one that prompted you. That is the case for
+// 615 prompts, and it is why one answer is not the same as nothing to open.
+function hasEntry(card) {
+  return !!card && ((card.senses || []).length > 1 || !!card.by_pos);
+}
+
+function answersFor(item) {
+  return item.answers || [{ es: item.card.es, pos: posGroups(item.card)[0] }];
 }
 
 // Grouped by part of speech, in the same shape as the deck's own `by_pos`, but
 // only where the split says something: `fare` answering five verbs is a list,
 // not a table.
-function collisionGroups(card) {
-  const alts = collisionAnswers(card);
-  if (!alts) return null;
+function answerGroups(item) {
+  const alts = answersFor(item);
   if (new Set(alts.map(a => a.pos)).size < 2) return null;
   const out = {};
   for (const a of alts) (out[a.pos] = out[a.pos] || []).push(a.es);
@@ -696,6 +839,17 @@ async function finish() {
 // Spanish it is not decoration but the question itself: `caldo` asks for
 // `calor` as a noun and `caliente` as an adjective, and without the marker the
 // prompt has two right answers and no way to tell which one is wanted.
+// Spelled out rather than abbreviated: this sits on its own line now, so it
+// has the room, and `noun · adjective` reads where `n. adj.` must be decoded.
+function posWords(groups) {
+  const seen = [];
+  for (const g of groups) {
+    const label = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
+    if (label && !seen.includes(label)) seen.push(label);
+  }
+  return seen.join(' · ');
+}
+
 function posMark(card) {
   const groups = posGroups(card).filter(g => POS_ABBR[g]);
   if (!groups.length) return null;
@@ -735,10 +889,11 @@ function spokenForm(word, info) {
 
 function genderFor(all, card, word, which) {
   if (!all) return null;
-  // Spanish is keyed directly, which is what lets an alternative answer carry
-  // its own article. Italian is keyed under the card it was glossed from.
+  // Spanish is keyed directly, which is what lets any answer -- or a word in
+  // the entry view, with no card in hand -- carry its own article. Italian is
+  // keyed under the card it was glossed from, so it needs one.
   if (which === 'es') return all[word] || null;
-  const entry = all[card.es];
+  const entry = card && all[card.es];
   return entry ? (entry.it || {})[word] || null : null;
 }
 
@@ -864,16 +1019,18 @@ const MOODS = [
 
 const IMPERATIVE_KEYS = new Set(['impAffirm', 'impNegative']);
 
-async function openConjugation() {
-  const card = state.queue[state.index].card;
+// Takes a word, so the entry view can open a table for an answer that is not
+// the card's lead. Defaults to the card in hand.
+async function openConjugation(word) {
+  const es = typeof word === 'string' ? word : state.queue[state.index].card.es;
   const all = await loadConjugations();
-  const data = all.verbs[card.es];
+  const data = all.verbs[es];
   if (!data) return;
 
   const pronouns = all.pronouns || [];
   const impPronouns = all.imperativePronouns || pronouns;
 
-  $('#conj-title').textContent = card.es;
+  $('#conj-title').textContent = es;
   const body = $('#conj-body');
   body.replaceChildren();
 
@@ -990,7 +1147,7 @@ const EVERYTHING = {
 function scopedItems(progress) {
   return progressScope === 'deck'
     ? state.items
-    : buildItems(state.deck, progress, EVERYTHING);
+    : buildItems(state.deck, state.prompts, progress, EVERYTHING);
 }
 
 function scopedReviews(reviews, items) {
@@ -1479,7 +1636,7 @@ function wire() {
     speakOtherAccent(state.queue[state.index].card.es);
   });
   $('#examples-btn').addEventListener('click', toggleExamples);
-  $('#conj-btn').addEventListener('click', openConjugation);
+  $('#conj-btn').addEventListener('click', () => openConjugation());
   $('#close-conj').addEventListener('click', () => show('review'));
 
   $('#export').addEventListener('click', exportProgress);

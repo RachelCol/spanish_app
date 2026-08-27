@@ -13,8 +13,8 @@ Multiword Italian is admitted only where it is already a card's primary gloss;
 new prompts are single words. Phrases need their own handling for gender,
 audio and sentence highlighting, and that is a separate job.
 
-Writes into lab/data/ -- this is the experimental deck. The app in daily use
-reads data/collisions.json and is not affected.
+collisions.json is what the pre-refactor app used and is still read by
+classic/; this file supersedes it.
 """
 import json
 from collections import defaultdict
@@ -75,7 +75,7 @@ def build(deck):
     return out
 
 
-def main(out='lab/data/prompts.json'):
+def main(out='data/prompts.json'):
     deck = json.load(open('data/deck.json'))
     prompts = build(deck)
     with open(out, 'w') as fh:
@@ -102,4 +102,4 @@ def main(out='lab/data/prompts.json'):
 
 if __name__ == '__main__':
     import sys
-    main(sys.argv[1] if len(sys.argv) > 1 else 'lab/data/prompts.json')
+    main(sys.argv[1] if len(sys.argv) > 1 else 'data/prompts.json')

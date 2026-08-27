@@ -100,18 +100,13 @@ export async function loadGender() {
 
 // Italian prompts that answer more than one Spanish card. Small, and needed
 // the moment an Italian->Spanish card flips, so it loads with the gender file.
-// Every Italian prompt and the Spanish words that answer it. This is what the
-// deck is now driven from: a prompt is an Italian word, not a card read
-// backwards, so `poi` can ask for `luego` even though `luego`'s own card
-// glosses it as `dopo`.
-let promptCache = null;
+let collisionCache = null;
 
-export async function loadPrompts() {
-  if (promptCache) return promptCache;
-  const res = await fetch('data/prompts.json');
-  if (!res.ok) throw new Error('could not load prompts: ' + res.status);
-  promptCache = await res.json();
-  return promptCache;
+export async function loadCollisions() {
+  if (collisionCache) return collisionCache;
+  const res = await fetch('data/collisions.json');
+  collisionCache = res.ok ? await res.json() : {};
+  return collisionCache;
 }
 
 let conjCache = null;
@@ -128,27 +123,18 @@ export function itemKey(cardId, direction) {
 }
 
 // Combine the static deck with stored progress into the full item list.
-// One scheduled item per Italian prompt, in the production direction only.
-//
-// Spanish -> Italian is no longer a review: it survives as the detail view
-// behind each Spanish answer, which is the same information doing a more
-// useful job. Recognition is the half already known.
-export function buildItems(deck, prompts, progressList, settings) {
-  const byId = new Map(deck.map(c => [c.id, c]));
+export function buildItems(deck, progressList, settings) {
   const stored = new Map(progressList.map(p => [p.key, p]));
-  const passes = card => card
-    && settings.tiers.includes(card.tier)
-    && settings.buckets.includes(card.bucket)
-    && posGroups(card).some(g => settings.pos.includes(g));
-
   const items = [];
-  for (const [prompt, all] of Object.entries(prompts)) {
-    const answers = all.filter(a => passes(byId.get(a.es)));
-    if (!answers.length) continue;
-    const lead = byId.get(answers[0].es);
-    const key = itemKey(prompt, 'it>es');
-    const item = stored.get(key) || newItem(key, prompt, 'it>es', lead.bucket);
-    items.push({ ...item, card: lead, prompt, answers });
+  for (const card of deck) {
+    if (!settings.tiers.includes(card.tier)) continue;
+    if (!settings.buckets.includes(card.bucket)) continue;
+    if (!posGroups(card).some(g => settings.pos.includes(g))) continue;
+    for (const dir of settings.directions) {
+      const key = itemKey(card.id, dir);
+      const item = stored.get(key) || newItem(key, card.id, dir, card.bucket);
+      items.push({ ...item, card });
+    }
   }
   return items;
 }
@@ -157,7 +143,7 @@ export const DEFAULT_SETTINGS = {
   tiers: ['common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
   pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'],
-  directions: ['it>es'],
+  directions: ['es>it', 'it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js
   sessionSize: 15,   // cards per sitting; the daily plan is separate

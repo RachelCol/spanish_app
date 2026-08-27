@@ -1,7 +1,7 @@
 {
-  "id": "spanish-from-italian-lab",
-  "name": "Spanish from Italian (Lab)",
-  "short_name": "Español Lab",
+  "id": "spanish-from-italian-classic",
+  "name": "Spanish from Italian (Classic)",
+  "short_name": "Español ‹old›",
   "description": "Spanish vocabulary and grammar for someone who already speaks Italian",
   "start_url": ".",
   "scope": ".",

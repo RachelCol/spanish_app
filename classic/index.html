@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="app.css">
 </head>
-<body data-lab="1">
+<body data-classic="1">
 
 <main id="app">
 
@@ -124,10 +124,11 @@
 
     <fieldset>
       <legend>Direction</legend>
+      <div id="f-directions" class="chips"></div>
       <p class="muted small">
-        Every card runs Italian to Spanish. Recognition is the half you already
-        have, so it is no longer scheduled — the Spanish side of a card lives
-        behind each answer instead, as an entry you can open.
+        Each direction is scheduled separately. Reading Spanish is recognition;
+        producing it is harder, and sharing one schedule would let the easy
+        direction hide the hard one.
       </p>
     </fieldset>
 
@@ -264,10 +265,8 @@
         <span id="prompt" class="prompt"></span>
         <button id="say-prompt" class="say" aria-label="Hear this word">▶</button>
       </div>
-      <p id="pos-line" class="pos-line hidden"></p>
 
       <div id="answers" class="answers hidden"></div>
-      <div id="detail" class="detail hidden" role="dialog" aria-label="Word detail"></div>
 
       <div id="meta" class="meta hidden"></div>
       <div id="present-table" class="present-table hidden"></div>

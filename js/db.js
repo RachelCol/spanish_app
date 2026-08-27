@@ -4,7 +4,7 @@
 // state is the one failure this app can't recover from, so export/import in
 // settings.js is the real backstop.
 
-const DB_NAME = 'spanish_app';
+const DB_NAME = 'spanish_app_v2';
 const DB_VERSION = 2;
 
 let dbp = null;

@@ -9,7 +9,8 @@ con las manos* / *Mangio con le mani*, which is `comer`, a different word.
 Requiring the Italian half to contain one of the card's Italian senses fixes
 both. The Italian translation becomes a check on the Spanish match.
 
-Writes lab/data/sentences.json. data/sentences.json is left alone.
+This is the shipping bank. pipeline/build_sentences.py is the older
+Spanish-only matcher, kept because classic/ was built with it.
 """
 import json, csv, collections
 import spacy
@@ -97,10 +98,8 @@ def build():
 
 if __name__ == '__main__':
     out, used = build()
-    with open('lab/data/sentences.json', 'w') as fh:
+    with open('data/sentences.json', 'w') as fh:
         json.dump(out, fh, ensure_ascii=False, separators=(',', ':'))
-    old = json.load(open('data/sentences.json'))
     deck = json.load(open('data/deck.json'))
     print(f'cards with examples: {len(out)} of {len(deck)}   ({used} sentences)')
-    print(f'  was (Spanish-only match): {len(old)}')
-    print(f'  lost: {len(set(old) - set(out))}   gained: {len(set(out) - set(old))}')
+

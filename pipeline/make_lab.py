@@ -98,7 +98,7 @@ body[data-lab]::before {
 
 
 def lab_data():
-    for script in ('pipeline/build_prompts.py', 'pipeline/build_lab_sentences.py'):
+    for script in ('pipeline/build_prompts.py', 'pipeline/build_sentences_paired.py'):
         print(f'  {script} ...', flush=True)
         subprocess.run([sys.executable, script], check=True,
                        stdout=subprocess.DEVNULL)

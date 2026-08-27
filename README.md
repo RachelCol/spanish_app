@@ -54,25 +54,26 @@ to the repo, so the app costs nothing to run and works on a plane.
 A Claude-backed grader for free-form production is a deliberate later option;
 the content layer is shaped so it can slot in without a rewrite.
 
-## The lab build
+## Two builds
 
-`lab/` is a second, independently installable copy of the app, for changes too
-disruptive to make in the one you use daily. Rebuild it from main with:
+`/` is the app. `classic/` is a frozen copy of how it worked before the
+Italian-first refactor, kept so the old behaviour stays referenceable.
 
-    python pipeline/make_lab.py
-
-Three things deliberately diverge, and nothing else:
-
-| | main | lab |
+| | app | classic |
 |---|---|---|
-| IndexedDB | `spanish_app` | `spanish_app_lab` |
-| cache | `spanish-app-vN` | `spanish-lab-vN` |
-| manifest id | *(none)* | `spanish-from-italian-lab` |
+| direction | Italian → Spanish only | both, scheduled separately |
+| deck driven by | `data/prompts.json` | `data/collisions.json` |
+| IndexedDB | `spanish_app_v2` | `spanish_app` |
+| cache | `spanish-app-vN` | `spanish-classic-v1` |
 
-They share an origin, so without the first of those the two copies would share
-your progress and a schema change in the lab would migrate your real data.
+They share an origin, so the database names must differ or the two would share
+progress. `classic/` keeps the original name because that is where the
+existing history lives; the app starts fresh alongside it.
 
-To carry your progress across, Export from one and Import into the other --
-the file format is the same.
+`stable-v56` tags the code as it stood before the refactor.
 
-`stable-v56` tags the app as it stood before the Italian-first experiments.
+## Experimenting
+
+`python pipeline/make_lab.py --recreate` copies the app into `lab/` as a third,
+independently installable build to try disruptive changes in. A plain run only
+rebuilds generated data and leaves `lab/` app code alone.
