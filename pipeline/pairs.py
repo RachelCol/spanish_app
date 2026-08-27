@@ -176,6 +176,11 @@ DROP_SENSES = {
     ('oficina',      'capannone'),    # a capannone is a warehouse
     ('escolar',      'scolare'),      # scolare is to drain; the pupil is scolaro
     ('concierto',    'trattativa'),   # a trattativa is a negotiation
+    # `costa` should answer `costa` and nothing else. Italian `costa` does
+    # cover the side of a hill, but a learner asking "how do you say costa"
+    # wants the coast, and `cuesta` is not the word they need. Apertium offers
+    # `cuesta` nothing else, so that card goes with it.
+    ('cuesta',       'costa'),
 
     # `auto -> atto` and `costa -> costo` were here. The gloss check agreed on
     # them, because the words do share a minor sense -- a legal decree, an

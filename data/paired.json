@@ -14868,22 +14868,6 @@
   "zipf_it": 4.7
  },
  {
-  "es": "cuesta",
-  "zipf_es": 4.72,
-  "tier": "useful",
-  "it": "costa",
-  "senses": [
-   "costa"
-  ],
-  "pos": "n",
-  "pos_all": [
-   "n"
-  ],
-  "sim": 0.67,
-  "bucket": "shifted",
-  "zipf_it": 5.05
- },
- {
   "es": "distribución",
   "zipf_es": 4.72,
   "tier": "useful",
