@@ -159,6 +159,15 @@ DROP_SENSES = {
     ('actuación',    'attuazione'),   # attuazione is implementation
     ('recorrer',     'ricorrere'),    # ricorrere is to resort to, or recur
     ('solicitar',    'sollecitare'),  # sollecitare is to urge, not to request
+
+    # Found once the check covered every sense a detail card shows, not only
+    # the ones that became prompts.
+    ('contestar',    'contestare'),   # contestare is to dispute, not to answer
+    ('actuar',       'attuare'),      # attuare is to implement
+    ('parada',       'parata'),       # una parata is a parade or a save
+    ('oficina',      'capannone'),    # a capannone is a warehouse
+    ('escolar',      'scolare'),      # scolare is to drain; the pupil is scolaro
+    ('concierto',    'trattativa'),   # a trattativa is a negotiation
 }
 
 # Two different problems, two different rules.

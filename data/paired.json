@@ -7563,8 +7563,7 @@
   "tier": "common",
   "it": "ufficio",
   "senses": [
-   "ufficio",
-   "capannone"
+   "ufficio"
   ],
   "pos": "n",
   "pos_all": [
@@ -18504,8 +18503,7 @@
   "tier": "useful",
   "it": "agire",
   "senses": [
-   "agire",
-   "attuare"
+   "agire"
   ],
   "pos": "vblex",
   "pos_all": [
@@ -19215,8 +19213,7 @@
   "tier": "useful",
   "it": "concerto",
   "senses": [
-   "concerto",
-   "trattativa"
+   "concerto"
   ],
   "pos": "n",
   "pos_all": [
@@ -25433,23 +25430,13 @@
   "it": "scolastico",
   "senses": [
    "scolastico",
-   "allievo",
-   "scolare"
+   "allievo"
   ],
   "pos": "adj",
   "pos_all": [
    "n",
    "adj"
   ],
-  "by_pos": {
-   "adj": [
-    "allievo",
-    "scolastico"
-   ],
-   "n": [
-    "scolare"
-   ]
-  },
   "sim": 0.4,
   "bucket": "distinct",
   "zipf_it": 4.36
@@ -30483,7 +30470,6 @@
   "it": "fermata",
   "senses": [
    "fermata",
-   "parata",
    "sosta"
   ],
   "pos": "n",
@@ -30496,8 +30482,7 @@
     "sosta"
    ],
    "n": [
-    "fermata",
-    "parata"
+    "fermata"
    ]
   },
   "sim": 0.43,
@@ -34514,8 +34499,7 @@
   "tier": "extended",
   "it": "rispondere",
   "senses": [
-   "rispondere",
-   "contestare"
+   "rispondere"
   ],
   "pos": "vblex",
   "pos_all": [

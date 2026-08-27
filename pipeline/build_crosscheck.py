@@ -13,8 +13,14 @@ Italian and Spanish words in English, so `dovere` glosses as "duty, must" and
 mean the same thing. `tener` glosses as "have, hold, own" and shares nothing
 with `dovere`, which is exactly the signal that was missing.
 
-Writes data/crosscheck.json: for each Italian prompt and Spanish answer, a
-verdict of `agree`, `differ` or `unknown`. Nothing here changes a card.
+Scope is every Italian sense a card carries, not only the ones that became
+prompts. A Spanish answer opens its own entry listing all of its senses, so
+all of them are on screen and all of them need checking -- 293 were visible
+and unaudited when this only followed the prompt map.
+
+Writes data/crosscheck.json, keyed by Spanish word: for each of its Italian
+senses, a verdict of `agree`, `differ` or `unknown`. Nothing here changes a
+card.
 """
 import json
 import re
@@ -69,9 +75,11 @@ def read_glosses(path, wanted, lang_code):
 
 
 def main(it_path, es_path, out_path="data/crosscheck.json"):
-    prompts = json.load(open("data/prompts.json"))
-    it_words = set(prompts)
-    es_words = {a["es"] for v in prompts.values() for a in v}
+    deck = json.load(open("data/deck.json"))
+    senses = {c["es"]: list(dict.fromkeys([c["it"]] + list(c["senses"])))
+              for c in deck}
+    es_words = set(senses)
+    it_words = {s for v in senses.values() for s in v}
 
     sys.stderr.write("reading Italian glosses ...\n")
     it_gloss = read_glosses(it_path, it_words, "it")
@@ -80,19 +88,19 @@ def main(it_path, es_path, out_path="data/crosscheck.json"):
 
     out = {}
     tally = defaultdict(int)
-    for it, answers in prompts.items():
-        gi = it_gloss.get(it)
+    for es, its in senses.items():
+        ge = es_gloss.get(es)
         rows = []
-        for a in answers:
-            ge = es_gloss.get(a["es"])
+        for it in its:
+            gi = it_gloss.get(it)
             if not gi or not ge:
                 verdict, shared = "unknown", []
             else:
                 shared = sorted(gi & ge)
                 verdict = "agree" if shared else "differ"
             tally[verdict] += 1
-            rows.append({"es": a["es"], "verdict": verdict, "shared": shared[:6]})
-        out[it] = rows
+            rows.append({"it": it, "verdict": verdict, "shared": shared[:6]})
+        out[es] = rows
 
     json.dump(out, open(out_path, "w"), ensure_ascii=False, separators=(",", ":"))
     total = sum(tally.values())
@@ -101,6 +109,7 @@ def main(it_path, es_path, out_path="data/crosscheck.json"):
         print(f"  {k:8s} {tally[k]:5d}  ({100*tally[k]//total}%)")
     print(f"\n  Italian words with glosses : {len(it_gloss)} of {len(it_words)}")
     print(f"  Spanish words with glosses : {len(es_gloss)} of {len(es_words)}")
+    print(f"  (every sense a detail card shows, not only prompts)")
 
 
 if __name__ == "__main__":
