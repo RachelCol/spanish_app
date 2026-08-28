@@ -1,0 +1,9 @@
+spanish,pos,italian,note
+haber,vblex,avere,"Set by hand. The corpus reads `essere` at 18.4% against `avere` at 2.4%, but that is the Italian compound tense taking `essere` as its auxiliary for intransitive verbs -- grammatical co-occurrence, not translation. `haber` is `avere`."
+ser,vblex,essere,"Set by hand so `ser` and `estar` are stated deliberately rather than inferred. Both align to `essere`, which is correct and is the whole difficulty: Italian has no ser/estar split."
+estar,vblex,essere|stare,"Set by hand. `essere` first because it carries most uses; `stare` second because it is right for location, health and the progressive -- `sto bene`, `sto andando`. Italian uses `stare` far more narrowly than Spanish uses `estar`."
+tener,vblex,avere|tenere,"Set by hand at your request. `tener` is `avere` for possession. `tenere` is the false friend -- it means to hold or keep, and translates `tener` only in its literal grip sense. Corpus gave `tenere` only 0.05 probability, which understates a distinction worth seeing."
+hacer,vblex,fare,"Set by hand to drop the noun reading, which the corpus filled with `lavoro` at 2.8% and which then sorted above `fare` at 41.5%."
+quedar,vblex,restare|rimanere,"Set by hand. The corpus put `essere` first at 8.8%, which is noise from copular sentences. `restare` and `rimanere` are near-synonyms and both belong."
+andar,vblex,camminare,"Set by hand. `andare` is the false friend and the corpus offered it at 11.1%: Italian `andare` is Spanish `ir`, not `andar`. `andar` is to walk, so `camminare`."
+parecer,vblex,sembrare,"Set by hand. `sembrare` at 19.5% is correct but sorted below `parere` at 1.6%. `parere` as a noun is opinion, a different word, and is not this card."

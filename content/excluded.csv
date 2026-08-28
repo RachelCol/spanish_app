@@ -1,0 +1,18 @@
+spanish,reason,note
+do,musical note,"Note names are the same class as letter names, which were already excluded. `do` also collides with the English word throughout the subtitle corpus."
+re,musical note,As above. Its corpus answers came from the Italian prefix `ri-` and from noise.
+fa,musical note,As above.
+sol,musical note,"Kept out as a note name. `sol` = sun is real but rare beside `soleil`-class vocabulary; `sol` scored only noise."
+maría,proper noun,"A given name. Aligned to `dire` at 0.54 because subtitle dialogue addresses her constantly."
+china,proper noun,"Country name. Also collides with `china` = pebble, which is not top-3000 vocabulary."
+cuba,proper noun,Country name. Aligned to `luce` at 0.19 from noise.
+corea,proper noun,Country name.
+et,not Spanish,"Latin, riding in from legal and scientific citations in Europarl. Aligned to `de` at 1.0."
+web,not Spanish,English borrowing left untranslated on both sides.
+online,not Spanish,English borrowing left untranslated on both sides. Aligned to `su` at 0.55.
+oh,not Spanish,"Interjection, and interjections were moved to their own section."
+show,not Spanish,English borrowing left untranslated on both sides.
+abierta,inflected form,"Feminine of `abierto`, which is the lexicon entry. Slipped past the masculine-singular rule."
+corta,inflected form,"Feminine of `corto`, and also a form of `cortar`. Aligned to `raggio` from noise."
+cuarta,inflected form,"Feminine of `cuarto`. Aligned to `lo` at 0.86, which is pure function-word noise."
+basada,inflected form,"Past participle of `basar`, feminine. `basado` was already dropped by the participle rule."

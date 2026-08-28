@@ -27,6 +27,8 @@ import csv
 import json
 import sys
 import unicodedata
+
+import editorial
 import xml.etree.ElementTree as ET
 
 sys.path.insert(0, "pipeline")
@@ -168,6 +170,8 @@ def build(wikt_it2es_path):
     except FileNotFoundError:
         phrases = {}
     replaced = {v["replaces"] for v in phrases.values()}
+    EXCLUDED = editorial.excluded()
+    REVERTS, OVERRIDES = editorial.reverts(), editorial.overrides()
 
     for phrase, v in phrases.items():
         defs[phrase] = {"pairs": v["pairs"],
@@ -176,7 +180,7 @@ def build(wikt_it2es_path):
 
     for w in words:
         es, poss = w["es"], w["pos"]
-        if es in replaced:
+        if es in replaced or es in EXCLUDED:
             continue
         nes = norm(es)
         entry = matrix.get(es)
@@ -351,6 +355,9 @@ def build(wikt_it2es_path):
             thin.append({"spanish": es, "pos": ",".join(poss),
                          "pairs": entry["pairs"]})
             continue
+        by_pos = finish(es, by_pos, share_of, REVERTS, OVERRIDES)
+        if not by_pos:
+            continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
         if corpus_only and not (set(poss) <= SECTIONED):
             unsupported.append({"spanish": es, "band": w["tier"],
@@ -380,6 +387,73 @@ def build(wikt_it2es_path):
                               "note": ""})
 
     return defs, additions, dropped, thin, unsupported, overruled
+
+
+def finish(es, by_pos, share_of, reverts, overrides):
+    """The hand decisions, the de-duplication, and the ordering.
+
+    Ordering is by measured share, not by alignment probability. Probability
+    still decides what survives -- it is the better judge of whether an Italian
+    word is the translation at all, and trimming on share would have cut
+    `haber -> avere`, which co-occurs at 2.4% only because Italian takes
+    `essere` as its auxiliary. But share is what the card prints, and a card
+    reading `nonno 1.9%` above `nonna 85.9%` is wrong whatever the internal
+    justification.
+    """
+    # An override states the whole word, not one of its readings. Spanish
+    # nominalises its infinitives freely, so Wiktionary gives every verb a noun
+    # reading and the corpus fills it -- which is where `hacer -> lavoro` and
+    # `haber -> essere` came from. Setting the verb by hand should retire them.
+    for (w, pos), forced in overrides.items():
+        if w == es:
+            return {pos: [{"it": it, "prob": None, "pct": share_of(it, False)}
+                          for it in forced]}
+
+    out = {}
+    for pos, items in by_pos.items():
+        if True:
+            swap = reverts.get((es, pos))
+            if swap:
+                drop, keep = swap
+                items = [i for i in items if i["it"] != drop]
+                if keep not in {i["it"] for i in items}:
+                    items.insert(0, {"it": keep, "prob": None,
+                                     "pct": share_of(keep, False)})
+
+            seen, unique = set(), []
+            for i in items:
+                if i["it"] not in seen:
+                    seen.add(i["it"])
+                    unique.append(i)
+            items = unique
+
+            # A sense the corpus measured at zero is not a sense, so long as
+            # the word has one it did attest.
+            best = max((i["pct"] or 0) for i in items) if items else 0
+            if best > 0:
+                items = [i for i in items if i["pct"] is None or i["pct"] > 0]
+
+        items.sort(key=lambda i: -(i["pct"] if i["pct"] is not None else -1))
+        if items:
+            out[pos] = items
+
+    # The same Italian word under two readings of one Spanish word says nothing
+    # twice: `ser` gave `essere` as both noun and verb. Keep it where it scores
+    # best, and where the scores tie, where it appeared first.
+    # On a tie the verb reading wins: `decir` and `saber` both scored the same
+    # as noun and as verb, and they are verbs.
+    PREF = {"vblex": 0, "adj": 1, "adv": 2, "n": 3}
+    best = {}
+    for pos, items in out.items():
+        for n, i in enumerate(items):
+            k = i["it"]
+            rank = (-(i["pct"] if i["pct"] is not None else -1),
+                    PREF.get(pos, 4), n)
+            if k not in best or rank < best[k][0]:
+                best[k] = (rank, pos)
+    out = {pos: [i for i in items if best[i["it"]][1] == pos]
+           for pos, items in out.items()}
+    return {pos: items for pos, items in out.items() if items}
 
 
 def write_csv(path, rows, fields):
