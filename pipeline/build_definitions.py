@@ -89,6 +89,10 @@ def build(wikt_it2es_path):
     matrix = json.load(open("data/matrix.json"))
     aligned = json.load(open("data/aligned.json"))
     it_pos = json.load(open("data/italian_pos.json"))
+    # The Italian side was never lemmatised, so `lascia`, `vanno`, `succede`
+    # and 113 others became prompts. italian_pos.json is built from readings a
+    # word has in its own right, so membership in it is the test.
+    it_base = set(it_pos)
     try:
         shares = json.load(open("data/shares.json"))["share"]
     except FileNotFoundError:
@@ -113,7 +117,8 @@ def build(wikt_it2es_path):
         proposed = dic.get(nes, {})
 
         # what the dictionary offers, ranked by how often it is the alignment
-        scored = sorted(((prob.get(it, 0.0), it) for it in proposed), reverse=True)
+        scored = sorted(((prob.get(it, 0.0), it) for it in proposed
+                         if it in it_base), reverse=True)
         attested = [(p, it) for p, it in scored if p >= MIN_PROB]
 
         corpus_only = False
@@ -126,7 +131,8 @@ def build(wikt_it2es_path):
             # `acta` is `verbale`, and in both the corpus is right and the
             # dictionary is not. Losing `año` for want of an agreement is the
             # worse error. Flagged so these can be looked at.
-            rows = [(it, p) for it, p in aligned.get(es, []) if p >= 0.10]
+            rows = [(it, p) for it, p in aligned.get(es, [])
+                    if p >= 0.10 and it in it_base]
             if not rows:
                 continue
             topp = rows[0][1]
@@ -175,6 +181,8 @@ def build(wikt_it2es_path):
         best_dict = keep[0][1] if keep else 0.0
         for it, p in aligned.get(es, []):
             if it in proposed or not cutoff or p < cutoff or p < ADD_PROB:
+                continue
+            if it not in it_base:
                 continue
             # A word the dictionary never lists that outranks everything it
             # does list is not an extra sense -- it says the dictionary has the
