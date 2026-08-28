@@ -30,6 +30,8 @@ from wordfreq import word_frequency, zipf_frequency
 
 DEPTH = 500                      # cover the commonest 500 Spanish verbs
 JUNK = {"estan", "habia", "mayar", "unir", "car", "dir", "sar"}
+# `cagar` clears the frequency bar and is excluded by choice, in
+# content/excluded.csv, rather than here -- it is not a data error.
 BANDS = [("first", 300), ("core", 500), ("common", 700),
          ("useful", 700), ("wider", 800)]
 

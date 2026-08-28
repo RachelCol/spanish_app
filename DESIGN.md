@@ -8,6 +8,26 @@ approach turned out to be wrong.
 
 - Lemmatised to base forms only: singular nouns, infinitive verbs, masculine
   singular adjectives. `costa`, never `costas`.
+- **Verbs are ranked by aggregated use, everything else by its own spelling.**
+  Spanish writes `gustar` far less often than it writes `gusta`, so ranking a
+  verb by its infinitive understates it badly: `necesitar` is a top-150 verb
+  and was missing from a list of the 3,000 commonest words, along with
+  `gustar`, `faltar`, `encantar` and the rest of the backwards-verb class --
+  the one an Italian speaker gets cheaply, since `piacere` behaves the same.
+  Of the 500 commonest verbs, 191 were absent. The list is 3,191 words.
+- Aggregating forms is also how this goes wrong, and only verbs are
+  aggregated. Done across all parts of speech it makes `unir` the 8th
+  commonest Spanish word, because `una` is one of its forms, and `parir` the
+  25th from `para`; a whole-lexicon rebuild on that basis came out 1,070 words
+  in and 1,070 out and was far worse than what it replaced. Two rules keep it
+  safe: a form shared with any non-verb counts for neither, so `faltar` is
+  counted from `faltaba` and `faltan` and never from `falta`; and Wiktionary's
+  form-of entries are skipped, since it lists `necesito` as an entry in its
+  own right and letting it claim its own spelling collapses the aggregation
+  back to the infinitive.
+- **The list is frozen between deliberate revisions.** Words are added, never
+  removed, so no card and no review history is lost. Adding is what the freeze
+  permits; recomputing the whole ranking is what it forbids.
 - May include fixed multiword phrases that always hold together. Not sentences.
 - **Each word tagged with its part(s) of speech.** A word may have several —
   noun *and* adjective.
@@ -34,6 +54,25 @@ approach turned out to be wrong.
   of 639 verified pairings -- `no -> non` among them, because `non` appears in
   a third of all Italian sentences and cannot stand out from its own baseline.
   It is excellent at ranking and at catching errors, and unreliable at recall.
+- **Answers are ordered by measured share and trimmed on alignment
+  probability.** The two say different things. Share is plain counting -- of
+  the pairs holding the Spanish word, how many hold this Italian one. Alignment
+  is competitive, so a word appearing in a third of all Italian sentences must
+  beat its own baseline. `haber` shows why both are needed: `essere` co-occurs
+  at 18.4% purely because Italian takes it as the auxiliary for intransitives,
+  while `avere` co-occurs at 2.4% and is the translation. Trimming on share
+  would cut `avere`; ordering on probability printed `nonno 1.9%` above
+  `nonna 85.9%`, which is wrong on a card whatever justifies it internally.
+- **A sense the corpus measured at zero is dropped** when the word has one it
+  did attest. Distinguish that from a sense never measured: for a while
+  `share_of` returned `0.0` for both, and 261 senses claimed a measured zero
+  they had never been counted for, `más → più` among them, which is 52.5%.
+  The share table is built from the definitions, so it must be rebuilt after
+  them and the definitions rebuilt again on the result.
+- **The same Italian word never appears under two readings of one Spanish
+  word.** Spanish nominalises its infinitives freely, so Wiktionary gives every
+  verb a noun reading and the corpus fills it -- which is where `hacer → lavoro`
+  and `haber → essere` came from. 256 words were saying the same thing twice.
 - Keep the top translation, plus any scoring **at least 15% relative to it**.
   Measured against 639 hand-verified pairings, every cut between 5% and 30%
   keeps the same set, and 19 of 20 known-wrong pairings score zero -- the
@@ -114,6 +153,24 @@ by the corpus counts above. Its direction markers (`LR`/`RL`) are **not** a
 quality signal — tested twice, filtering on them would have removed
 `dopo → luego`, `ciao → hola` and `caffè → café`.
 
+## Hand decisions
+
+Four lists under `content/`, each with a `note` column recording what was done
+and the evidence for it. None of them reach a card. They exist because some
+questions have no corpus answer, and because a frozen list still needs a way
+to say "not this one".
+
+| file | what it holds |
+|---|---|
+| `excluded.csv` | words in the frozen lexicon that should not be studied -- note names, proper nouns, English borrowings, inflected forms that slipped the lemmatiser. Skipped at build time so the list itself stays frozen. |
+| `reverts.csv` | rows where the corpus displaced the dictionary and was wrong, nearly always by catching a fragment of a fixed phrase: `casa` from *casa editrice*, `processo` from *processo verbale*. |
+| `overrides.csv` | a word's senses set outright. For the auxiliaries, where co-occurrence measures grammar rather than meaning. |
+| `phrases.json` | built rather than written, but applied alongside these: a fixed phrase becomes the card in place of the bare word it contains, so `sin embargo → tuttavia` is a card and `embargo` is not. |
+
+English Wiktionary judged all 360 overruled rows and decided none of them. It
+favours cognates, because a cognate shares its English gloss for free: it
+wanted `frequentemente` over `spesso`, which the corpus measures at 62%.
+
 ## Review lists
 
 Nothing enters the deck from the corpus without being seen. These come out of
@@ -130,5 +187,7 @@ the build as spreadsheets to fill in and upload back:
 - Plural-only nouns: `vacaciones` is dropped because `vacación` is listed,
   though Spanish uses the plural. A small class, worth handling rather than
   losing.
+- `soler` is outside the 500 commonest verbs and so was not added, though
+  `suele` is ordinary Spanish and Italian has no clean equivalent.
 - `cualquier`, which Wiktionary files as an apocopic form of `cualquiera`.
   Same for `gran`, `buen`, `primer`.

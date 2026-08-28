@@ -16,3 +16,4 @@ abierta,inflected form,"Feminine of `abierto`, which is the lexicon entry. Slipp
 corta,inflected form,"Feminine of `corto`, and also a form of `cortar`. Aligned to `raggio` from noise."
 cuarta,inflected form,"Feminine of `cuarto`. Aligned to `lo` at 0.86, which is pure function-word noise."
 basada,inflected form,"Past participle of `basar`, feminine. `basado` was already dropped by the participle rule."
+cagar,not wanted,"Vulgar. Frequent in the subtitle corpus and a real verb, but not something Rachel wants to study. Excluded rather than removed from the lexicon so no ranks shift."
