@@ -198,12 +198,18 @@ def build(wikt_it2es_path):
 
         def share_of(it, from_dict=True):
             """The count is stored under the canonical spelling, so look it up
-            there -- `citta` was asking for a figure filed under `città`."""
+            there -- `citta` was asking for a figure filed under `città`.
+
+            None where the pair was never counted, which is not the same as
+            counted and found to be zero. Returning 0.0 for both is how 261
+            senses came to claim a measured zero they had never been measured
+            for, and how `avere bisogno di` -- a phrase, so never in the share
+            table at all -- came to read 0%."""
             can = italian(it, from_dict)
             for k in (can, it):
                 if k is not None and k in pct:
                     return round(pct[k], 1)
-            return 0.0
+            return None
         prob = {it: p for it, p in aligned.get(es, [])}
 
         def tagged_prob(pos):

@@ -25,13 +25,14 @@ Two further things the Spanish side gets wrong on its own:
 This is the shipping bank. pipeline/build_sentences.py is the older
 Spanish-only matcher, kept because classic/ was built with it.
 """
-import json, csv, collections
+import json, csv, collections, re
 import spacy
 from wordfreq import zipf_frequency
 
 V = 'vendor/tatoeba/'
 PER_CARD = 2
 MIN_TOKENS, MAX_TOKENS = 4, 14
+PREFER_TOKENS = 6      # a four-word example carries too little content
 MAX_INFLECTION = 3       # `casa` may reach `casitas`, not `casualidad`
 
 
@@ -55,12 +56,18 @@ def load_pairs():
 
 
 def score(text, tokens, target):
-    """Lower is better. Rewards short sentences built from common words."""
+    """Lower is better. Rewards sentences long enough to give the word a
+    context, then short ones built from common words.
+
+    Length leads the key rather than filtering, so a card with only short
+    sentences still gets them -- the shorter ones simply rank behind every
+    sentence that clears the bar.
+    """
     n = len(tokens)
     if not (MIN_TOKENS <= n <= MAX_TOKENS):
         return None
     hard = sum(1 for t in tokens if zipf_frequency(t, 'es') < 3.5 and t != target)
-    return (hard, n, len(text))
+    return (0 if n >= PREFER_TOKENS else 1, hard, n, len(text))
 
 
 def stem(word):
@@ -79,9 +86,22 @@ def build():
     verbs = {c['es'] for c in deck
              if any(str(t).startswith('vb') for t in (c.get('pos_all') or [c['pos']]))}
 
+    # Multiword cards -- the fixed phrases, and any card whose Spanish is more
+    # than one word -- cannot be found in a set of single tokens. They are
+    # matched against the sentence as written instead.
+    multi = {w for w in words if " " in w}
     by_stem = collections.defaultdict(set)
-    for w in words:
+    for w in words - multi:
         by_stem[stem(w)].add(w)
+
+    def flat(text):
+        """Lowercased words with punctuation gone, so `Sin embargo,` matches."""
+        return " " + " ".join(re.findall(r"[\w']+", text.lower())) + " "
+
+    def phrase_hits(text):
+        """Multiword cards, found in the sentence text rather than its tokens."""
+        low = flat(text)
+        return {w for w in multi if f" {w} " in low}
 
     def surface_hits(tokens):
         """Non-verb cards whose word appears in the sentence as written."""
@@ -101,16 +121,25 @@ def build():
     # Index the Italian side once: which words does each Italian sentence hold?
     ita_ids = list(ita)
     ita_words = {}
+    ita_text = {}
     for sid, doc in zip(ita_ids, it_nlp.pipe([ita[i] for i in ita_ids], batch_size=256)):
         ita_words[sid] = ({t.lemma_.lower() for t in doc if t.is_alpha}
                           | {t.text.lower() for t in doc if t.is_alpha})
+        ita_text[sid] = flat(ita[sid])
 
     ids = list(spa)
     candidates = collections.defaultdict(list)
     for sid, doc in zip(ids, es_nlp.pipe([spa[i] for i in ids], batch_size=256)):
         lemmas = [t.lemma_.lower() for t in doc if t.is_alpha]
         surfaces = [t.text.lower() for t in doc if t.is_alpha]
+        found_phrases = phrase_hits(spa[sid])
         hits = {t for t in lemmas if t in verbs} | surface_hits(surfaces)
+        # A word inside a phrase belongs to the phrase. `Empezo a pesar de la
+        # lluvia` illustrates `a pesar de`, and offering it as the example for
+        # `pesar` would show "despite" on a card that means "to weigh".
+        for p in found_phrases:
+            hits -= set(p.split())
+        hits |= found_phrases
         if not hits:
             continue
         pair_ids = [i for i in links[sid] if i in ita]
@@ -120,7 +149,13 @@ def build():
             held = ita_words.get(pair_ids[0], set())
             for iid in pair_ids:
                 held = ita_words.get(iid, set())
-                found = next((s for s in senses[target] if s.lower() in held), None)
+                def matches(sense):
+                    if " " not in sense:
+                        return sense.lower() in held
+                    parts = [p for p in sense.lower().split() if len(p) > 2]
+                    return all(p in held for p in parts)
+
+                found = next((s for s in senses[target] if matches(s)), None)
                 if found:
                     sc = score(spa[sid], lemmas, target)
                     if sc is not None:

@@ -53,22 +53,35 @@ export function renderIndex(lessons, onOpen) {
   return list;
 }
 
+// **bold** marks the word being taught; *italic* marks a form that is wrong,
+// which several lessons rely on to show what not to say. Without the second,
+// `*soy ido*` rendered with its asterisks showing.
+function inline(text) {
+  const out = [];
+  for (const chunk of text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/)) {
+    if (!chunk) continue;
+    if (chunk.startsWith('**') && chunk.endsWith('**')) {
+      const b = document.createElement('b');
+      b.textContent = chunk.slice(2, -2);
+      out.push(b);
+    } else if (chunk.startsWith('*') && chunk.endsWith('*') && chunk.length > 2) {
+      const i = document.createElement('i');
+      i.textContent = chunk.slice(1, -1);
+      out.push(i);
+    } else {
+      out.push(chunk);
+    }
+  }
+  return out;
+}
+
 export function renderLesson(lesson) {
   const frag = document.createDocumentFragment();
 
   for (const para of lesson.body) {
     const p = document.createElement('p');
     p.className = 'lesson-para';
-    // **bold** is the only markup used, and only for the word being taught.
-    para.split(/(\*\*[^*]+\*\*)/).forEach(chunk => {
-      if (chunk.startsWith('**') && chunk.endsWith('**')) {
-        const b = document.createElement('b');
-        b.textContent = chunk.slice(2, -2);
-        p.append(b);
-      } else if (chunk) {
-        p.append(chunk);
-      }
-    });
+    p.append(...inline(para));
     frag.append(p);
   }
 
@@ -91,7 +104,7 @@ export function renderLesson(lesson) {
   if (lesson.watch) {
     const w = document.createElement('p');
     w.className = 'conj-warn';
-    w.textContent = lesson.watch;
+    w.append(...inline(lesson.watch));
     frag.append(w);
   }
   return frag;

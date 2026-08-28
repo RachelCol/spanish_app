@@ -76,8 +76,15 @@ def main():
                   if pos not in SECTIONED}
         if not by_pos:
             continue
+        # Ordered by measured share across every reading, not by the order the
+        # parts of speech happen to sit in. `pesar` is a noun and a verb, and
+        # taking the noun first led the card with `nonostante` at 1.7% ahead of
+        # `pesare` at 5.7% -- the phrase meaning in front of the word's own.
         senses, seen = [], set()
-        for items in by_pos.values():
+        ranked_pos = sorted(
+            by_pos.values(),
+            key=lambda items: -max((i["pct"] or 0) for i in items))
+        for items in ranked_pos:
             for i in items:
                 if i["it"] not in seen:
                     seen.add(i["it"])
