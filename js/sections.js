@@ -392,6 +392,12 @@ const GAP_CONFIG = {
     intro: 'The Italian sentence, then the Spanish with the preposition removed. '
          + 'Sentences come from Tatoeba, not from anyone’s imagination.',
   },
+  auxiliaries: {
+    view: 'aux', title: 'ser, estar, tener, haber',
+    intro: 'One Italian verb often does the work of two or three Spanish ones. '
+         + 'The wrong answers are the same person and tense of the rival verb, '
+         + 'so the only question is which verb.',
+  },
   articles: {
     view: 'articles', title: 'Articles',
     intro: 'The Italian sentence, then the Spanish with the article removed. '
@@ -514,4 +520,6 @@ export function initSections(showView, conjugationData) {
   $('#close-prep').addEventListener('click', () => show('home'));
   $('#open-articles').addEventListener('click', openGap('articles'));
   $('#close-articles').addEventListener('click', () => show('home'));
+  $('#open-aux').addEventListener('click', openGap('auxiliaries'));
+  $('#close-aux').addEventListener('click', () => show('home'));
 }

@@ -199,6 +199,151 @@
   "watch": "*soy cansado* means something like 'I am a tiring person'. *soy en casa* is simply wrong."
  },
  {
+  "id": "avere-tener",
+  "title": "avere does two jobs; Spanish uses two verbs",
+  "summary": "Italian's avere is both 'to have' and the auxiliary. Spanish splits them: tener owns things, haber builds tenses.",
+  "body": [
+   "This is the single most reliable trap for an Italian speaker, because **avere** is one verb doing two jobs and Spanish never lets them touch. *Ho una casa* and *ho parlato* use the same verb in Italian. In Spanish the first is **tener** and the second is **haber**, and swapping them is not a small mistake — *tengo hablado* is not a sentence.",
+   "The rule is clean: if you can point at the thing, it is **tener**. If it is holding up a participle, it is **haber**. Spanish speakers never say *he un coche* and never say *tengo comido*.",
+   "Where Italian says **avere** in a fixed expression about how you feel, Spanish almost always says **tener** — and this transfers perfectly, so it is free vocabulary. Hunger, thirst, cold, fear, sleepiness, and your age are all things you *have* in both languages, which English gets wrong and you already get right.",
+   "**haber** has one more job with no Italian parallel worth the name: the impersonal **hay**, meaning there is or there are. Italian chooses between *c'è* and *ci sono*; Spanish does not. **hay** never changes for number — *hay un libro*, *hay dos libros*. Never *han*.",
+   "Finally, the false friend. Italian **tenere** is not Spanish **tener**. *Tenere* is to hold or to keep — *tieni questo* is *sujeta esto*. If you reach for tenere expecting possession you will be reaching for the wrong idea, even though the word looks right."
+  ],
+  "pairs": [
+   [
+    "Ho una casa.",
+    "Tengo una casa.",
+    "possession → tener"
+   ],
+   [
+    "Ho parlato.",
+    "He hablado.",
+    "auxiliary → haber"
+   ],
+   [
+    "Non ho tempo.",
+    "No tengo tiempo.",
+    "possession again"
+   ],
+   [
+    "Ho fame.",
+    "Tengo hambre.",
+    "avere → tener, and it transfers"
+   ],
+   [
+    "Ho freddo.",
+    "Tengo frío.",
+    ""
+   ],
+   [
+    "Ho paura.",
+    "Tengo miedo.",
+    ""
+   ],
+   [
+    "Ho sonno.",
+    "Tengo sueño.",
+    ""
+   ],
+   [
+    "Ho vent'anni.",
+    "Tengo veinte años.",
+    "age is had in both"
+   ],
+   [
+    "Ho ragione.",
+    "Tengo razón.",
+    ""
+   ],
+   [
+    "C'è un problema.",
+    "Hay un problema.",
+    "c'è → hay"
+   ],
+   [
+    "Ci sono due libri.",
+    "Hay dos libros.",
+    "hay never becomes plural"
+   ],
+   [
+    "Tieni questo.",
+    "Sujeta esto.",
+    "tenere is to hold, not to have"
+   ],
+   [
+    "Devo tenere le chiavi.",
+    "Debo guardar las llaves.",
+    "tenere = keep"
+   ]
+  ],
+  "watch": "Your instinct will produce *tengo hablado* for *ho parlato*, and *he hambre* for *ho fame*. Both are wrong in the same way: you carried avere across whole instead of choosing which of its two jobs you meant."
+ },
+ {
+  "id": "dovere",
+  "title": "dovere splits three ways",
+  "summary": "Obligation, debt and guesswork are one verb in Italian and three constructions in Spanish.",
+  "body": [
+   "Italian **dovere** carries three meanings at once: I have to, I owe, and it must be. Spanish separates them, and the everyday one is not the cognate.",
+   "For ordinary obligation Spanish reaches for **tener que**, not **deber**. *Devo andare* is **tengo que ir**. You will be understood if you say *debo ir*, but it sounds weightier — closer to a duty than to a plan. Save **deber** for moral obligation: *debes respetar a tus padres*.",
+   "For owing, **deber** is exactly right and the cognate holds: *ti devo dieci euro* is **te debo diez euros**.",
+   "For supposition — the *deve essere* sense, guessing at a cause — careful Spanish uses **deber de**: *debe de estar cansado*. The *de* is dropped constantly in speech, and nobody will misunderstand you, but the distinction is the one the grammar books defend.",
+   "The pattern to carry away: **tener que** is what you will need most, and it is the one your Italian will not suggest to you."
+  ],
+  "pairs": [
+   [
+    "Devo andare.",
+    "Tengo que ir.",
+    "plain obligation → tener que"
+   ],
+   [
+    "Devi studiare di più.",
+    "Tienes que estudiar más.",
+    ""
+   ],
+   [
+    "Dobbiamo partire presto.",
+    "Tenemos que salir temprano.",
+    ""
+   ],
+   [
+    "Devi rispettare i tuoi genitori.",
+    "Debes respetar a tus padres.",
+    "moral duty → deber"
+   ],
+   [
+    "Ti devo dieci euro.",
+    "Te debo diez euros.",
+    "owing → deber"
+   ],
+   [
+    "Quanto ti devo?",
+    "¿Cuánto te debo?",
+    ""
+   ],
+   [
+    "Deve essere stanco.",
+    "Debe de estar cansado.",
+    "guessing → deber de"
+   ],
+   [
+    "Devono essere le tre.",
+    "Deben de ser las tres.",
+    ""
+   ],
+   [
+    "Non devi farlo.",
+    "No tienes que hacerlo.",
+    "you don't have to"
+   ],
+   [
+    "Non devi mentire.",
+    "No debes mentir.",
+    "you must not — a different meaning"
+   ]
+  ],
+  "watch": "*Devo andare* → *debo ir* is the mistake you will make most often. It is not wrong, it is just heavier than you mean. Spanish says **tengo que**."
+ },
+ {
   "id": "personal-a",
   "title": "The personal a",
   "summary": "Spanish marks a human direct object with a. Italian has nothing like it.",

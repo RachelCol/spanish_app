@@ -4,7 +4,15 @@ Nothing here is written. Every sentence is an attested Spanish sentence with an
 attested Italian translation, and the gap is cut out of the real thing, so the
 answer is what a speaker actually said rather than what I would have guessed.
 
-Two banks: prepositions and articles.
+Three banks: prepositions, articles, and the auxiliaries.
+
+The auxiliary bank drills the split an Italian speaker cannot feel, because
+one Italian verb is doing the work of two or three Spanish ones. `avere` is
+`tener` when it owns something and `haber` when it holds up a participle;
+`dovere` is `tener que` for a plain obligation and `deber` for a duty or a
+debt; `essere` is `ser` or `estar` depending on what kind of being is meant.
+The wrong options are the same person and tense of the rival verb, so the
+choice is only ever about which verb, never about conjugating it.
 
 The article bank includes items whose answer is no article at all, which is the
 case an Italian speaker gets wrong most reliably -- `il mio libro` against `mi
@@ -16,6 +24,19 @@ import csv, json, re, collections, random
 V = 'vendor/tatoeba/'
 MAX_WORDS = 12
 NO_ARTICLE = '—'
+
+AUX = ['ser', 'estar', 'tener', 'haber', 'deber']
+
+# Which verbs actually compete. A drill teaches nothing if the wrong answers
+# are ones no Italian speaker would be tempted by.
+AUX_RIVALS = {
+    'ser':   ['estar', 'tener', 'haber'],
+    'estar': ['ser', 'tener', 'haber'],
+    'tener': ['haber', 'ser', 'deber'],
+    'haber': ['tener', 'ser', 'estar'],
+    'deber': ['tener', 'haber', 'estar'],
+}
+AUX_TENSES = ['present', 'preterite', 'imperfect', 'future', 'subjPresent']
 
 PREPOSITIONS = ['a', 'en', 'de', 'por', 'para', 'con', 'sin',
                 'sobre', 'entre', 'hasta', 'desde', 'hacia', 'según']
@@ -132,6 +153,58 @@ def build_prepositions(pairs, per_prep=14):
     return items
 
 
+def build_auxiliaries(pairs, per_verb=22):
+    """Gap a conjugated auxiliary; offer the same slot of its rivals."""
+    conj = json.load(open('data/conjugations.json'))['verbs']
+    # form -> (verb, tense, person), for forms only one of these verbs claims
+    slot, clash = {}, set()
+    for v in AUX:
+        for tense in AUX_TENSES:
+            for i, form in enumerate(conj.get(v, {}).get(tense, [])):
+                f = form.lower()
+                if ' ' in f:
+                    continue
+                if f in slot and slot[f][0] != v:
+                    clash.add(f)
+                slot[f] = (v, tense, i)
+    for f in clash:
+        slot.pop(f, None)          # `fue` is ser and ir; drop the ambiguous ones
+
+    out, seen, made = [], set(), collections.Counter()
+    for es, it in pairs:
+        words = es.split()
+        if not (3 <= len(words) <= MAX_WORDS):
+            continue
+        for i, w in enumerate(words):
+            bare = re.sub(r"[^\wáéíóúüñ]", "", w.lower())
+            hit = slot.get(bare)
+            if not hit:
+                continue
+            verb, tense, person = hit
+            if made[verb] >= per_verb or es in seen:
+                continue
+            rivals = []
+            for r in AUX_RIVALS[verb]:
+                forms = conj.get(r, {}).get(tense, [])
+                if len(forms) > person and ' ' not in forms[person]:
+                    rivals.append(forms[person])
+            if len(rivals) < 2:
+                continue
+            gapped = words[:i] + ['___'] + words[i + 1:]
+            row = {'italian': it, 'gapped': ' '.join(gapped), 'answer': w.strip('.,;:!?¿¡'),
+                   'full': es}
+            # Match the answer's case, or a sentence-initial gap gives the
+            # answer away: `Tengo` beside `soy`, `debo`, `he`.
+            if row['answer'][:1].isupper():
+                rivals = [r[:1].upper() + r[1:] for r in rivals]
+            row['options'] = options(row['answer'], rivals[:3], [])
+            out.append(row)
+            seen.add(es)
+            made[verb] += 1
+            break
+    return out
+
+
 def build_articles(pairs, per_article=16, no_article_target=24):
     by_article = collections.defaultdict(list)
     bare = []
@@ -176,7 +249,8 @@ if __name__ == '__main__':
     pairs = load_pairs()
     preps = build_prepositions(pairs)
     arts = build_articles(pairs)
-    json.dump({'prepositions': preps, 'articles': arts},
+    auxes = build_auxiliaries(pairs)
+    json.dump({'prepositions': preps, 'articles': arts, 'auxiliaries': auxes},
               open('data/drill_bank.json', 'w'),
               ensure_ascii=False, separators=(',', ':'))
 
@@ -185,7 +259,10 @@ if __name__ == '__main__':
     print(f"preposition items: {len(preps)}")
     print(f"article items: {len(arts)}  "
           f"(no-article: {sum(1 for a in arts if a['answer'] == NO_ARTICLE)})")
+    print(f"auxiliary items: {len(auxes)}")
     print(f"data/drill_bank.json: {os.path.getsize('data/drill_bank.json')/1024:.0f} KB\n")
+    for row in auxes[:5]:
+        print(f"  {row['italian']}\n  {row['gapped']}\n  {row['options']}  -> {row['answer']}\n")
     for row in preps[:4]:
         print(f"  {row['italian']}\n  {row['gapped']}\n  {row['options']}  -> {row['answer']}\n")
     for row in [a for a in arts if a['answer'] == NO_ARTICLE][:3]:
