@@ -49,11 +49,19 @@ def main():
     defs = json.load(open("data/definitions.json"))
     prompts = json.load(open("data/prompts_new.json"))
 
+    # Prepositions, articles and interjections are taught in their own
+    # sections. What matters about a preposition is which words it goes with,
+    # which a translation card cannot show.
+    SECTIONED = {"pr", "det", "ij"}
+
     deck = []
     for es, entry in defs.items():
         w = words[es]
         by_pos = {pos: [{"it": i["it"], "pct": i["pct"]} for i in items]
-                  for pos, items in entry["by_pos"].items()}
+                  for pos, items in entry["by_pos"].items()
+                  if pos not in SECTIONED}
+        if not by_pos:
+            continue
         senses, seen = [], set()
         for items in by_pos.values():
             for i in items:
@@ -63,7 +71,8 @@ def main():
         deck.append({
             "id": es, "es": es, "it": senses[0],
             "senses": senses,
-            "pos": w["pos"][0], "pos_all": w["pos"],
+            "pos": sorted(by_pos)[0],
+            "pos_all": [p for p in w["pos"] if p in by_pos],
             "by_pos": by_pos,
             "bucket": bucket(es, senses[0]),
             "tier": w["tier"], "zipf": w["zipf"],

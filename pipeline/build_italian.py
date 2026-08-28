@@ -34,8 +34,11 @@ def build():
 
     # italian -> [(spanish, part of speech)]
     by_it = collections.defaultdict(list)
+    SECTIONED = {"pr", "det", "ij"}
     for es, entry in defs.items():
         for pos, items in entry["by_pos"].items():
+            if pos in SECTIONED:
+                continue
             for i in items:
                 by_it[i["it"]].append((es, pos))
 

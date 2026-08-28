@@ -40,6 +40,13 @@ from pairs import _surface, DIX          # noqa: E402
 # for `de` -> `di` would say nothing anyone needs.
 CLOSED = {"pr", "cnj", "det", "prn"}
 
+# Owned by their own sections rather than by the flashcard deck. Definitions
+# are still built for them -- the sections need the data -- but they do not
+# become cards, and they are kept off the review lists so no time is spent on
+# words that are leaving. What a preposition needs taught is which words it
+# attaches to, which a translation card cannot carry.
+SECTIONED = {"pr", "det", "ij"}
+
 RELATIVE = 15.0        # keep anything within this % of the top translation
 MIN_PAIRS = 30         # below this the corpus has no opinion worth having
 MIN_PROB = 0.01        # an alignment weaker than this is noise
@@ -251,12 +258,13 @@ def build(wikt_it2es_path):
                                   and italian(it) in it_pos), reverse=True)
                 if outside and (not ranked or outside[0][0] > ranked[0][0] * BEATS) \
                         and outside[0][0] >= ADD_PROB:
-                    overruled.append({
-                        "band": w["tier"], "spanish": es, "pos": pos,
-                        "corpus": italian(outside[0][1], False),
-                        "prob": round(outside[0][0], 3),
-                        "dictionary": italian(ranked[0][1]) if ranked else "",
-                        "revert": ""})
+                    if pos not in SECTIONED:
+                        overruled.append({
+                            "band": w["tier"], "spanish": es, "pos": pos,
+                            "corpus": italian(outside[0][1], False),
+                            "prob": round(outside[0][0], 3),
+                            "dictionary": italian(ranked[0][1]) if ranked else "",
+                            "revert": ""})
                     ranked = [outside[0]] + [r for r in ranked
                                              if r[0] >= outside[0][0] * RELATIVE / 100]
                 if ranked:
@@ -310,7 +318,7 @@ def build(wikt_it2es_path):
                          "pairs": entry["pairs"]})
             continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
-        if corpus_only:
+        if corpus_only and not (set(poss) <= SECTIONED):
             unsupported.append({"spanish": es, "band": w["tier"],
                                 "definition": ", ".join(it for it, _ in keep),
                                 "keep": ""})
@@ -326,6 +334,8 @@ def build(wikt_it2es_path):
             # A word the dictionary never lists that outranks everything it
             # does list is not an extra sense -- it says the dictionary has the
             # primary meaning wrong. `carta` is `lettera` before it is `carta`.
+            if set(poss) <= SECTIONED:
+                continue
             additions.append({"beats_dictionary": "yes" if p > best_dict else "",
                               "spanish": es, "italian": it,
                               "prob": round(p, 3),
