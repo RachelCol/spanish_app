@@ -55,6 +55,7 @@ non ci si mi ti vi ne del della dei delle nel nella dal dalla al alla sul sulla
 questo questa quello quella qui qua lì là
 dell all nell sull dall coll quell un anche solo più molto po cosi coso
 commissione parlamento consiglio europea europeo signor presidente onorevole
+unione stato stati membro membri paese paesi piu piú più gia già
 anni anno degli delle dei negli nelle ogni volta cosa modo caso punto
 pero perche quando dopo prima ora poi già ancora sempre mai""".split())
 

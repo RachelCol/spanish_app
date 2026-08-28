@@ -9,9 +9,13 @@ import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE, s
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, speakSequence, stop as stopSpeech } from './speech.js';
 
-// Categories that existed before settings carried a `pos` list.
+// What the two filter lists held before, so a category added later can be
+// told apart from one deliberately switched off. A saved list overrides the
+// default wholesale, so without this a new band or part of speech stays
+// invisible for good.
 const NAMED_POS = new Set(
   ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num']);
+const NAMED_TIERS = new Set(['core', 'common', 'useful', 'extended', 'long_tail']);
 
 const $ = sel => document.querySelector(sel);
 
@@ -102,6 +106,12 @@ async function start() {
     for (const p of DEFAULT_SETTINGS.pos)
       if (!NAMED_POS.has(p) && !state.settings.pos.includes(p))
         state.settings.pos.push(p);
+    for (const t of DEFAULT_SETTINGS.tiers)
+      if (!NAMED_TIERS.has(t) && !state.settings.tiers.includes(t))
+        state.settings.tiers.push(t);
+    // `extended` and `long_tail` are gone from the lexicon; drop them so a
+    // stale name cannot sit in the list matching nothing.
+    state.settings.tiers = state.settings.tiers.filter(t => TIER_ORDER.includes(t));
   }
   await refresh();
   renderFilters();

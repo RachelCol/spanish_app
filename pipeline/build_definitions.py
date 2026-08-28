@@ -477,6 +477,26 @@ if __name__ == "__main__":
     json.dump(defs, open("data/definitions.json", "w"),
               ensure_ascii=False, separators=(",", ":"))
     additions.sort(key=lambda r: (r["beats_dictionary"] != "yes", -r["prob"]))
+    # The review rows are collected while each word is resolved, which is
+    # before the hand decisions in finish() have been applied. A row about a
+    # reading that no longer reaches a card is not a question anyone can
+    # answer -- 256 of the additions were already on the card, and 28 of the
+    # overruled rows concerned readings an override had retired.
+    def on_card(es, it, pos=None):
+        entry = defs.get(es)
+        if not entry:
+            return False
+        items = entry["by_pos"].get(pos, []) if pos else \
+            [i for l in entry["by_pos"].values() for i in l]
+        return any(i["it"] == it for i in items)
+
+    additions = [r for r in additions if not on_card(r["spanish"], r["italian"])]
+    overruled = [r for r in overruled
+                 if on_card(r["spanish"], r["corpus"], r["pos"])]
+    unsupported = [r for r in unsupported
+                   if any(on_card(r["spanish"], it.strip())
+                          for it in r["definition"].split(","))]
+
     write_csv("review_additions.csv", additions,
               ["beats_dictionary", "band", "spanish", "italian",
                "prob", "pct", "of_top", "add", "note"])
