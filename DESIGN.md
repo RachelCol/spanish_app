@@ -182,12 +182,15 @@ the build as spreadsheets to fill in and upload back:
 | off-list answers | Spanish words outside the frequency list that translate an Italian word above the threshold |
 | dropped parts of speech | a part of speech with no attested translation, and the word it came from |
 
+## Settled
+
+- Plural-only nouns stay out. `vacaciones` is dropped because `vacación` is
+  the lemma; the plural patterns are learned as patterns, not as vocabulary.
+- `cualquier`, `gran`, `buen` and `primer` stay out as apocopic forms. The
+  shortening is taught instead, as a comparison lesson -- Italian does the
+  same thing with `un buon caffè`, on a list that does not quite match.
+- `soler` is in, named explicitly rather than reached by frequency.
+
 ## Open decisions
 
-- Plural-only nouns: `vacaciones` is dropped because `vacación` is listed,
-  though Spanish uses the plural. A small class, worth handling rather than
-  losing.
-- `soler` is outside the 500 commonest verbs and so was not added, though
-  `suele` is ordinary Spanish and Italian has no clean equivalent.
-- `cualquier`, which Wiktionary files as an apocopic form of `cualquiera`.
-  Same for `gran`, `buen`, `primer`.
+- Nothing outstanding.
