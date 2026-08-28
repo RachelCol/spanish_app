@@ -32,3 +32,4 @@ review_additions.csv
 review_dropped_pos.csv
 review_thin.csv
 data/matrix.json
+data/aligned.json
