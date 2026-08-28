@@ -160,8 +160,24 @@ def build(wikt_it2es_path):
 
     defs, additions, dropped, thin, unsupported, overruled = {}, [], [], [], [], []
 
+    # Fixed phrases replace the bare word they contain: `sin embargo` is a card
+    # and `embargo` is not, because 98% of that word's uses are the phrase and
+    # aligning the bare form credits it with the phrase's meaning.
+    try:
+        phrases = json.load(open("data/phrases.json"))
+    except FileNotFoundError:
+        phrases = {}
+    replaced = {v["replaces"] for v in phrases.values()}
+
+    for phrase, v in phrases.items():
+        defs[phrase] = {"pairs": v["pairs"],
+                        "by_pos": {"phrase": [{"it": i["it"], "prob": None,
+                                               "pct": i["pct"]} for i in v["it"]]}}
+
     for w in words:
         es, poss = w["es"], w["pos"]
+        if es in replaced:
+            continue
         nes = norm(es)
         entry = matrix.get(es)
         if not entry or entry["pairs"] < MIN_PAIRS:
@@ -278,7 +294,11 @@ def build(wikt_it2es_path):
                             "corpus": italian(outside[0][1], False),
                             "prob": round(outside[0][0], 3),
                             "dictionary": italian(ranked[0][1]) if ranked else "",
-                            "revert": ""})
+                            "revert": "",
+                            "note": ("dictionary offered nothing"
+                                     if not ranked else
+                                     "corpus beats dictionary %.1fx"
+                                     % (outside[0][0] / max(ranked[0][0], 1e-9)))})
                     ranked = [outside[0]] + [r for r in ranked
                                              if r[0] >= outside[0][0] * RELATIVE / 100]
                 if ranked:
@@ -335,7 +355,8 @@ def build(wikt_it2es_path):
         if corpus_only and not (set(poss) <= SECTIONED):
             unsupported.append({"spanish": es, "band": w["tier"],
                                 "definition": ", ".join(it for it, _ in keep),
-                                "keep": ""})
+                                "keep": "",
+                                "note": "no dictionary candidate was attested"})
 
         # what the alignment found that no dictionary lists
         cutoff = keep[0][1] * RELATIVE / 100 if keep else 0
@@ -355,7 +376,8 @@ def build(wikt_it2es_path):
                               "prob": round(p, 3),
                               "pct": share_of(it),
                               "of_top": round(100 * p / keep[0][1]),
-                              "band": w["tier"], "add": ""})
+                              "band": w["tier"], "add": "",
+                              "note": ""})
 
     return defs, additions, dropped, thin, unsupported, overruled
 
@@ -375,13 +397,14 @@ if __name__ == "__main__":
     additions.sort(key=lambda r: (r["beats_dictionary"] != "yes", -r["prob"]))
     write_csv("review_additions.csv", additions,
               ["beats_dictionary", "band", "spanish", "italian",
-               "prob", "pct", "of_top", "add"])
+               "prob", "pct", "of_top", "add", "note"])
     write_csv("review_dropped_pos.csv", dropped, ["spanish", "dropped_pos", "kept"])
     write_csv("review_thin.csv", thin, ["spanish", "pos", "pairs"])
     write_csv("review_corpus_only.csv", unsupported,
-              ["band", "spanish", "definition", "keep"])
+              ["band", "spanish", "definition", "keep", "note"])
     write_csv("review_overruled.csv", overruled,
-              ["band", "spanish", "pos", "corpus", "prob", "dictionary", "revert"])
+              ["band", "spanish", "pos", "corpus", "prob", "dictionary",
+               "revert", "note"])
 
     print(f"{len(defs)} Spanish words defined -> data/definitions.json")
     n_senses = sum(len(v) for d in defs.values() for v in d["by_pos"].values())

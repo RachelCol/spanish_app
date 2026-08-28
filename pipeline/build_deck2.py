@@ -54,9 +54,23 @@ def main():
     # which a translation card cannot show.
     SECTIONED = {"pr", "det", "ij"}
 
+    # Fixed phrases are cards but not lexicon rows, so give them a band from
+    # the word they replaced.
+    try:
+        phrases = json.load(open("data/phrases.json"))
+    except FileNotFoundError:
+        phrases = {}
+    for p, v in phrases.items():
+        base = words.get(v["replaces"])
+        words[p] = {"es": p, "pos": ["phrase"],
+                    "tier": base["tier"] if base else "common",
+                    "zipf": base["zipf"] if base else 4.5}
+
     deck = []
     for es, entry in defs.items():
-        w = words[es]
+        w = words.get(es)
+        if not w:
+            continue
         by_pos = {pos: [{"it": i["it"], "pct": i["pct"]} for i in items]
                   for pos, items in entry["by_pos"].items()
                   if pos not in SECTIONED}
