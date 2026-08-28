@@ -96,6 +96,13 @@ def build(wikt_it2es_path):
     words = read_lexicon()
     matrix = json.load(open("data/matrix.json"))
     aligned = json.load(open("data/aligned.json"))
+    # Alignment over tagged tokens, where available: `mejor|adj` and
+    # `mejor|adv` are separate entries, so `migliore` leads the adjective and
+    # `meglio` the adverb rather than both appearing under both.
+    try:
+        by_reading = json.load(open("data/aligned_pos.json"))
+    except FileNotFoundError:
+        by_reading = {}
     it_pos = json.load(open("data/italian_pos.json"))
     # The Italian side was never lemmatised, so `lascia`, `vanno`, `succede`
     # and 113 others became prompts. italian_pos.json is built from readings a
@@ -122,6 +129,20 @@ def build(wikt_it2es_path):
         # neighbours and those are mostly function words.
         pct = dict(shares.get(nes) or {}) or {it: p for it, p in entry["it"]}
         prob = {it: p for it, p in aligned.get(es, [])}
+
+        def tagged_prob(pos):
+            """Alignment for this reading of the word, if it was tagged.
+
+            Italian candidates of the same part of speech first: a Spanish noun
+            is answered by an Italian noun, and `tener en cuenta` does not make
+            `tenere` the meaning of `cuenta`."""
+            rows = by_reading.get(f"{es}|{pos}") or []
+            same, other = {}, {}
+            for key, p in rows:
+                it_word, _, it_p = key.partition("|")
+                (same if it_p == pos else other)[it_word] = max(
+                    (same if it_p == pos else other).get(it_word, 0.0), p)
+            return same or other
         proposed = dic.get(nes, {})
 
         # what the dictionary offers, ranked by how often it is the alignment
@@ -154,6 +175,18 @@ def build(wikt_it2es_path):
         # `migliore` the adjective on a word that is both.
         by_pos = {}
         for pos in poss:
+            tp = tagged_prob(pos)
+            if tp and pos not in CLOSED:
+                ranked = sorted(((p, it) for it, p in tp.items()
+                                 if it in proposed and it in it_base), reverse=True)
+                if ranked:
+                    top_p = ranked[0][0]
+                    here = [(it, p) for p, it in ranked
+                            if 100 * p / top_p >= RELATIVE]
+                    by_pos[pos] = [{"it": it, "prob": round(p, 3),
+                                    "pct": round(pct.get(it, 0.0), 1)}
+                                   for it, p in here]
+                    continue
             if pos in CLOSED:
                 # dictionary order, no corpus ranking, no percentage
                 offered = [it for it in proposed
