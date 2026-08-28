@@ -49,6 +49,7 @@ CLOSED = {"pr", "cnj", "det", "prn"}
 # attaches to, which a translation card cannot carry.
 SECTIONED = {"pr", "det", "ij"}
 
+RESCUE_PROB = 0.25     # what the corpus must reach to save a word from vanishing
 RELATIVE = 15.0        # keep anything within this % of the top translation
 MIN_PAIRS = 30         # below this the corpus has no opinion worth having
 MIN_PROB = 0.01        # an alignment weaker than this is noise
@@ -161,6 +162,7 @@ def build(wikt_it2es_path):
     dic = dictionary(wikt_it2es_path)
 
     defs, additions, dropped, thin, unsupported, overruled = {}, [], [], [], [], []
+    rescued = []
 
     # Fixed phrases replace the bare word they contain: `sin embargo` is a card
     # and `embargo` is not, because 98% of that word's uses are the phrase and
@@ -186,7 +188,13 @@ def build(wikt_it2es_path):
             continue
         nes = norm(es)
         entry = matrix.get(es)
-        if not entry or entry["pairs"] < MIN_PAIRS:
+        # A word set by hand is not waiting on corpus evidence -- that is the
+        # reason it was set. `soler` has zero pairs because it is written
+        # `suele`, and skipping it here threw the override away.
+        forced_here = any(w == es for w, _ in OVERRIDES)
+        if forced_here and (not entry or entry["pairs"] < MIN_PAIRS):
+            entry = entry or {"pairs": 0, "it": []}
+        elif not entry or entry["pairs"] < MIN_PAIRS:
             thin.append({"spanish": es, "pos": ",".join(poss),
                          "pairs": entry["pairs"] if entry else 0})
             continue
@@ -272,12 +280,18 @@ def build(wikt_it2es_path):
                         and not (it_pos.get(italian(it))
                                  and set(it_pos[italian(it)]) <= CLOSED
                                  and not (set(poss) & CLOSED))]
-            if not rows:
+            if not rows and not forced_here:
                 continue
-            rows.sort(key=lambda r: -r[1])
-            topp = rows[0][1]
-            keep = [(it, p) for it, p in rows if 100 * p / topp >= RELATIVE]
-            corpus_only = True
+            if not rows:
+                # `soler` is written `suele` and `suelen`, so it has no corpus
+                # rows at all. That is exactly why it was set by hand, and the
+                # override is applied further down.
+                keep, corpus_only = [], True
+            else:
+                rows.sort(key=lambda r: -r[1])
+                topp = rows[0][1]
+                keep = [(it, p) for it, p in rows if 100 * p / topp >= RELATIVE]
+                corpus_only = True
 
         # Organise by the Spanish word's parts of speech. Apertium says which
         # Spanish part of speech it listed a pair under; where it does not --
@@ -359,11 +373,50 @@ def build(wikt_it2es_path):
             if pos not in by_pos:
                 dropped.append({"spanish": es, "dropped_pos": pos,
                                 "kept": ",".join(sorted(by_pos)) or "nothing"})
+        # A word in the lexicon is a word we set out to learn, so it should not
+        # disappear without anyone seeing it. Two ways that happened: `si` is a
+        # conjunction, and function words take the dictionary only, so when the
+        # dictionary held nothing the word went -- though the corpus reads
+        # `se` at 69.6% and aligns it at 0.78. And `mayor` is tagged a noun and
+        # nothing else, so the corpus was asked about `mayor|n` and answered
+        # noise, while untagged it aligns to `maggiore` at 0.33.
+        #
+        # The rescue is deliberately strict: only where nothing else survived,
+        # only from the untagged alignment, and only when it is confident.
+        if not by_pos:
+            rescue = [(p, it) for it, p in aligned.get(es, [])
+                      if p >= RESCUE_PROB and italian(it, False)]
+            if rescue:
+                p_best, it_best = max(rescue)
+                canon = italian(it_best, False)
+                by_pos[poss[0]] = [{"it": canon, "prob": round(p_best, 3),
+                                    "pct": share_of(canon, False)}]
+                rescued.append({"spanish": es, "pos": poss[0], "italian": canon,
+                                "prob": round(p_best, 3),
+                                "note": "would have had no card at all; taken "
+                                        "from the untagged alignment"})
+        if not by_pos and forced_here:
+            by_pos = {poss[0]: []}      # finish() fills it from the override
         if not by_pos:
             thin.append({"spanish": es, "pos": ",".join(poss),
                          "pairs": entry["pairs"]})
             continue
         by_pos = finish(es, by_pos, share_of, REVERTS, OVERRIDES)
+        # A hand decision can empty a word too -- dropping `cuando -> tanto`
+        # left `cuando` with nothing, though it aligns to `quando` at 0.61.
+        # The rescue above runs before those decisions, so try it again here.
+        if not by_pos:
+            again = [(p, it) for it, p in aligned.get(es, [])
+                     if p >= RESCUE_PROB and italian(it, False)]
+            if again:
+                p_best, it_best = max(again)
+                canon = italian(it_best, False)
+                by_pos = {poss[0]: [{"it": canon, "prob": round(p_best, 3),
+                                     "pct": share_of(canon, False)}]}
+                rescued.append({"spanish": es, "pos": poss[0], "italian": canon,
+                                "prob": round(p_best, 3),
+                                "note": "a hand decision left no card; taken "
+                                        "from the untagged alignment"})
         if not by_pos:
             continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
@@ -394,7 +447,7 @@ def build(wikt_it2es_path):
                               "band": w["tier"], "add": "",
                               "note": ""})
 
-    return defs, additions, dropped, thin, unsupported, overruled
+    return defs, additions, dropped, thin, unsupported, overruled, rescued
 
 
 def finish(es, by_pos, share_of, reverts, overrides):
@@ -424,7 +477,9 @@ def finish(es, by_pos, share_of, reverts, overrides):
             if swap:
                 drop, keep = swap
                 items = [i for i in items if i["it"] != drop]
-                if keep not in {i["it"] for i in items}:
+                # An empty `keep` means the reading was simply wrong and there
+                # is nothing to put in its place -- `nadie` is not `vero`.
+                if keep and keep not in {i["it"] for i in items}:
                     items.insert(0, {"it": keep, "prob": None,
                                      "pct": share_of(keep, False)})
 
@@ -473,7 +528,7 @@ def write_csv(path, rows, fields):
 
 if __name__ == "__main__":
     wikt = sys.argv[1]
-    defs, additions, dropped, thin, unsupported, overruled = build(wikt)
+    defs, additions, dropped, thin, unsupported, overruled, rescued = build(wikt)
     json.dump(defs, open("data/definitions.json", "w"),
               ensure_ascii=False, separators=(",", ":"))
     additions.sort(key=lambda r: (r["beats_dictionary"] != "yes", -r["prob"]))
@@ -502,6 +557,8 @@ if __name__ == "__main__":
                "prob", "pct", "of_top", "add", "note"])
     write_csv("review_dropped_pos.csv", dropped, ["spanish", "dropped_pos", "kept"])
     write_csv("review_thin.csv", thin, ["spanish", "pos", "pairs"])
+    write_csv("review_rescued.csv", rescued,
+              ["spanish", "pos", "italian", "prob", "note"])
     write_csv("review_corpus_only.csv", unsupported,
               ["band", "spanish", "definition", "keep", "note"])
     write_csv("review_overruled.csv", overruled,

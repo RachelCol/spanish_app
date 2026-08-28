@@ -3,9 +3,9 @@ first,para,n,discorso,0.209,,,dictionary offered nothing,neither,,
 first,cuando,adv,tanto,0.211,,,dictionary offered nothing,neither,,
 first,sobre,n,busta,0.383,,,dictionary offered nothing,corpus,envelope,
 first,hasta,adv,anche,0.186,fino,,corpus beats dictionary 2.1x,corpus,even,
-first,hacer,n,lavoro,0.168,,,dictionary offered nothing,corpus,task,
 first,era,n,era,0.196,,,dictionary offered nothing,corpus,age era,
 first,ni,adv,non,0.253,,,dictionary offered nothing,corpus,don,
+first,seguir,vblex,continuare,0.253,seguire,,corpus beats dictionary 2.5x,both,continue doing keep,follow pursue
 first,tanto,adv,così,0.338,tanto,,corpus beats dictionary 2.4x,neither,,
 first,forma,n,modo,0.323,forma,,corpus beats dictionary 2.0x,both,manner way,shape
 first,nadie,n,vero,0.196,,,dictionary offered nothing,neither,,
@@ -15,304 +15,335 @@ first,lado,n,parte,0.247,lato,,corpus beats dictionary 2.0x,dictionary,,side
 first,final,n,fine,0.526,finale,,corpus beats dictionary 21.2x,both,end,after end final last
 first,política,n,politica,0.853,,,dictionary offered nothing,corpus,equivalent female policy politics,
 first,claro,adv,certo,0.314,,,dictionary offered nothing,corpus,certainly course,
+first,terminar,vblex,finire,0.324,terminare,,corpus beats dictionary 7.0x,both,end finish,end finish terminate
 first,igual,adv,non,0.17,,,dictionary offered nothing,neither,,
 first,incluso,adv,anche,0.408,persino,,corpus beats dictionary 2.1x,both,even,even
 first,primero,adv,prima,0.337,,,dictionary offered nothing,neither,,
 first,tema,n,questione,0.222,,,dictionary offered nothing,corpus,matter,
+first,comenzar,vblex,iniziare,0.303,cominciare,,corpus beats dictionary 1.7x,both,begin,begin commence
 first,cierto,adj,vero,0.39,certo,,corpus beats dictionary 6.7x,both,true,true
-first,seguir,vblex,continuare,0.253,seguire,,corpus beats dictionary 2.5x,both,continue doing keep,follow pursue
+first,intentar,vblex,cercare,0.323,tentare,,corpus beats dictionary 3.2x,both,try,attempt try
+first,conseguir,vblex,riuscire,0.152,conseguire,,corpus beats dictionary 4.4x,both,achieve reach succeed,achieve attain gain get
 first,educación,n,istruzione,0.628,educazione,,corpus beats dictionary 4.2x,both,education,education etiquette manners upbringing
-first,ello,n,campanello,0.16,,,dictionary offered nothing,neither,,
 first,largo,n,corso,0.164,,,dictionary offered nothing,neither,,
 first,puesto,n,posto,0.425,,,dictionary offered nothing,corpus,job place position,
 first,realmente,adv,davvero,0.298,veramente,,corpus beats dictionary 1.7x,both,actually really,actually really
 first,junto,adj,insieme,0.533,assieme,,corpus beats dictionary 9.3x,both,together,together
 first,video,n,fronte,0.18,,,dictionary offered nothing,neither,,
-first,web,n,sito,0.364,web,,corpus beats dictionary 2.0x,both,website,internet web
-first,bastante,adj,scordare,0.16,,,dictionary offered nothing,neither,,
-first,apoyo,n,sostegno,0.421,appoggio,,corpus beats dictionary 3.5x,both,support,support
-first,propio,adj,stesso,0.269,,,dictionary offered nothing,neither,,
-core,pesar,n,nonostante,0.39,,,dictionary offered nothing,neither,,
-core,tampoco,adv,non,0.396,neanche,,corpus beats dictionary 3.8x,dictionary,,either neither
+first,convertir,vblex,diventare,0.483,,,dictionary offered nothing,corpus,become turn,
+core,bastante,adj,scordare,0.16,,,dictionary offered nothing,neither,,
+core,apoyo,n,sostegno,0.421,appoggio,,corpus beats dictionary 3.5x,both,support,support
+core,propio,adj,stesso,0.269,,,dictionary offered nothing,neither,,
+core,formar,vblex,fare,0.282,formare,,corpus beats dictionary 3.7x,both,constitute create make,create educate make train
 core,vista,n,vista,0.391,,,dictionary offered nothing,corpus,appearance eyesight look sight,
 core,actual,n,velocità,0.318,,,dictionary offered nothing,neither,,
+core,ocurrir,vblex,succedere,0.171,,,dictionary offered nothing,corpus,come happen occur,
 core,llamado,adj,cosiddetto,0.311,,,dictionary offered nothing,corpus,called,
 core,papel,n,ruolo,0.572,carta,,corpus beats dictionary 6.6x,both,role,paper
+core,resultar,vblex,essere,0.36,risultare,,corpus beats dictionary 10.9x,dictionary,,out prove seem turn
 core,vale,n,soldo,0.398,,,dictionary offered nothing,neither,,
+core,cumplir,vblex,rispettare,0.188,compiere,,corpus beats dictionary 10.7x,both,comply,complete fulfilled out turn
+core,referir,vblex,riguardare,0.261,riferire,,corpus beats dictionary 2.9x,dictionary,,relate report
 core,alrededor,adv,circa,0.262,,,dictionary offered nothing,neither,,
-core,comer,n,volta,0.2,,,dictionary offered nothing,neither,,
 core,especialmente,adv,particolarmente,0.256,specialmente,,corpus beats dictionary 4.8x,neither,,
 core,anterior,adj,precedente,0.521,,,dictionary offered nothing,corpus,earlier former previous,
 core,justo,adv,proprio,0.26,,,dictionary offered nothing,corpus,exactly just right,
-core,maría,n,dire,0.541,,,dictionary offered nothing,neither,,
+core,comer,n,volta,0.2,,,dictionary offered nothing,neither,,
 core,busca,n,cerca,0.171,,,dictionary offered nothing,corpus,search,
+core,desear,vblex,volere,0.326,desiderare,,corpus beats dictionary 1.7x,both,desire want wish,desire long want wish
 core,conocido,adj,noto,0.397,,,dictionary offered nothing,corpus,famous known well,
-core,conseguir,vblex,riuscire,0.152,conseguire,,corpus beats dictionary 4.4x,both,achieve reach succeed,achieve attain gain get
+core,regresar,vblex,tornare,0.499,ritornare,,corpus beats dictionary 6.7x,both,back come return,back return
+core,levantar,vblex,terminare,0.336,alzare,,corpus beats dictionary 2.1x,both,end,build increase lift put
 core,diferente,adj,diverso,0.487,differente,,corpus beats dictionary 11.3x,both,different,different
+core,encantar,vblex,piacere,0.226,,,dictionary offered nothing,corpus,delight,
 core,natural,n,e,0.179,,,dictionary offered nothing,neither,,
 core,conmigo,adv,me,0.374,,,dictionary offered nothing,neither,,
 core,llamada,n,telefonata,0.248,chiamata,,corpus beats dictionary 1.7x,both,call,call
-core,toma,n,processo,0.249,,,dictionary offered nothing,neither,,
 core,carta,n,lettera,0.652,carta,,corpus beats dictionary 5.4x,both,letter,card map menu
-core,china,n,cinese,0.18,,,dictionary offered nothing,corpus,chinese,
 core,rápido,adv,presto,0.299,,,dictionary offered nothing,corpus,fast quickly,
 core,solamente,adv,solo,0.429,solamente,,corpus beats dictionary 15.0x,both,alone merely only,alone merely only
 core,contenido,n,contenuto,0.709,,,dictionary offered nothing,corpus,content contents,
 core,encuentro,n,incontro,0.423,,,dictionary offered nothing,corpus,encounter match meeting,
 core,ropa,n,vestito,0.376,,,dictionary offered nothing,corpus,clothes clothing,
 core,instituto,n,istituto,0.461,liceo,,corpus beats dictionary 12.3x,both,institute,school secondary
-core,re,n,suono,0.172,,,dictionary offered nothing,neither,,
-core,escrito,n,iscritto,0.383,,,dictionary offered nothing,neither,,
 core,juicio,n,processo,0.282,giudizio,,corpus beats dictionary 1.7x,both,trial,judgement judgment opinion trial
 core,asunto,n,questione,0.283,affare,,corpus beats dictionary 5.0x,both,issue matter,affair business matter
+core,destacar,vblex,sottolineare,0.318,,,dictionary offered nothing,corpus,emphasize out point stress,
 core,don,n,don,0.313,dono,,corpus beats dictionary 3.7x,both,man respect sir title,gift
-core,cuba,n,luce,0.189,,,dictionary offered nothing,neither,,
-core,señora,n,signore,0.444,,,dictionary offered nothing,corpus,address adult title,
+core,enfrentar,vblex,affrontare,0.226,,,dictionary offered nothing,corpus,confront cope deal face,
+core,exigir,vblex,richiedere,0.251,esigere,,corpus beats dictionary 2.1x,both,demand exact require,call demand exact require
 core,asociación,n,partenariato,0.495,associazione,,corpus beats dictionary 1.6x,both,partnership,association partnership
 core,completo,n,completamente,0.241,completo,,corpus beats dictionary 12.7x,neither,,
-core,cuidado,adj,attento,0.22,,,dictionary offered nothing,neither,,
-core,cuidado,n,attenzione,0.188,cura,,corpus beats dictionary 2.6x,both,attention care,care treatment
-core,perro,adj,AI,1.0,,,dictionary offered nothing,unknown,,
-core,terminar,vblex,finire,0.324,terminare,,corpus beats dictionary 7.0x,both,end finish,end finish terminate
-core,comercial,n,pubblicità,0.22,,,dictionary offered nothing,corpus,advert commercial,
-core,debate,n,discussione,0.63,dibattito,,corpus beats dictionary 2.9x,both,discussion,debate discussion
-core,diseño,n,progettazione,0.212,design,,corpus beats dictionary 4.9x,both,design,design
-core,mando,n,comando,0.364,,,dictionary offered nothing,corpus,command control,
-core,niña,n,bambino,0.353,ragazza,,corpus beats dictionary 3.1x,dictionary,,girl
-core,cumplir,vblex,rispettare,0.188,compiere,,corpus beats dictionary 10.7x,both,comply,complete fulfilled out turn
-core,marco,n,quadro,0.597,,,dictionary offered nothing,corpus,other,
-core,empleo,n,occupazione,0.463,impiego,,corpus beats dictionary 21.4x,both,employment job,employment job
+common,cuidado,adj,attento,0.22,,,dictionary offered nothing,neither,,
+common,cuidado,n,attenzione,0.188,cura,,corpus beats dictionary 2.6x,both,attention care,care treatment
+common,perro,adj,AI,1.0,,,dictionary offered nothing,unknown,,
+common,solicitar,vblex,chiedere,0.456,,,dictionary offered nothing,corpus,ask request,
+common,aprovechar,vblex,cogliere,0.255,sfruttare,,corpus beats dictionary 1.8x,both,take,advantage make take
+common,comercial,n,pubblicità,0.22,,,dictionary offered nothing,corpus,advert commercial,
+common,pretender,vblex,intendere,0.195,pretendere,,corpus beats dictionary 7.1x,both,intend,claim
+common,debate,n,discussione,0.63,dibattito,,corpus beats dictionary 2.9x,both,discussion,debate discussion
+common,diseño,n,progettazione,0.212,design,,corpus beats dictionary 4.9x,both,design,design
+common,mando,n,comando,0.364,,,dictionary offered nothing,corpus,command control,
+common,marco,n,quadro,0.597,,,dictionary offered nothing,corpus,other,
+common,empleo,n,occupazione,0.463,impiego,,corpus beats dictionary 21.4x,both,employment job,employment job
 common,café,adj,marrone,0.369,,,dictionary offered nothing,corpus,brown,
+common,señalar,vblex,sottolineare,0.182,segnalare,,corpus beats dictionary 3.1x,both,out point,indicate out point signal
 common,intento,n,tentativo,0.639,,,dictionary offered nothing,corpus,attempt,
+common,corresponder,vblex,spettare,0.289,corrispondere,,corpus beats dictionary 3.9x,dictionary,,correspond love reciprocate
 common,raro,adj,strano,0.404,raro,,corpus beats dictionary 4.7x,both,odd strange,rare
 common,crítica,n,critica,0.549,,,dictionary offered nothing,corpus,criticism equivalent female,
 common,piso,n,piano,0.4,appartamento,,corpus beats dictionary 2.8x,both,building flat floor level,apartment flat
 common,pro,adj,riguardare,0.18,,,dictionary offered nothing,neither,,
-common,comentario,n,osservazione,0.33,commento,,corpus beats dictionary 1.5x,dictionary,,comment commentary
 common,presupuesto,n,bilancio,0.81,,,dictionary offered nothing,corpus,budget,
 common,querido,adj,caro,0.51,,,dictionary offered nothing,corpus,dear letter,
 common,antiguo,adj,vecchio,0.341,antico,,corpus beats dictionary 2.3x,both,fashioned old,ancient
 common,carga,n,onere,0.434,fardello,,corpus beats dictionary 9.4x,both,burden,burden
 common,culo,n,sedere,0.205,culo,,corpus beats dictionary 3.9x,both,bottom butt buttocks,anus ass bottom butt
-common,ejercicio,n,carica,0.332,esercizio,,corpus beats dictionary 3.3x,dictionary,,exercise
 common,municipal,adj,comunale,0.292,municipale,,corpus beats dictionary 1.5x,both,municipal,municipal
+common,poseer,vblex,avere,0.302,possedere,,corpus beats dictionary 2.1x,both,have,have own possess
 common,cárcel,n,prigione,0.316,galera,,corpus beats dictionary 1.6x,both,prison,prison
-common,digital,n,transizione,0.238,digitale,,corpus beats dictionary 1.9x,dictionary,,foxglove plant
+common,rechazar,vblex,respingere,0.429,rifiutare,,corpus beats dictionary 3.2x,both,away decline down off,decline deny refuse reject
 common,familiar,n,parente,0.286,familiare,,corpus beats dictionary 2.2x,both,relative,car estate family member
 common,técnica,n,tecnica,0.553,,,dictionary offered nothing,corpus,technique,
-common,online,adj,su,0.553,,,dictionary offered nothing,neither,,
-common,clara,n,roccia,0.601,,,dictionary offered nothing,neither,,
+common,ejercer,vblex,esercitare,0.478,svolgere,,corpus beats dictionary 24.7x,corpus,exercise,
 common,corto,adj,breve,0.473,corto,,corpus beats dictionary 3.3x,both,short small,short
-common,quedar,vblex,essere,0.413,rimanere,,corpus beats dictionary 4.4x,both,good,left remain stay
+common,oír,vblex,sentire,0.432,ascoltare,,corpus beats dictionary 6.7x,both,hear,listen
 common,estadounidense,adj,americano,0.525,statunitense,,corpus beats dictionary 2.6x,both,american states united,american states united
-common,estadounidense,n,americano,0.561,,,dictionary offered nothing,corpus,american inhabitant native states,
+common,colocar,vblex,mettere,0.222,collocare,,corpus beats dictionary 6.0x,both,place put,place put
 common,tratado,n,trattato,0.785,,,dictionary offered nothing,corpus,treaty,
 common,compañero,n,collega,0.381,compagno,,corpus beats dictionary 1.5x,both,colleague,companion comrade fellow friend
 common,asesinato,n,omicidio,0.473,assassinio,,corpus beats dictionary 2.8x,both,homicide murder,assassination murder
 common,correcto,adj,giusto,0.421,corretto,,corpus beats dictionary 1.9x,both,right,correct
-common,abierta,n,più,0.215,,,dictionary offered nothing,neither,,
+common,afectar,vblex,riguardare,0.25,,,dictionary offered nothing,corpus,have speak,
 common,bebé,n,bambino,0.485,neonato,,corpus beats dictionary 11.8x,both,baby,baby
 common,decreto,n,decreto,0.45,,,dictionary offered nothing,corpus,decree,
 common,municipio,n,comune,0.251,municipio,,corpus beats dictionary 8.3x,corpus,municipality,
 common,etapa,n,fase,0.396,tappa,,corpus beats dictionary 1.5x,both,phase stage step,leg phase stage
-common,llegue,n,quartiere,0.236,,,dictionary offered nothing,neither,,
 common,precisamente,adv,proprio,0.516,appunto,,corpus beats dictionary 13.1x,dictionary,,precisely
-common,audiencia,n,audizione,0.342,udienza,,corpus beats dictionary 2.2x,dictionary,,audience
-common,formar,vblex,fare,0.282,formare,,corpus beats dictionary 3.7x,both,constitute create make,create educate make train
-common,intentar,vblex,cercare,0.323,tentare,,corpus beats dictionary 3.2x,both,try,attempt try
+common,dudar,vblex,dubitare,0.219,esitare,,corpus beats dictionary 3.3x,corpus,doubt,
 common,móvil,n,movente,0.171,cellulare,,corpus beats dictionary 10.0x,both,motive,cell cellular phone
 common,trato,n,trattamento,0.4,,,dictionary offered nothing,corpus,treatment,
 common,aparte,adv,oltre,0.167,,,dictionary offered nothing,corpus,apart,
+common,marcar,vblex,segnare,0.218,,,dictionary offered nothing,corpus,down mark read say,
 common,lindo,adj,bello,0.424,carino,,corpus beats dictionary 4.5x,dictionary,,cute pretty
+common,agarrar,vblex,prendere,0.249,afferrare,,corpus beats dictionary 2.8x,both,catch feeling hold illness,grab take
 common,evidencia,n,prova,0.252,evidenza,,corpus beats dictionary 3.5x,both,evidence,evidence
 common,vuelto,n,resto,0.192,,,dictionary offered nothing,corpus,change,
 common,escenario,n,scenario,0.225,palco,,corpus beats dictionary 2.8x,both,scenario,stage
 common,igualdad,n,parità,0.361,uguaglianza,,corpus beats dictionary 1.7x,both,equality,equality
 common,sesión,n,seduta,0.642,sessione,,corpus beats dictionary 9.9x,both,meeting session,session
 common,tarjeta,n,biglietto,0.233,carta,,corpus beats dictionary 1.7x,both,card,card
+common,enterar,vblex,sapere,0.248,scoprire,,corpus beats dictionary 3.0x,both,come find know out,find out
 common,corriente,adj,comune,0.188,corrente,,corpus beats dictionary 1.9x,both,common ordinary usual,current ordinary running
-common,corta,n,raggio,0.189,,,dictionary offered nothing,neither,,
-common,do,n,meglio,0.21,,,dictionary offered nothing,neither,,
 common,escala,n,livello,0.471,scala,,corpus beats dictionary 3.0x,dictionary,,ladder scale
 common,montón,n,sacco,0.156,mucchio,,corpus beats dictionary 1.8x,both,lot ton,heap pile
-common,show,n,spettacolo,0.318,,,dictionary offered nothing,corpus,show spectacle,
-common,igualmente,adv,anche,0.327,altrettanto,,corpus beats dictionary 2.3x,dictionary,,equally likewise
+common,cantar,n,leggenda,0.491,,,dictionary offered nothing,neither,,
+common,brindar,vblex,offrire,0.227,brindare,,corpus beats dictionary 4.3x,both,offer,toast
 common,representación,n,rappresentanza,0.453,rappresentazione,,corpus beats dictionary 11.6x,both,representation,representation
 common,resumen,n,sintesi,0.195,riassunto,,corpus beats dictionary 10.7x,both,summary,abstract summary
-common,titular,n,titolo,0.237,,,dictionary offered nothing,corpus,headline,
+common,pegar,vblex,picchiare,0.181,attaccare,,corpus beats dictionary 8.4x,both,hit strike,stick
 common,gay,adj,omosessuale,0.184,,,dictionary offered nothing,corpus,homosexual,
-common,gay,n,omosessuale,0.224,,,dictionary offered nothing,corpus,homosexual,
-common,abuela,n,nonno,0.254,nonna,,corpus beats dictionary 2.7x,dictionary,,grandmother
-common,editorial,n,casa,0.15,editoriale,,corpus beats dictionary 3.1x,dictionary,,editorial
-common,suma,n,somma,0.379,,,dictionary offered nothing,corpus,addition sum,
-common,cariño,n,tesoro,0.27,affetto,,corpus beats dictionary 14.1x,dictionary,,affection
-common,secundaria,n,liceo,0.231,,,dictionary offered nothing,corpus,high school secondary,
-common,ámbito,n,settore,0.283,ambito,,corpus beats dictionary 1.6x,dictionary,,scope
-common,conexión,n,collegamento,0.282,connessione,,corpus beats dictionary 2.5x,both,connection,connection
-common,salón,n,salotto,0.171,,,dictionary offered nothing,corpus,drawing living room sitting,
-common,estudiante,adj,bravo,0.335,,,dictionary offered nothing,neither,,
-common,actuación,n,azione,0.329,spettacolo,,corpus beats dictionary 8.4x,both,action,performance show
-common,comenzar,vblex,iniziare,0.303,cominciare,,corpus beats dictionary 1.7x,both,begin,begin commence
-common,efectivo,adj,efficace,0.547,effettivo,,corpus beats dictionary 4.8x,both,effective,effective real
-common,efectivo,n,contante,0.315,,,dictionary offered nothing,corpus,cash money,
-common,firme,adj,forte,0.183,,,dictionary offered nothing,corpus,strong,
-common,haz,n,anticipo,0.186,,,dictionary offered nothing,neither,,
-common,herramienta,n,strumento,0.761,attrezzo,,corpus beats dictionary 35.2x,both,implement tool,implement tool
-common,peña,n,rupe,0.24,,,dictionary offered nothing,corpus,cliff,
-common,argumento,n,argomentazione,0.421,argomento,,corpus beats dictionary 2.0x,both,argument,argument
-common,musical,n,musical,0.261,,,dictionary offered nothing,corpus,musical,
-common,oriente,n,ovest,0.178,,,dictionary offered nothing,neither,,
-common,paga,n,paga,0.336,,,dictionary offered nothing,neither,,
-common,regresar,vblex,tornare,0.499,ritornare,,corpus beats dictionary 6.7x,both,back come return,back return
-common,únicamente,adv,solo,0.417,unicamente,,corpus beats dictionary 18.0x,both,only,only
-common,activo,n,bene,0.245,attivo,,corpus beats dictionary 3.6x,corpus,asset property right,
-common,et,n,de,1.0,,,dictionary offered nothing,neither,,
-common,triunfo,n,trionfo,0.236,vittoria,,corpus beats dictionary 2.7x,corpus,triumph,
-common,caballero,n,signore,0.405,cavaliere,,corpus beats dictionary 8.3x,both,gentleman,gentleman horseman knight
-common,parecido,n,somiglianza,0.422,,,dictionary offered nothing,corpus,resemblance,
-common,puro,n,sigaro,0.263,,,dictionary offered nothing,corpus,cigar,
-common,granada,n,granata,0.299,,,dictionary offered nothing,corpus,grenade hand pomegranate,
+common,pesar,n,nonostante,0.39,,,dictionary offered nothing,neither,,
+useful,suma,n,somma,0.379,,,dictionary offered nothing,corpus,addition sum,
+useful,trasladar,vblex,trasferire,0.259,spostare,,corpus beats dictionary 2.5x,both,move transfer,change move transfer
+useful,opinar,vblex,ritenere,0.156,,,dictionary offered nothing,corpus,think,
+useful,alegrar,vblex,essere,0.216,,,dictionary offered nothing,neither,,
+useful,reclamar,vblex,chiedere,0.232,reclamare,,corpus beats dictionary 2.6x,both,ask,claim complain demand object
+useful,marchar,vblex,andare,0.29,,,dictionary offered nothing,neither,,
+useful,cariño,n,tesoro,0.27,affetto,,corpus beats dictionary 14.1x,dictionary,,affection
+useful,secundaria,n,liceo,0.231,,,dictionary offered nothing,corpus,high school secondary,
+useful,ámbito,n,settore,0.283,ambito,,corpus beats dictionary 1.6x,dictionary,,scope
+useful,conexión,n,collegamento,0.282,connessione,,corpus beats dictionary 2.5x,both,connection,connection
+useful,salón,n,salotto,0.171,,,dictionary offered nothing,corpus,drawing living room sitting,
+useful,estudiante,adj,bravo,0.335,,,dictionary offered nothing,neither,,
+useful,actuación,n,azione,0.329,spettacolo,,corpus beats dictionary 8.4x,both,action,performance show
+useful,efectivo,adj,efficace,0.547,effettivo,,corpus beats dictionary 4.8x,both,effective,effective real
+useful,efectivo,n,contante,0.315,,,dictionary offered nothing,corpus,cash money,
+useful,firme,adj,forte,0.183,,,dictionary offered nothing,corpus,strong,
+useful,herramienta,n,strumento,0.761,attrezzo,,corpus beats dictionary 35.2x,both,implement tool,implement tool
+useful,acudir,vblex,venire,0.163,,,dictionary offered nothing,corpus,come mind,
+useful,peña,n,rupe,0.24,,,dictionary offered nothing,corpus,cliff,
+useful,argumento,n,argomentazione,0.421,argomento,,corpus beats dictionary 2.0x,both,argument,argument
+useful,ingresar,vblex,aderire,0.152,,,dictionary offered nothing,corpus,join,
+useful,musical,n,musical,0.261,,,dictionary offered nothing,corpus,musical,
+useful,oriente,n,ovest,0.178,,,dictionary offered nothing,neither,,
+useful,paga,n,paga,0.336,,,dictionary offered nothing,neither,,
+useful,únicamente,adv,solo,0.417,unicamente,,corpus beats dictionary 18.0x,both,only,only
+useful,activo,n,bene,0.245,attivo,,corpus beats dictionary 3.6x,corpus,asset property right,
+useful,triunfo,n,trionfo,0.236,vittoria,,corpus beats dictionary 2.7x,corpus,triumph,
+useful,caballero,n,signore,0.405,cavaliere,,corpus beats dictionary 8.3x,both,gentleman,gentleman horseman knight
+useful,vincular,vblex,collegare,0.218,,,dictionary offered nothing,corpus,link,
+useful,emplear,vblex,utilizzare,0.216,impiegare,,corpus beats dictionary 2.1x,dictionary,,employ hire spend
+useful,parecido,n,somiglianza,0.422,,,dictionary offered nothing,corpus,resemblance,
+useful,puro,n,sigaro,0.263,,,dictionary offered nothing,corpus,cigar,
+useful,granada,n,granata,0.299,,,dictionary offered nothing,corpus,grenade hand pomegranate,
 useful,aniversario,adj,novantunesimo,0.198,,,dictionary offered nothing,neither,,
 useful,anoche,adv,ieri,0.359,,,dictionary offered nothing,neither,,
 useful,comparación,n,confronto,0.188,paragone,,corpus beats dictionary 1.7x,both,comparison,comparison
-useful,leo,adj,di,1.0,,,dictionary offered nothing,neither,,
+useful,centrar,vblex,concentrare,0.211,,,dictionary offered nothing,corpus,focus,
 useful,meta,n,obiettivo,0.478,traguardo,,corpus beats dictionary 10.9x,both,goal,goal
 useful,posteriormente,adv,poi,0.203,,,dictionary offered nothing,corpus,later,
-useful,regular,vblex,regolamentare,0.276,regolare,,corpus beats dictionary 2.9x,both,control regulate,adjust control regulate
-useful,corea,n,luogo,0.165,,,dictionary offered nothing,neither,,
+useful,prohibir,vblex,vietare,0.44,proibire,,corpus beats dictionary 2.9x,both,forbid prohibit,forbid prohibit
+useful,fabricar,vblex,produrre,0.264,fabbricare,,corpus beats dictionary 1.9x,both,manufacture,build manufacture
+useful,finalizar,vblex,concludere,0.28,finire,,corpus beats dictionary 10.3x,both,end finish,end finish
 useful,manejo,n,gestione,0.179,,,dictionary offered nothing,neither,,
 useful,oído,n,orecchia,0.289,udito,,corpus beats dictionary 8.7x,both,ear,hearing
-useful,puesta,n,attuazione,0.201,,,dictionary offered nothing,neither,,
 useful,turno,n,tempo,0.277,turno,,corpus beats dictionary 1.6x,both,period time,duty guard shift turn
 useful,posterior,adj,successivo,0.289,,,dictionary offered nothing,neither,,
 useful,preparado,adj,pronto,0.421,,,dictionary offered nothing,corpus,prepared,
+useful,callar,vblex,tacere,0.167,,,dictionary offered nothing,corpus,keep shut silent,
 useful,paseo,n,passeggiata,0.229,passeggio,,corpus beats dictionary 14.1x,both,act park place promenade,act place promenade stroll
 useful,secretaría,n,segretariato,0.304,,,dictionary offered nothing,corpus,secretariat,
+useful,incrementar,vblex,aumentare,0.345,incrementare,,corpus beats dictionary 5.7x,both,increase rise,increase
+useful,despedir,vblex,licenziare,0.317,,,dictionary offered nothing,corpus,dismiss fire,
 useful,castellano,adj,spagnolo,0.248,,,dictionary offered nothing,corpus,language spanish,
 useful,correspondiente,adj,relativo,0.156,corrispondente,,corpus beats dictionary 3.2x,both,respective,corresponding
 useful,distinto,adj,diverso,0.449,distinto,,corpus beats dictionary 20.8x,dictionary,,distinct
 useful,índice,n,tasso,0.35,indice,,corpus beats dictionary 3.2x,dictionary,,finger index
 useful,feria,n,fiera,0.328,,,dictionary offered nothing,corpus,fair,
 useful,posiblemente,adv,forse,0.314,possibilmente,,corpus beats dictionary 21.5x,corpus,possibly,
-useful,puto,n,posto,0.236,,,dictionary offered nothing,neither,,
+useful,liderar,vblex,guidare,0.185,,,dictionary offered nothing,corpus,lead,
 useful,avance,n,progresso,0.406,,,dictionary offered nothing,corpus,progress,
 useful,empleado,n,dipendente,0.277,impiegato,,corpus beats dictionary 1.9x,both,employee,employee
 useful,hacienda,n,finanza,0.158,tenuta,,corpus beats dictionary 3.8x,neither,,
-useful,cantar,n,leggenda,0.491,,,dictionary offered nothing,neither,,
-useful,cuarta,n,lo,0.863,,,dictionary offered nothing,neither,,
 useful,petición,n,richiesta,0.513,petizione,,corpus beats dictionary 5.6x,corpus,request,
-useful,previa,n,generale,0.167,,,dictionary offered nothing,neither,,
 useful,comunicado,n,comunicato,0.28,,,dictionary offered nothing,corpus,statement,
+useful,proveer,vblex,fornire,0.167,provvedere,,corpus beats dictionary 1.5x,both,equip furnish give provide,decision furnish provide supply
+useful,implementar,vblex,attuare,0.216,,,dictionary offered nothing,corpus,implement,
 useful,postura,n,posizione,0.593,,,dictionary offered nothing,corpus,position,
 useful,primo,adj,primo,0.55,,,dictionary offered nothing,corpus,prime,
-useful,basada,n,scritta,0.162,,,dictionary offered nothing,neither,,
 useful,coño,n,diavolo,0.393,,,dictionary offered nothing,neither,,
 useful,cumplimiento,n,rispetto,0.209,,,dictionary offered nothing,neither,,
+useful,rescatar,vblex,salvare,0.361,,,dictionary offered nothing,corpus,rescue,
 useful,ronda,n,ciclo,0.182,ronda,,corpus beats dictionary 10.0x,both,round,beat patrol
+useful,detectar,vblex,individuare,0.161,rilevare,,corpus beats dictionary 2.5x,both,detect,detect
 useful,concreto,n,particolare,0.357,,,dictionary offered nothing,neither,,
 useful,detenido,n,detenuto,0.181,arrestato,,corpus beats dictionary 2.6x,both,prisoner,arrested
-useful,levantar,vblex,terminare,0.336,alzare,,corpus beats dictionary 2.1x,both,end,build increase lift put
+useful,cuestionar,vblex,mettere,0.221,,,dictionary offered nothing,neither,,
 useful,avenida,n,viale,0.223,,,dictionary offered nothing,corpus,avenue,
-useful,gordo,adj,grosso,0.153,grasso,,corpus beats dictionary 1.7x,both,fat,fat
-useful,incremento,n,aumento,0.465,incremento,,corpus beats dictionary 4.0x,dictionary,,increment
-useful,nave,n,nave,0.259,vascello,,corpus beats dictionary 3.1x,both,ship,ship vessel
-useful,tonto,adj,stupido,0.215,,,dictionary offered nothing,corpus,stupid,
-useful,alerta,n,allarme,0.211,allerta,,corpus beats dictionary 1.9x,both,alarm,alarm
-useful,básicamente,adv,essenzialmente,0.181,,,dictionary offered nothing,corpus,basically,
-useful,deportivo,n,margine,0.167,,,dictionary offered nothing,neither,,
-useful,ejercer,vblex,esercitare,0.478,svolgere,,corpus beats dictionary 24.7x,corpus,exercise,
-useful,originalmente,adv,originariamente,0.189,,,dictionary offered nothing,corpus,originally,
-useful,cubierta,n,ponte,0.314,coperta,,corpus beats dictionary 6.2x,both,deck structure,deck
-useful,destacar,vblex,sottolineare,0.318,,,dictionary offered nothing,corpus,emphasize out point stress,
-useful,establecimiento,n,istituzione,0.154,stabilimento,,corpus beats dictionary 4.1x,dictionary,,establishment
-useful,gracioso,n,spiritoso,0.177,,,dictionary offered nothing,neither,,
-useful,mama,n,seno,0.284,mammella,,corpus beats dictionary 3.3x,both,breast,breast
-useful,recuperación,n,ripresa,0.463,recupero,,corpus beats dictionary 2.3x,both,recovery,recovery retrieval
-useful,borde,adj,acido,0.676,,,dictionary offered nothing,neither,,
-useful,borde,n,orlo,0.348,bordo,,corpus beats dictionary 3.9x,both,border brink edge margin,border edge margin rim
-useful,dama,n,signore,0.43,dama,,corpus beats dictionary 6.7x,dictionary,,king lady queen
-useful,invitado,adj,invitare,0.298,,,dictionary offered nothing,neither,,
-useful,invitado,n,ospite,0.542,invitato,,corpus beats dictionary 8.1x,both,guest,guest
-useful,lástima,n,peccato,0.305,pena,,corpus beats dictionary 10.0x,both,pity,pity
-useful,titulado,n,laureato,0.226,,,dictionary offered nothing,neither,,
-useful,vicepresidente,n,vicepresidente,0.402,,,dictionary offered nothing,corpus,president vice,
-useful,acusado,n,imputato,0.557,,,dictionary offered nothing,corpus,accused defendant,
-useful,asiento,n,posto,0.327,sedile,,corpus beats dictionary 3.8x,both,seat,seat
-useful,logro,n,risultato,0.338,traguardo,,corpus beats dictionary 10.8x,neither,,
-useful,negativa,n,rifiuto,0.339,negazione,,corpus beats dictionary 19.5x,corpus,denial refusal,
-useful,poderoso,adj,potente,0.554,,,dictionary offered nothing,corpus,powerful,
-useful,rechazo,n,rifiuto,0.21,,,dictionary offered nothing,corpus,refusal rejection,
-useful,básico,adj,fondamentale,0.297,,,dictionary offered nothing,corpus,basic fundamental,
-useful,cerro,n,crinale,0.158,,,dictionary offered nothing,neither,,
-useful,lanza,n,lancia,0.193,,,dictionary offered nothing,corpus,lance spear,
-useful,aprovechar,vblex,cogliere,0.255,sfruttare,,corpus beats dictionary 1.8x,both,take,advantage make take
-useful,oír,vblex,sentire,0.432,ascoltare,,corpus beats dictionary 6.7x,both,hear,listen
-useful,casualidad,n,caso,0.483,,,dictionary offered nothing,corpus,accident chance coincidence,
-useful,coca,n,coca,0.249,,,dictionary offered nothing,corpus,coca cocaine coke cola,
-useful,poema,n,poesia,0.441,poema,,corpus beats dictionary 5.1x,both,poem,literary piece poem verse
+wider,gordo,adj,grosso,0.153,grasso,,corpus beats dictionary 1.7x,both,fat,fat
+wider,incremento,n,aumento,0.465,incremento,,corpus beats dictionary 4.0x,dictionary,,increment
+wider,nave,n,nave,0.259,vascello,,corpus beats dictionary 3.1x,both,ship,ship vessel
+wider,carecer,vblex,mancare,0.163,,,dictionary offered nothing,corpus,lack lacking,
+wider,tonto,adj,stupido,0.215,,,dictionary offered nothing,corpus,stupid,
+wider,alerta,n,allarme,0.211,allerta,,corpus beats dictionary 1.9x,both,alarm,alarm
+wider,básicamente,adv,essenzialmente,0.181,,,dictionary offered nothing,corpus,basically,
+wider,deportivo,n,margine,0.167,,,dictionary offered nothing,neither,,
+wider,calificar,vblex,definire,0.334,,,dictionary offered nothing,neither,,
+wider,originalmente,adv,originariamente,0.189,,,dictionary offered nothing,corpus,originally,
+wider,colgar,vblex,impiccare,0.239,appendere,,corpus beats dictionary 1.7x,both,hang,hang
+wider,hundir,vblex,affondare,0.371,,,dictionary offered nothing,corpus,sink,
+wider,cubierta,n,ponte,0.314,coperta,,corpus beats dictionary 6.2x,both,deck structure,deck
+wider,establecimiento,n,istituzione,0.154,stabilimento,,corpus beats dictionary 4.1x,dictionary,,establishment
+wider,gracioso,n,spiritoso,0.177,,,dictionary offered nothing,neither,,
+wider,mama,n,seno,0.284,mammella,,corpus beats dictionary 3.3x,both,breast,breast
+wider,presionar,vblex,esercitare,0.192,premere,,corpus beats dictionary 10.7x,dictionary,,press
+wider,recuperación,n,ripresa,0.463,recupero,,corpus beats dictionary 2.3x,both,recovery,recovery retrieval
+wider,borde,adj,acido,0.676,,,dictionary offered nothing,neither,,
+wider,borde,n,orlo,0.348,bordo,,corpus beats dictionary 3.9x,both,border brink edge margin,border edge margin rim
+wider,ascender,vblex,ammontare,0.209,,,dictionary offered nothing,neither,,
+wider,lastimar,vblex,fare,0.173,,,dictionary offered nothing,corpus,cause damage pain physical,
+wider,fallecer,vblex,morire,0.286,decedere,,corpus beats dictionary 6.9x,both,die,die
+wider,invitado,adj,invitare,0.298,,,dictionary offered nothing,neither,,
+wider,invitado,n,ospite,0.542,invitato,,corpus beats dictionary 8.1x,both,guest,guest
+wider,lástima,n,peccato,0.305,pena,,corpus beats dictionary 10.0x,both,pity,pity
+wider,vicepresidente,n,vicepresidente,0.402,,,dictionary offered nothing,corpus,president vice,
+wider,asiento,n,posto,0.327,sedile,,corpus beats dictionary 3.8x,both,seat,seat
+wider,logro,n,risultato,0.338,traguardo,,corpus beats dictionary 10.8x,neither,,
+wider,acostumbrar,vblex,abituare,0.317,,,dictionary offered nothing,corpus,accustom,
+wider,negativa,n,rifiuto,0.339,negazione,,corpus beats dictionary 19.5x,corpus,denial refusal,
+wider,asesinar,vblex,uccidere,0.485,assassinare,,corpus beats dictionary 2.5x,dictionary,,murder
+wider,poderoso,adj,potente,0.554,,,dictionary offered nothing,corpus,powerful,
+wider,rechazo,n,rifiuto,0.21,,,dictionary offered nothing,corpus,refusal rejection,
+wider,básico,adj,fondamentale,0.297,,,dictionary offered nothing,corpus,basic fundamental,
+wider,cerro,n,crinale,0.158,,,dictionary offered nothing,neither,,
+wider,lanza,n,lancia,0.193,,,dictionary offered nothing,corpus,lance spear,
+wider,cancelar,vblex,cancellare,0.208,,,dictionary offered nothing,corpus,cancel,
+wider,gozar,vblex,godere,0.264,,,dictionary offered nothing,corpus,enjoy,
+wider,portar,vblex,comportare,0.26,portare,,corpus beats dictionary 8.6x,dictionary,,bear carry wear
+wider,optar,vblex,scegliere,0.271,optare,,corpus beats dictionary 1.9x,dictionary,,opt
+wider,reforzar,vblex,rafforzare,0.609,,,dictionary offered nothing,corpus,reinforce strengthen,
+wider,casualidad,n,caso,0.483,,,dictionary offered nothing,corpus,accident chance coincidence,
+wider,coca,n,coca,0.249,,,dictionary offered nothing,corpus,coca cocaine coke cola,
+wider,regular,vblex,regolamentare,0.276,regolare,,corpus beats dictionary 2.9x,both,control regulate,adjust control regulate
+wider,poema,n,poesia,0.441,poema,,corpus beats dictionary 5.1x,both,poem,literary piece poem verse
+wider,arruinar,vblex,rovinare,0.468,,,dictionary offered nothing,corpus,ruin,
 wider,cometido,n,compito,0.25,ruolo,,corpus beats dictionary 3.7x,corpus,task,
 wider,descarga,n,scarico,0.174,,,dictionary offered nothing,corpus,unloading,
 wider,oscuridad,n,buio,0.369,oscurità,,corpus beats dictionary 1.8x,both,darkness,darkness obscurity
-wider,redacción,n,formulazione,0.249,redazione,,corpus beats dictionary 2.4x,dictionary,,editing writing
+wider,debatir,vblex,discutere,0.425,,,dictionary offered nothing,corpus,debate,
+wider,resaltar,vblex,sottolineare,0.342,evidenziare,,corpus beats dictionary 5.2x,both,emphasize out,emphasize highlight out
 wider,censo,n,censimento,0.232,,,dictionary offered nothing,corpus,census,
-wider,convertir,vblex,diventare,0.483,,,dictionary offered nothing,corpus,become turn,
+wider,argumentar,vblex,sostenere,0.174,argomentare,,corpus beats dictionary 4.6x,dictionary,,argue case make
 wider,legado,n,eredità,0.407,retaggio,,corpus beats dictionary 7.7x,both,legacy,legacy
-wider,panorama,n,quadro,0.246,panorama,,corpus beats dictionary 2.1x,dictionary,,panorama
 wider,pedazo,n,pezzo,0.386,,,dictionary offered nothing,corpus,chunk hunk piece,
-wider,campamento,n,campo,0.422,accampamento,,corpus beats dictionary 3.6x,dictionary,,camp campsite
-wider,condenado,n,condannato,0.216,,,dictionary offered nothing,corpus,convict,
+wider,burlar,vblex,prendere,0.188,,,dictionary offered nothing,neither,,
+wider,descartar,vblex,escludere,0.238,,,dictionary offered nothing,corpus,out rule,
+wider,denominar,vblex,definire,0.239,denominare,,corpus beats dictionary 17.6x,dictionary,,name
 wider,recepción,n,ricevimento,0.182,ricezione,,corpus beats dictionary 10.5x,both,reception,reception
 wider,tele,n,TV,0.181,televisione,,corpus beats dictionary 2.3x,unknown,,television
+wider,adelantar,vblex,anticipare,0.197,,,dictionary offered nothing,corpus,advance anticipate bring forward,
+wider,redactar,vblex,elaborare,0.155,,,dictionary offered nothing,corpus,law write,
 wider,cuenca,n,bacino,0.36,,,dictionary offered nothing,corpus,basin catchment,
 wider,desaparición,n,scomparsa,0.27,sparizione,,corpus beats dictionary 2.7x,both,demise disappearance,disappearance
-wider,exigir,vblex,richiedere,0.251,esigere,,corpus beats dictionary 2.1x,both,demand exact require,call demand exact require
 wider,finalidad,n,scopo,0.274,finalità,,corpus beats dictionary 2.3x,both,aim,aim purpose
+wider,consumir,vblex,consumare,0.402,mangiare,,corpus beats dictionary 9.6x,both,consume,consume
+wider,presidir,vblex,presiedere,0.367,,,dictionary offered nothing,corpus,preside,
 wider,pasta,n,soldo,0.238,pasta,,corpus beats dictionary 1.7x,both,money,dough pasta paste
 wider,regulación,n,regolamentazione,0.359,regolamento,,corpus beats dictionary 3.2x,both,regulation,regulation
+wider,estallar,vblex,scoppiare,0.325,esplodere,,corpus beats dictionary 6.9x,both,break burst explode out,blow explode fire
+wider,titular,n,titolo,0.237,,,dictionary offered nothing,corpus,headline,
 wider,cancha,n,campo,0.22,,,dictionary offered nothing,corpus,field,
 wider,dinámica,n,dinamica,0.434,,,dictionary offered nothing,corpus,dynamics,
-wider,enfrentar,vblex,affrontare,0.226,,,dictionary offered nothing,corpus,confront cope deal face,
+wider,retener,vblex,trattenere,0.21,,,dictionary offered nothing,corpus,back hold keep withhold,
 wider,policial,adj,polizia,0.605,,,dictionary offered nothing,corpus,police,
 wider,estima,n,stima,0.207,,,dictionary offered nothing,corpus,esteem respect,
 wider,fabricación,n,produzione,0.441,fabbricazione,,corpus beats dictionary 3.7x,both,manufacturing,manufacturing
 wider,importe,n,importo,0.431,,,dictionary offered nothing,corpus,sum,
+wider,ocasionar,vblex,causare,0.219,,,dictionary offered nothing,corpus,cause,
+wider,librar,vblex,liberare,0.178,,,dictionary offered nothing,corpus,deliver free,
+wider,enfocar,vblex,affrontare,0.172,,,dictionary offered nothing,neither,,
 wider,magnitud,n,portata,0.158,,,dictionary offered nothing,neither,,
 wider,plástico,adj,plastico,0.276,,,dictionary offered nothing,corpus,plastic,
 wider,reporte,n,rapporto,0.165,,,dictionary offered nothing,corpus,report,
 wider,semejante,adj,simile,0.235,tale,,corpus beats dictionary 4.9x,corpus,similar,
-wider,señalar,vblex,sottolineare,0.182,segnalare,,corpus beats dictionary 3.1x,both,out point,indicate out point signal
-wider,solicitar,vblex,chiedere,0.456,,,dictionary offered nothing,corpus,ask request,
-wider,ocurrir,vblex,succedere,0.171,,,dictionary offered nothing,corpus,come happen occur,
 wider,transferencia,n,trasferimento,0.548,bonifico,,corpus beats dictionary 19.8x,both,transfer,transfer
-wider,acta,n,processo,0.277,atto,,corpus beats dictionary 6.4x,dictionary,,act certificate
+wider,atrapar,vblex,prendere,0.234,catturare,,corpus beats dictionary 2.9x,both,catch get,capture catch
 wider,dispositivo,adj,disposizione,0.199,,,dictionary offered nothing,neither,,
-wider,madrugada,n,notte,0.172,alba,,corpus beats dictionary 3.6x,dictionary,,dawn sunrise
 wider,pesado,adj,pesante,0.555,,,dictionary offered nothing,corpus,heavy,
 wider,precioso,adj,bello,0.33,prezioso,,corpus beats dictionary 3.7x,dictionary,,precious
 wider,be,n,sì,0.713,,,dictionary offered nothing,neither,,
 wider,doña,n,donna,0.236,,,dictionary offered nothing,corpus,lady woman,
-wider,amanecer,n,alba,0.451,,,dictionary offered nothing,corpus,dawn,
+wider,obedecer,vblex,obbedire,0.285,,,dictionary offered nothing,corpus,obey,
+wider,cansar,vblex,stancare,0.25,,,dictionary offered nothing,corpus,tire,
 wider,apartado,n,paragrafo,0.701,,,dictionary offered nothing,corpus,paragraph,
+wider,derribar,vblex,abbattere,0.243,,,dictionary offered nothing,corpus,bring demolish down knock,
 wider,colonial,adj,coloniale,0.424,,,dictionary offered nothing,corpus,colonial,
 wider,consentimiento,n,consenso,0.511,,,dictionary offered nothing,corpus,agreement consent permission,
 wider,conveniente,adj,opportuno,0.218,conveniente,,corpus beats dictionary 9.5x,both,opportune suitable,convenient suitable
+wider,chupar,vblex,succhiare,0.227,,,dictionary offered nothing,corpus,absorb off suck,
 wider,frecuentemente,adv,spesso,0.305,frequentemente,,corpus beats dictionary 12.4x,dictionary,,frequently
 wider,parado,n,disoccupato,0.43,,,dictionary offered nothing,corpus,unemployed,
 wider,recibo,n,ricevuta,0.349,,,dictionary offered nothing,corpus,receipt,
 wider,tela,n,stoffa,0.283,tessuto,,corpus beats dictionary 5.0x,both,cloth fabric material,cloth fabric material woven
+wider,aburrir,vblex,annoiare,0.23,,,dictionary offered nothing,corpus,bore,
+wider,bañar,vblex,fare,0.234,,,dictionary offered nothing,corpus,clean,
+wider,doler,vblex,fare,0.241,,,dictionary offered nothing,corpus,about cause pain physical,
+wider,herir,vblex,ferire,0.293,,,dictionary offered nothing,corpus,hurt injure wound,
+wider,festejar,vblex,festeggiare,0.166,,,dictionary offered nothing,corpus,celebrate,
 wider,pasaje,n,biglietto,0.218,passaggio,,corpus beats dictionary 1.7x,both,ticket,passage passing
+wider,predecir,vblex,prevedere,0.33,predire,,corpus beats dictionary 5.7x,dictionary,,predict
 wider,triple,adj,triplice,0.176,triplo,,corpus beats dictionary 4.0x,both,threefold triple,threefold triple
-wider,absurdo,n,assurdità,0.19,assurdo,,corpus beats dictionary 2.0x,dictionary,,absurd ridiculous
 wider,ascenso,n,promozione,0.191,,,dictionary offered nothing,corpus,promotion,
+wider,agotar,vblex,esaurire,0.257,,,dictionary offered nothing,corpus,exhaust,
 wider,detención,n,arresto,0.4,detenzione,,corpus beats dictionary 2.1x,both,arrest,detention
 wider,entusiasmo,n,entusiasmo,0.632,,,dictionary offered nothing,corpus,enthusiasm,
-wider,fa,n,fa,0.383,,,dictionary offered nothing,corpus,chromatic diatonic fourth musical,
+wider,desayunar,vblex,fare,0.187,,,dictionary offered nothing,corpus,have,
 wider,justamente,adv,proprio,0.407,giustamente,,corpus beats dictionary 6.7x,both,exactly,fairly justly
-wider,miss,n,scoprire,0.413,,,dictionary offered nothing,neither,,
-wider,municipalidad,n,mamma,0.25,,,dictionary offered nothing,neither,,
 wider,tocado,n,cappello,0.311,,,dictionary offered nothing,neither,,
 wider,ajuste,n,adeguamento,0.306,aggiustamento,,corpus beats dictionary 3.6x,both,adjustment,adjustment
 wider,conservador,n,conservatorio,0.548,conservatore,,corpus beats dictionary 27.4x,neither,,
+wider,suprimir,vblex,eliminare,0.231,,,dictionary offered nothing,neither,,
 wider,pinche,n,cazzo,0.21,,,dictionary offered nothing,neither,,
 wider,asociado,n,partner,0.24,,,dictionary offered nothing,neither,,
 wider,evidentemente,adv,ovviamente,0.29,evidentemente,,corpus beats dictionary 2.0x,both,clearly evidently obviously,clearly evidently obviously
@@ -320,42 +351,44 @@ wider,full,n,full,0.174,,,dictionary offered nothing,corpus,full house,
 wider,ida,n,andata,0.16,,,dictionary offered nothing,corpus,journey leg outward,
 wider,lealtad,n,lealtà,0.431,fedeltà,,corpus beats dictionary 3.4x,both,loyalty,loyalty
 wider,marta,n,zibellino,0.326,,,dictionary offered nothing,neither,,
+wider,enfadar,vblex,arrabbiare,0.278,,,dictionary offered nothing,corpus,angry get,
 wider,morena,n,bruno,0.159,,,dictionary offered nothing,corpus,equivalent,
-wider,suministro,n,approvvigionamento,0.389,fornitura,,corpus beats dictionary 1.6x,dictionary,,supply
 wider,acoso,n,molestia,0.297,,,dictionary offered nothing,corpus,harassment,
 wider,colón,n,colono,0.193,,,dictionary offered nothing,neither,,
+wider,amanecer,n,alba,0.451,,,dictionary offered nothing,corpus,dawn,
 wider,exclusiva,n,esclusiva,0.173,,,dictionary offered nothing,corpus,exclusive,
 wider,majestad,n,maestà,0.263,,,dictionary offered nothing,corpus,majesty,
-wider,mato,n,spaventare,0.236,,,dictionary offered nothing,neither,,
 wider,maya,adj,lingua,0.195,,,dictionary offered nothing,neither,,
 wider,secuestro,n,rapimento,0.454,,,dictionary offered nothing,corpus,kidnapping,
 wider,sexto,n,senso,0.156,,,dictionary offered nothing,neither,,
+wider,maldecir,vblex,maledire,0.174,,,dictionary offered nothing,corpus,curse,
 wider,alba,n,alba,0.386,,,dictionary offered nothing,corpus,dawn,
-wider,colocar,vblex,mettere,0.222,collocare,,corpus beats dictionary 6.0x,both,place put,place put
 wider,contraste,n,contrasto,0.291,,,dictionary offered nothing,corpus,contrast,
+wider,barrer,vblex,spazzare,0.171,,,dictionary offered nothing,corpus,sweep,
 wider,dirigente,n,leader,0.295,dirigente,,corpus beats dictionary 2.3x,both,leader,leader
 wider,escasez,n,carenza,0.294,scarsità,,corpus beats dictionary 2.5x,both,shortage,scarcity shortage
 wider,especialista,adj,specializzato,0.151,,,dictionary offered nothing,neither,,
+wider,peinar,vblex,pettinare,0.16,,,dictionary offered nothing,corpus,comb,
 wider,harto,adj,stufo,0.176,,,dictionary offered nothing,corpus,fed stuffed tired,
 wider,implementación,n,attuazione,0.416,,,dictionary offered nothing,corpus,implementation,
 wider,laguna,n,lacuna,0.346,laguna,,corpus beats dictionary 13.0x,both,gap,lagoon
-wider,marcar,vblex,segnare,0.218,,,dictionary offered nothing,corpus,down mark read say,
 wider,navarro,adj,affetto,0.277,,,dictionary offered nothing,neither,,
 wider,obligatorio,adj,obbligatorio,0.524,,,dictionary offered nothing,corpus,obligatory,
 wider,pelotudo,adj,insegnare,0.405,,,dictionary offered nothing,neither,,
 wider,pelotudo,n,coglione,0.265,,,dictionary offered nothing,corpus,idiot,
 wider,sed,n,sete,0.513,,,dictionary offered nothing,corpus,thirst,
-wider,sexta,n,miglio,0.204,,,dictionary offered nothing,neither,,
+wider,delinquir,vblex,trasformare,0.178,,,dictionary offered nothing,neither,,
 wider,autora,n,autore,0.413,,,dictionary offered nothing,corpus,author,
 wider,descenso,n,riduzione,0.191,discesa,,corpus beats dictionary 3.6x,dictionary,,descent
-wider,ingresar,vblex,aderire,0.152,,,dictionary offered nothing,corpus,join,
+wider,calzar,vblex,portare,0.296,,,dictionary offered nothing,corpus,wear,
 wider,mami,n,mamma,0.28,,,dictionary offered nothing,neither,,
+wider,desvestir,vblex,spogliare,0.162,,,dictionary offered nothing,corpus,undress,
 wider,norteamericano,adj,americano,0.687,nordamericano,,corpus beats dictionary 20.9x,both,america american states united,american north
-wider,norteamericano,n,americano,0.433,,,dictionary offered nothing,corpus,america american inhabitant male,
 wider,reparto,n,ripartizione,0.299,,,dictionary offered nothing,neither,,
+wider,sollozar,vblex,piangere,0.213,,,dictionary offered nothing,neither,,
 wider,cuartel,n,quartier,0.18,,,dictionary offered nothing,neither,,
 wider,guapo,adj,bello,0.461,,,dictionary offered nothing,corpus,good handsome looking man,
-wider,lisa,n,problema,0.23,,,dictionary offered nothing,neither,,
+wider,reñir,vblex,litigare,0.155,,,dictionary offered nothing,corpus,fight quarrel,
 wider,masculino,adj,maschile,0.298,mascolino,,corpus beats dictionary 17.3x,both,male,male
 wider,ampliación,n,allargamento,0.499,ampliamento,,corpus beats dictionary 1.5x,both,enlargement extension widening,broadening expansion widening
 wider,bala,n,proiettile,0.212,,,dictionary offered nothing,corpus,bullet,

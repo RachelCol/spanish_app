@@ -61,3 +61,40 @@ ello,no usable card,A pronoun already covered in the pronoun section; `campanell
 verga,not wanted,"Vulgar, and `piede` is noise."
 puto,not wanted,"Vulgar, and `posto` is noise."
 carajo,not wanted,"Vulgar, and the card is noise."
+pienso,inflected form,First person of `pensar`. The fodder sense is real but rare.
+ido,inflected form,Past participle of `ir`.
+dicha,inflected form,Feminine participle of `decir`. The happiness sense is literary.
+limpia,inflected form,Feminine of `limpio`.
+mate,inflected form,"Read as a form of `matar`; `ucciso` is killed, not the drink."
+gane,inflected form,Subjunctive of `ganar`.
+miro,inflected form,First person of `mirar`.
+tocado,inflected form,Past participle of `tocar`.
+mantenido,inflected form,Past participle of `mantener`.
+tomada,inflected form,Feminine participle of `tomar`.
+corazones,inflected form,"Plural of `corazón`, which is the lexicon entry."
+bolívar,proper noun,A surname and a currency.
+medina,proper noun,"A surname; its card read `onorevole`, from Europarl."
+marta,proper noun,"A given name. `zibellino` is the sable, a different sense."
+colón,proper noun,A surname and a currency.
+be,not Spanish,"The name of the letter B, and letter names are excluded."
+info,not Spanish,An abbreviation.
+pendejo,not wanted,Vulgar.
+miguel,proper noun,A given name.
+puebla,proper noun,A Mexican city.
+xi,not Spanish,A Greek letter and a surname.
+po,not Spanish,An Italian river.
+vs,not Spanish,An abbreviation of versus.
+pm,not Spanish,A clock abbreviation.
+sub,not Spanish,"A prefix, not a word."
+mini,not Spanish,A prefix.
+dejo,inflected form,First person of `dejar`.
+tomo,inflected form,First person of `tomar`; the volume sense is rare.
+saca,inflected form,Third person of `sacar`.
+rara,inflected form,Feminine of `raro`.
+acompañado,inflected form,Past participle of `acompañar`.
+torno,inflected form,Read as a form of `tornar`; the lathe sense is rare and it occurs almost only in `en torno a`.
+miar,no usable card,A rare variant of `maullar`; no corpus evidence at all.
+ojalar,no usable card,Rare; no corpus evidence.
+peorar,no usable card,A non-standard variant of `empeorar`.
+numerar,no usable card,No corpus evidence.
+paginar,no usable card,No corpus evidence.

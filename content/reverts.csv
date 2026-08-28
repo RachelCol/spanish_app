@@ -19,3 +19,34 @@ absurdo,n,assurdità,assurdo,"Reverted. As a noun Italian says `l'assurdo`. `ass
 suministro,n,approvvigionamento,fornitura,"Reverted. `approvvigionamento` is procurement as a process; `fornitura` is the supply itself and is far commoner."
 escrito,n,iscritto,scritto,"Reverted. `iscritto` means enrolled or registered, not written, and was ranked above `scritto` on 32.5% against 24.6%. The count came from `por escrito`."
 actriz,n,attore,attrice,"Reverted. Gender: the aligner lemmatises the Italian side to masculine, so `attrice` became `attore`. Same defect as `abuela -> nonno`."
+lado,n,parte,lato,"Reverted. `lato` is the word for side; `parte` comes from `por otro lado`, which is `d'altra parte`."
+resultar,vblex,essere,risultare,Reverted. `essere` is copular noise -- it appears beside almost anything.
+referir,vblex,riguardare,riferire,Reverted. `riferirsi a` is `referirse a`; `riguardare` is to concern.
+portar,vblex,comportare,portare,Reverted. `comportare` is to entail; the word is `portare`.
+presionar,vblex,esercitare,premere,Reverted. `esercitare` is a fragment of `esercitare pressione`.
+descenso,n,riduzione,discesa,Reverted. `riduzione` is a decrease in quantity; `descenso` is the descent.
+para,n,discorso,,Dropped. `para` has no noun reading worth teaching; `discorso` is noise.
+cuando,adv,tanto,,"Dropped. `tanto` comes from `de vez en cuando`, which is a card of its own."
+nadie,n,vero,,Dropped. `nadie` is a pronoun; `vero` is noise.
+igual,adv,non,,Dropped. `non` is the bare negator and beats nothing.
+video,n,fronte,,Dropped. `fronte` is noise.
+bastante,adj,scordare,,Dropped. `scordare` is to forget; pure noise.
+actual,n,velocità,,Dropped. `actual` has no noun reading; `velocità` is noise.
+vale,n,soldo,,Dropped. `vale` is a conjugated form of `valer` in practice; `soldo` is noise.
+comer,n,volta,,Dropped. The nominalised infinitive is not a card; `volta` is noise.
+natural,n,e,,Dropped. `e` is a conjunction.
+conmigo,adv,me,,"Dropped. `conmigo` is `con me`, a phrase; `me` alone is half of it."
+pro,adj,riguardare,,Dropped. Noise.
+cantar,n,leggenda,,Dropped. The nominalised infinitive is not a card.
+alegrar,vblex,essere,rallegrare,Reverted. `essere` is copular noise; `alegrarse` is `rallegrarsi`.
+estudiante,adj,bravo,,Dropped. `estudiante` is a noun; `bravo` is noise.
+aniversario,adj,novantunesimo,,"Dropped. `novantunesimo` is ninety-first, from ordinal lists."
+cuestionar,vblex,mettere,contestare,Reverted. `mettere` is a fragment of `mettere in discussione`.
+largo,n,corso,,"Dropped. `corso` comes from `a lo largo de`, which is a card of its own."
+pesar,n,nonostante,,Dropped. The noun `pesar` is sorrow; `nonostante` belongs to `a pesar de`.
+encargar,vblex,pensare,incaricare,Reverted. `pensare` is noise; `encargar` is to entrust or to order.
+lastimar,vblex,fare,ferire,"Reverted. `fare` is a fragment of `fare male`, the Italian phrasal verb."
+bañar,vblex,fare,bagnare,Reverted. `fare` is a fragment of `fare il bagno`.
+afeitar,vblex,fare,radere,Reverted. `fare` is a fragment of `farsi la barba`.
+burlar,vblex,prendere,beffare,Reverted. `prendere` is a fragment of `prendere in giro`.
+delinquir,vblex,trasformare,,Dropped. `trasformare` is unrelated noise.
