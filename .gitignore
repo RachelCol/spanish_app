@@ -33,3 +33,5 @@ review_dropped_pos.csv
 review_thin.csv
 data/matrix.json
 data/aligned.json
+review_corpus_only.csv
+review_off_list.csv

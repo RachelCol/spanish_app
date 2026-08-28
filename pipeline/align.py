@@ -29,6 +29,8 @@ import unicodedata
 
 from wordfreq import top_n_list
 
+from lookup import build as build_lookup, strip
+
 TOKEN = re.compile(r"[A-Za-zÁÉÍÓÚÜÑÀÈÌÒÙáéíóúüñàèìòùç]+")
 MAX_LEN = 20           # long sentences align poorly and cost the most
 PRUNE = 1e-3           # drop translation probabilities below this between rounds
@@ -40,13 +42,21 @@ def norm(s):
 
 
 def vocabularies(extra_es=6000, it_n=40000):
-    deck = {norm(w["es"]) for w in json.load(open("data/wordlist.json"))}
-    es = deck | {norm(w) for w in top_n_list("es", extra_es)}
-    it = {norm(w) for w in top_n_list("it", it_n)}
-    return deck, es, it
+    """Also returns the map back from the normalised key to the real spelling.
+
+    Alignment works on accent-stripped text, so `después` is `despues`
+    throughout. Emitting the stripped form would mean nothing downstream could
+    match it against the word list, which is how `dopo` came to answer `tras`
+    while `después` was filed as a word we had never heard of.
+    """
+    look = build_lookup([w["es"] for w in json.load(open("data/wordlist.json"))])
+    deck = set(look.values())
+    es = deck | {w.lower() for w in top_n_list("es", extra_es)}
+    it = {w.lower() for w in top_n_list("it", it_n)}
+    return deck, es, it, look
 
 
-def read_pairs(corpus_dir, es_vocab, it_vocab, limit):
+def read_pairs(corpus_dir, es_vocab, it_vocab, limit, look):
     """Sentence pairs as word tuples, taken evenly from each corpus.
 
     Split evenly rather than in filename order: Europarl is institutional and
@@ -64,10 +74,11 @@ def read_pairs(corpus_dir, es_vocab, it_vocab, limit):
             for es_line, it_line in zip(fe, fi):
                 if here >= share or len(pairs) >= limit:
                     break
-                e = [norm(t) for t in TOKEN.findall(es_line)]
+                e = [look.get(t.lower()) or look.get(strip(t)) or t.lower()
+                     for t in TOKEN.findall(es_line)]
                 if not (1 < len(e) <= MAX_LEN):
                     continue
-                f = [norm(t) for t in TOKEN.findall(it_line)]
+                f = [t.lower() for t in TOKEN.findall(it_line)]
                 if not (1 < len(f) <= MAX_LEN):
                     continue
                 e = tuple(sorted({w for w in e if w in es_vocab}))
@@ -139,9 +150,9 @@ def main():
     if "--iters" in sys.argv:
         iters = int(sys.argv[sys.argv.index("--iters") + 1])
 
-    deck, es_vocab, it_vocab = vocabularies()
+    deck, es_vocab, it_vocab, look = vocabularies()
     sys.stderr.write(f"vocabulary: {len(es_vocab):,} Spanish, {len(it_vocab):,} Italian\n")
-    pairs = read_pairs(corpus, es_vocab, it_vocab, limit)
+    pairs = read_pairs(corpus, es_vocab, it_vocab, limit, look)
     sys.stderr.write(f"{len(pairs):,} sentence pairs\n")
     t = train(pairs, iters)
 

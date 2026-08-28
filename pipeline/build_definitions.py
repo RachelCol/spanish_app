@@ -78,9 +78,13 @@ def build(wikt_it2es_path):
     matrix = json.load(open("data/matrix.json"))
     aligned = json.load(open("data/aligned.json"))
     it_pos = json.load(open("data/italian_pos.json"))
+    try:
+        shares = json.load(open("data/shares.json"))["share"]
+    except FileNotFoundError:
+        shares = {}
     dic = dictionary(wikt_it2es_path)
 
-    defs, additions, dropped, thin = {}, [], [], []
+    defs, additions, dropped, thin, unsupported = {}, [], [], [], []
 
     for w in words:
         es, poss = w["es"], w["pos"]
@@ -91,7 +95,9 @@ def build(wikt_it2es_path):
                          "pairs": entry["pairs"] if entry else 0})
             continue
 
-        pct = {it: p for it, p in entry["it"]}
+        # Exact counts where we have them; matrix.json truncates at thirty
+        # neighbours and those are mostly function words.
+        pct = dict(shares.get(nes) or {}) or {it: p for it, p in entry["it"]}
         prob = {it: p for it, p in aligned.get(es, [])}
         proposed = dic.get(nes, {})
 
@@ -99,11 +105,22 @@ def build(wikt_it2es_path):
         scored = sorted(((prob.get(it, 0.0), it) for it in proposed), reverse=True)
         attested = [(p, it) for p, it in scored if p >= MIN_PROB]
 
+        corpus_only = False
         if attested:
             top = attested[0][0]
             keep = [(it, p) for p, it in attested if 100 * p / top >= RELATIVE]
         else:
-            keep = []
+            # No dictionary candidate survives. Falling back to the alignment
+            # rather than dropping the word: `anterior` is `precedente` and
+            # `acta` is `verbale`, and in both the corpus is right and the
+            # dictionary is not. Losing `año` for want of an agreement is the
+            # worse error. Flagged so these can be looked at.
+            rows = [(it, p) for it, p in aligned.get(es, []) if p >= 0.10]
+            if not rows:
+                continue
+            topp = rows[0][1]
+            keep = [(it, p) for it, p in rows if 100 * p / topp >= RELATIVE]
+            corpus_only = True
 
         # Organise by the Spanish word's parts of speech. Apertium says which
         # Spanish part of speech it listed a pair under; where it does not --
@@ -114,7 +131,8 @@ def build(wikt_it2es_path):
         for pos in poss:
             here = []
             for it, p in keep:
-                tagged = proposed[it] - {""}
+                # a corpus fallback is not in `proposed` at all
+                tagged = proposed.get(it, set()) - {""}
                 if tagged:
                     if pos in tagged:
                         here.append((it, p))
@@ -122,7 +140,8 @@ def build(wikt_it2es_path):
                     here.append((it, p))
             if not here:
                 here = [(it, p) for it, p in keep
-                        if not proposed[it] - {""} or pos in proposed[it]]
+                        if not proposed.get(it, set()) - {""}
+                        or pos in proposed.get(it, set())]
             if here:
                 by_pos[pos] = [{"it": it, "prob": round(p, 3),
                                 "pct": round(pct.get(it, 0.0), 1)} for it, p in here]
@@ -133,19 +152,28 @@ def build(wikt_it2es_path):
         if not by_pos:
             continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
+        if corpus_only:
+            unsupported.append({"spanish": es, "band": w["tier"],
+                                "definition": ", ".join(it for it, _ in keep),
+                                "keep": ""})
 
         # what the alignment found that no dictionary lists
         cutoff = keep[0][1] * RELATIVE / 100 if keep else 0
+        best_dict = keep[0][1] if keep else 0.0
         for it, p in aligned.get(es, []):
             if it in proposed or not cutoff or p < cutoff or p < ADD_PROB:
                 continue
-            additions.append({"spanish": es, "italian": it,
+            # A word the dictionary never lists that outranks everything it
+            # does list is not an extra sense -- it says the dictionary has the
+            # primary meaning wrong. `carta` is `lettera` before it is `carta`.
+            additions.append({"beats_dictionary": "yes" if p > best_dict else "",
+                              "spanish": es, "italian": it,
                               "prob": round(p, 3),
                               "pct": round(pct.get(it, 0.0), 1),
                               "of_top": round(100 * p / keep[0][1]),
                               "band": w["tier"], "add": ""})
 
-    return defs, additions, dropped, thin
+    return defs, additions, dropped, thin, unsupported
 
 
 def write_csv(path, rows, fields):
@@ -157,14 +185,17 @@ def write_csv(path, rows, fields):
 
 if __name__ == "__main__":
     wikt = sys.argv[1]
-    defs, additions, dropped, thin = build(wikt)
+    defs, additions, dropped, thin, unsupported = build(wikt)
     json.dump(defs, open("data/definitions.json", "w"),
               ensure_ascii=False, separators=(",", ":"))
-    additions.sort(key=lambda r: -r["prob"])
+    additions.sort(key=lambda r: (r["beats_dictionary"] != "yes", -r["prob"]))
     write_csv("review_additions.csv", additions,
-              ["band", "spanish", "italian", "prob", "pct", "of_top", "add"])
+              ["beats_dictionary", "band", "spanish", "italian",
+               "prob", "pct", "of_top", "add"])
     write_csv("review_dropped_pos.csv", dropped, ["spanish", "dropped_pos", "kept"])
     write_csv("review_thin.csv", thin, ["spanish", "pos", "pairs"])
+    write_csv("review_corpus_only.csv", unsupported,
+              ["band", "spanish", "definition", "keep"])
 
     print(f"{len(defs)} Spanish words defined -> data/definitions.json")
     n_senses = sum(len(v) for d in defs.values() for v in d["by_pos"].values())
@@ -172,3 +203,4 @@ if __name__ == "__main__":
     print(f"\n  review_additions.csv    {len(additions):5d}  corpus found, no dictionary lists")
     print(f"  review_dropped_pos.csv  {len(dropped):5d}  parts of speech with no translation")
     print(f"  review_thin.csv         {len(thin):5d}  too little corpus evidence")
+    print(f"  review_corpus_only.csv  {len(unsupported):5d}  defined by the corpus, no dictionary agreed")

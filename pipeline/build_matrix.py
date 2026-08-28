@@ -30,6 +30,8 @@ import unicodedata
 
 from wordfreq import zipf_frequency
 
+from lookup import build as build_lookup, strip
+
 TOKEN = re.compile(r"[A-Za-zÁÉÍÓÚÜÑÀÈÌÒÙáéíóúüñàèìòùç]+")
 MIN_IT_ZIPF = 2.5      # `leader` clears this; untranslated English does not
 KEEP_TOP = 30
@@ -40,9 +42,15 @@ def norm(s):
     return "".join(c for c in s if unicodedata.category(c) != "Mn")
 
 
-def build(corpus_dir, cap=3000):
+def build(corpus_dir, cap=3000, keep_always=None):
+    """`keep_always` maps a Spanish word to Italian words that must be kept
+    however far down the list they fall. The thirty commonest neighbours are
+    `e`, `di` and `che`, so a real translation can be truncated away and read
+    as 0% -- which is what happened to `carta`. Anything a dictionary proposes
+    is counted whether or not it makes the top."""
     words = json.load(open("data/wordlist.json"))
-    wanted = {norm(w["es"]): w["es"] for w in words}
+    wanted = build_lookup([w["es"] for w in words])
+    keep_always = keep_always or {}
 
     seen = collections.Counter()
     tally = collections.defaultdict(collections.Counter)
@@ -60,7 +68,7 @@ def build(corpus_dir, cap=3000):
                     sys.stderr.write(f"    {n:,}\n")
                 hits = set()
                 for t in TOKEN.findall(es_line):
-                    w = wanted.get(norm(t))
+                    w = wanted.get(t.lower()) or wanted.get(strip(t))
                     if w is not None and seen[w] < cap:
                         hits.add(w)
                 if not hits:
@@ -81,19 +89,23 @@ def build(corpus_dir, cap=3000):
         sys.stderr.write(f"    {n:,}\n")
 
     out = {}
-    for w in wanted.values():
+    for w in set(wanted.values()):
         total = seen.get(w, 0)
         if total < 20:
             continue
-        rows = []
-        for it, c in tally[w].most_common(120):
-            if c < 3 or it == norm(w) and False:
+        must = keep_always.get(w, set())
+        rows, seen_it = [], set()
+        for it, c in tally[w].most_common():
+            if it in seen_it:
                 continue
-            if zipf_frequency(it, "it") < MIN_IT_ZIPF:
-                continue
+            forced = it in must
+            if not forced:
+                if c < 3 or zipf_frequency(it, "it") < MIN_IT_ZIPF:
+                    continue
+                if len(rows) >= KEEP_TOP:
+                    continue
             rows.append([it, round(100 * c / total, 2)])
-            if len(rows) >= KEEP_TOP:
-                break
+            seen_it.add(it)
         out[w] = {"pairs": total, "it": rows}
     return out
 
