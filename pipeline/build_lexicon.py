@@ -14,6 +14,7 @@ list as a visible gap rather than vanishing.
 """
 import csv
 import os
+import re
 import sys
 
 from wordfreq import top_n_list, zipf_frequency
@@ -27,6 +28,19 @@ from build_wordlist import read_wiktionary, POS_MAP, singular_of  # noqa: E402
 # and accepting those put 181 verb forms in a list meant to hold `tener`, not
 # `tengo`. `era`, `trabajo` and `cuenta` stay: those are genuine nouns.
 SUBSTANTIAL = {"n", "adj", "vblex"}
+
+# Articles are not worth drilling: an Italian speaker does not need a card to
+# learn that `el` is `il`. Dropped as a class rather than one at a time.
+ARTICLES = {"el", "la", "los", "las", "un", "una", "unos", "unas", "lo"}
+
+# Names of letters and notes. Wiktionary lists `de` as "the name of the Latin
+# script letter D", `te` as T, `la` as the sixth note of the scale -- readings
+# that keep a function word alive as a noun and belong nowhere near a deck.
+LETTERISH = re.compile(
+    r"^(the name of the|name of the).*(letter|character)|"
+    r"letter [א-ת]|"
+    r"\((?:first|second|third|fourth|fifth|sixth|seventh) note of the scale\)",
+    re.I)
 
 # Nouns that coincide with a verb form stay -- `casa`, `agua`, `mano`, `paso`,
 # `pasa` the raisin. What goes is a past participle riding in on an adjective
@@ -57,6 +71,32 @@ OUT = "content/lexicon.csv"
 # absolute Zipf, which put 22 words in one band and 1,700 in another.
 BANDS = [(0, 300, "first"), (300, 800, "core"), (800, 1500, "common"),
          (1500, 2200, "useful"), (2200, 3000, "wider")]
+
+
+def letter_names(path, lang="es"):
+    """word -> the parts of speech whose only reading is a letter or note."""
+    import collections
+    import json
+    lettery = collections.defaultdict(set)
+    other = collections.defaultdict(set)
+    for line in open(path, errors="ignore"):
+        if '"word"' not in line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        if r.get("lang_code") != lang:
+            continue
+        pos = POS_MAP.get(r.get("pos"))
+        if not pos:
+            continue
+        for s in r.get("senses") or []:
+            g = (s.get("glosses") or [""])[0]
+            if not g or s.get("form_of"):
+                continue
+            (lettery if LETTERISH.search(g) else other)[r["word"]].add(pos)
+    return {w: v - other.get(w, set()) for w, v in lettery.items()}
 
 
 def feminine_forms(path, lang="es"):
@@ -144,13 +184,17 @@ def main(wikt_path):
     inflected_bases = bases_of(wikt_path)
     feminines = feminine_forms(wikt_path)
     parts = participles(wikt_path)
+    letters = letter_names(wikt_path)
     rows, rank = [], 0
     for w in top_n_list("es", 20000):
         if len(rows) >= SIZE:
             break
         if not w.isalpha() or len(w) < 2:
             continue
+        if w in ARTICLES:
+            continue
         pos = {p for p in own.get(w, ()) if p != "name"}
+        pos = pos - letters.get(w, set())      # `de` the letter, `la` the note
         if not pos:
             continue
         if inflected.get(w) and not (pos & SUBSTANTIAL):

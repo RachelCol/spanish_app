@@ -32,6 +32,14 @@ import xml.etree.ElementTree as ET
 sys.path.insert(0, "pipeline")
 from pairs import _surface, DIX          # noqa: E402
 
+# Closed classes. A preposition, conjunction, determiner or pronoun is glue
+# rather than meaning, and alignment has nothing to grip: the corpus gets the
+# top answer right -- `si` is `se` at 0.72, `porque` is `perché` at 0.66 -- and
+# fills the rest with noise. For these readings the dictionary is taken as it
+# stands, in its own order, and no percentage is shown, because a percentage
+# for `de` -> `di` would say nothing anyone needs.
+CLOSED = {"pr", "cnj", "det", "prn"}
+
 RELATIVE = 15.0        # keep anything within this % of the top translation
 MIN_PAIRS = 30         # below this the corpus has no opinion worth having
 MIN_PROB = 0.01        # an alignment weaker than this is noise
@@ -146,6 +154,18 @@ def build(wikt_it2es_path):
         # `migliore` the adjective on a word that is both.
         by_pos = {}
         for pos in poss:
+            if pos in CLOSED:
+                # dictionary order, no corpus ranking, no percentage
+                offered = [it for it in proposed
+                           if pos in (proposed[it] - {""}) or not (proposed[it] - {""})]
+                offered = [it for it in offered
+                           if it in it_base
+                           and (not it_pos.get(it) or pos in it_pos[it]
+                                or set(it_pos[it]) & CLOSED)]
+                if offered:
+                    by_pos[pos] = [{"it": it, "prob": None, "pct": None}
+                                   for it in offered[:4]]
+                continue
             here = []
             for it, p in keep:
                 # a corpus fallback is not in `proposed` at all
@@ -153,12 +173,17 @@ def build(wikt_it2es_path):
                 if tagged:
                     if pos in tagged:
                         here.append((it, p))
-                elif pos in it_pos.get(it, []) or not it_pos.get(it):
+                elif pos in it_pos.get(it, []):
                     here.append((it, p))
-            if not here:
-                here = [(it, p) for it, p in keep
-                        if not proposed.get(it, set()) - {""}
-                        or pos in proposed.get(it, set())]
+                elif it_pos.get(it) and set(it_pos[it]) <= CLOSED:
+                    continue      # glue cannot be the meaning of a noun
+                elif not it_pos.get(it) and pos in ("n", "adj", "vblex", "adv"):
+                    # unknown to Wiktionary; allow only for open classes, so a
+                    # stray preposition cannot become a noun's definition
+                    here.append((it, p))
+            # No fallback that re-admits everything. It was letting `di`, a
+            # preposition, stand as the definition of `intento`, a noun --
+            # the part of speech is the whole point of grouping.
             if here:
                 by_pos[pos] = [{"it": it, "prob": round(p, 3),
                                 "pct": round(pct.get(it, 0.0), 1)} for it, p in here]

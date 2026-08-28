@@ -45,8 +45,18 @@ approach turned out to be wrong.
   it to that word's definition permanently. This is what catches a missing
   definition -- the corpus found `auto -> macchina` at 37%, which no dictionary
   has -- without letting a collocation like `tiempo -> anche` onto a card.
+- **Function words are taken from the dictionary, not the corpus.** A
+  preposition, conjunction, determiner or pronoun is glue rather than meaning,
+  and alignment has nothing to grip. The corpus gets the top answer right --
+  `si` is `se`, `porque` is `perché`, `con` is `con` -- and fills the rest with
+  noise, which is how `di` came to answer `intento` and `la` to answer `china`.
+  For those readings the dictionary is taken in its own order, and **no
+  percentage is shown**: a figure for `de` → `di` tells no one anything. A word
+  with both kinds of reading is split -- `de` takes the dictionary as a
+  preposition and the corpus as a noun.
 - **Each Italian word carries its own part-of-speech tag.** Used for mapping
-  backwards in step 3; not necessarily shown.
+  backwards in step 3, and to keep a preposition from standing as the meaning
+  of a noun.
 - **The definition is organised by the *Spanish* word's parts of speech** —
   which Italian word translates it as a noun, which as an adjective. At least
   one per Spanish part of speech.
