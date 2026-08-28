@@ -199,6 +199,20 @@ def build(wikt_it2es_path):
             return same or other
         proposed = dic.get(nes, {})
 
+        # Apertium keys its candidates unaccented, the corpus returns them
+        # accented, so testing membership directly said `verità` was not what
+        # the dictionary meant by `verita`. Compare through the canonical form.
+        canon_proposed = {}
+        for _it in proposed:
+            _c = italian(_it)
+            if _c:
+                canon_proposed[_c] = _it
+
+        def in_dictionary(it):
+            return it in proposed or italian(it, False) in canon_proposed \
+                or italian(it) in canon_proposed
+
+
         # what the dictionary offers, ranked by how often it is the alignment
         scored = sorted(((prob.get(it, 0.0), it) for it in proposed
                          if italian(it)), reverse=True)
@@ -247,14 +261,14 @@ def build(wikt_it2es_path):
             tp = tagged_prob(pos)
             if tp and pos not in CLOSED:
                 ranked = sorted(((p, it) for it, p in tp.items()
-                                 if it in proposed and italian(it)), reverse=True)
+                                 if in_dictionary(it) and italian(it)), reverse=True)
                 # A word the dictionary never lists that beats everything it
                 # does list is not an extra sense -- it says the dictionary has
                 # the primary wrong. `carta` is `lettera` before it is `carta`,
                 # `papel` is `ruolo`, and `más` is `più` rather than `oltre`.
                 # Must be a real Italian word: `parlamente` is a tagger slip.
                 outside = sorted(((p, it) for it, p in tp.items()
-                                  if it not in proposed and italian(it)
+                                  if not in_dictionary(it) and italian(it)
                                   and italian(it) in it_pos), reverse=True)
                 if outside and (not ranked or outside[0][0] > ranked[0][0] * BEATS) \
                         and outside[0][0] >= ADD_PROB:
@@ -327,7 +341,7 @@ def build(wikt_it2es_path):
         cutoff = keep[0][1] * RELATIVE / 100 if keep else 0
         best_dict = keep[0][1] if keep else 0.0
         for it, p in aligned.get(es, []):
-            if it in proposed or not cutoff or p < cutoff or p < ADD_PROB:
+            if in_dictionary(it) or not cutoff or p < cutoff or p < ADD_PROB:
                 continue
             if not italian(it):
                 continue
