@@ -37,9 +37,13 @@ LOCKED = {
     # Found in the overruled review: each of these is why a bare word was
     # credited with the phrase's meaning. The words themselves have real
     # standalone uses, so they keep their own cards and the phrase joins them.
-    "a pesar": "pesar",         "de vez en cuando": "vez",
-    "en concreto": "concreto",  "a lo largo": "largo",
-    "alrededor de": "alrededor",
+    # These five keep their bare word as a card of its own: `largo`, `vez`,
+    # `pesar`, `concreto` and `alrededor` are ordinary Spanish outside the
+    # phrase, unlike `siquiera` or `embargo`, which a learner never meets
+    # alone. The phrase joins them rather than replacing them.
+    "a pesar": None,            "de vez en cuando": None,
+    "en concreto": None,        "a lo largo": None,
+    "alrededor de": None,
 }
 
 IT_SKIP = set("""il lo la i gli le un uno una l di a da in con su per tra fra e ed o che se ma
@@ -47,6 +51,8 @@ non ci si mi ti vi ne del della dei delle nel nella dal dalla al alla sul sulla
 è sono ha ho hanno era erano essere avere fare dire come dove quando cosa
 questo questa quello quella qui qua lì là
 dell all nell sull dall coll quell un anche solo più molto po cosi coso
+commissione parlamento consiglio europea europeo signor presidente onorevole
+anni anno degli delle dei negli nelle ogni volta cosa modo caso punto
 pero perche quando dopo prima ora poi già ancora sempre mai""".split())
 
 

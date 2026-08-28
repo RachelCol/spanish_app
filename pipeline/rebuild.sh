@@ -28,6 +28,9 @@ export PYTHONPATH=pipeline
 
 step() { printf '\n=== %s\n' "$1"; }
 
+step "wordlist superset of the lexicon"
+$PY pipeline/sync_wordlist.py
+
 step "alignment over lemma|POS tokens"
 $PY pipeline/align_tagged.py "$CORPUS"
 

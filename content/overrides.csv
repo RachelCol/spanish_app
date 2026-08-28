@@ -7,3 +7,4 @@ hacer,vblex,fare,"Set by hand to drop the noun reading, which the corpus filled 
 quedar,vblex,restare|rimanere,"Set by hand. The corpus put `essere` first at 8.8%, which is noise from copular sentences. `restare` and `rimanere` are near-synonyms and both belong."
 andar,vblex,camminare,"Set by hand. `andare` is the false friend and the corpus offered it at 11.1%: Italian `andare` is Spanish `ir`, not `andar`. `andar` is to walk, so `camminare`."
 parecer,vblex,sembrare,"Set by hand. `sembrare` at 19.5% is correct but sorted below `parere` at 1.6%. `parere` as a noun is opinion, a different word, and is not this card."
+necesitar,vblex,avere bisogno di,"Set by hand. Italian has no everyday single verb for `to need` -- `necessitare` is formal -- so it says `ho bisogno di`. The corpus saw this correctly and could only report the pieces: `bisogno` as a noun at 0.29 and `avere` at 0.20. This is the first Italian answer that is a phrase rather than a word."

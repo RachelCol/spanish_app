@@ -169,7 +169,9 @@ def build(wikt_it2es_path):
         phrases = json.load(open("data/phrases.json"))
     except FileNotFoundError:
         phrases = {}
-    replaced = {v["replaces"] for v in phrases.values()}
+    # `replaces: null` means the phrase joins the bare word rather than
+    # standing in for it.
+    replaced = {v["replaces"] for v in phrases.values() if v["replaces"]}
     EXCLUDED = editorial.excluded()
     REVERTS, OVERRIDES = editorial.reverts(), editorial.overrides()
 

@@ -1,1 +1,960 @@
-[{"id":"auxiliary","title":"One auxiliary, not two","summary":"The essere/avere choice simply does not exist in Spanish.","body":["Italian makes you choose an auxiliary for every compound tense, and then agree the participle when it is essere. Spanish has one auxiliary, **haber**, for every verb without exception — and the participle never agrees.","This is the single biggest simplification Spanish offers you. Movement verbs, reflexives, **ser** itself: all take haber."],"pairs":[["ho parlato","he hablado","avere → haber"],["sono andato","he ido","essere → haber too"],["sono stato","he sido","even ser takes haber"],["mi sono lavato","me he lavado","reflexives too"],["siamo andati","hemos ido","no plural agreement"],["è andata","ha ido","no feminine agreement"]],"watch":"Your instinct will produce *soy ido* and *somos idos*. There is no context in which that is right."},{"id":"past-tense","title":"Which past tense to reach for","summary":"Italian's everyday past maps to the Spanish preterite, not the perfect.","body":["In Italian the **passato prossimo** is the ordinary past and the passato remoto is literary or southern. So your instinct is: past → compound tense.","In Latin American Spanish that instinct is wrong. The ordinary past is the simple **pretérito**. The compound **pretérito perfecto** exists and looks exactly like the passato prossimo, which is the trap: it is used far less.","This affects nearly every past-tense sentence you will say, which makes it the highest-frequency error available to you."],"pairs":[["Ieri ho mangiato alle otto.","Ayer comí a las ocho.","not *he comido*"],["Sono andato al mercato.","Fui al mercado.","not *he ido*"],["Che cosa hai detto?","¿Qué dijiste?","not *has dicho*"],["Stamattina ho visto Ana.","Esta mañana vi a Ana.","still the preterite"]],"watch":"In Spain `he comido hoy` is normal and much closer to Italian. You chose Latin American, so the preterite is your default."},{"id":"articles-possessive","title":"Possessives take no article","summary":"il mio libro → mi libro. Spanish never puts an article there.","body":["Italian requires the definite article before a possessive: *il mio libro*, *la tua casa*. Spanish never does.","Italian's own exception — dropping the article for singular unmodified family members, *mio fratello* — is a rule you can forget entirely, because Spanish treats every noun the same way.","Spanish also has a second, stressed possessive that goes **after** the noun: *un amigo mío*, *¿es tuyo?* That is the form that looks like Italian's."],"pairs":[["il mio libro","mi libro","no article"],["la tua casa","tu casa","no article"],["mio fratello","mi hermano","same in Spanish, no exception needed"],["i miei genitori","mis padres","the possessive itself pluralises"],["un mio amico","un amigo mío","stressed form goes after"]],"watch":"*el mi libro* is the error, and it is one you will make."},{"id":"partitive","title":"There is no partitive","summary":"del pane, dei libri → just pan, libros.","body":["Italian uses *del*, *della*, *dei*, *delle* to mean 'some'. Spanish has no partitive at all. Where Italian puts a word, Spanish puts nothing.","This one is easy to fix because the correction is always deletion."],"pairs":[["Vorrei del pane.","Quiero pan.","no word for 'some'"],["Ho comprato dei libri.","Compré libros.","bare plural"],["Bevi del vino?","¿Bebes vino?","bare noun"],["C'è dell'acqua?","¿Hay agua?","bare noun"]],"watch":"*Quiero del pan* is wrong. So is *compré de los libros*."},{"id":"ser-estar","title":"ser and estar are not essere and stare","summary":"The concept transfers; the boundary does not.","body":["Italian has essere and stare, so the idea of two 'to be' verbs is familiar. The problem is that the line falls in a different place, and the cognate pull is towards the wrong one.","**estar** covers location, and temporary or changed states — including many that Italian expresses with essere.","**ser** covers identity, origin, material, time, and inherent qualities.","Location is the clearest rule: things and people are **estar**. The one exception is events, which use ser: *la fiesta es en mi casa*."],"pairs":[["Sono stanco.","Estoy cansado.","state → estar"],["Sono a casa.","Estoy en casa.","location → estar"],["Sono italiana.","Soy italiana.","identity → ser"],["È mia sorella.","Es mi hermana.","identity → ser"],["La zuppa è fredda.","La sopa está fría.","it has gone cold → estar"],["Il ghiaccio è freddo.","El hielo es frío.","ice is inherently cold → ser"],["Dov'è la stazione?","¿Dónde está la estación?","location → estar"],["La festa è a casa mia.","La fiesta es en mi casa.","event → ser"]],"watch":"*soy cansado* means something like 'I am a tiring person'. *soy en casa* is simply wrong."},{"id":"personal-a","title":"The personal a","summary":"Spanish marks a human direct object with a. Italian has nothing like it.","body":["When the direct object of a verb is a specific person, Spanish puts **a** in front of it. Italian does not, and there is no equivalent to transfer from.","It applies to people and to pets, not to things. It also applies to *alguien*, *nadie*, and to *quién* in questions."],"pairs":[["Vedo Maria.","Veo a María.","a person → a"],["Vedo la casa.","Veo la casa.","a thing → no a"],["Cerco mio fratello.","Busco a mi hermano.","a person → a"],["Cerco un taxi.","Busco un taxi.","a thing → no a"],["Non vedo nessuno.","No veo a nadie.","nadie takes it"],["Chi hai visto?","¿A quién viste?","questions too"]],"watch":"Omitting it is the classic Italian-speaker error, and it is audible in every sentence about a person."},{"id":"por-para","title":"per splits into por and para","summary":"One Italian preposition, two Spanish ones, and the choice is obligatory.","body":["Italian *per* does several jobs. Spanish divides them between **por** and **para**, and you must pick.","**para** points forwards: destination, purpose, recipient, deadline.","**por** points backwards or through: cause, exchange, duration, means, movement through a place.","The shortest test that works most of the time: *para* answers 'what for?', *por* answers 'why?' or 'in exchange for what?'"],"pairs":[["Parto per Madrid.","Salgo para Madrid.","destination → para"],["È per te.","Es para ti.","recipient → para"],["Per domani.","Para mañana.","deadline → para"],["Grazie per il regalo.","Gracias por el regalo.","cause → por"],["L'ho comprato per dieci euro.","Lo compré por diez euros.","exchange → por"],["Ho studiato per due ore.","Estudié por dos horas.","duration → por"],["Passo per il parco.","Paso por el parque.","through → por"]],"watch":"There is no safe default. Guessing *por* everywhere is wrong about half the time."},{"id":"prepositions-place","title":"Where things are, and where you are going","summary":"Italian's a/in/da do not line up with Spanish a/en/de.","body":["Italian chooses between *a* and *in* partly by the kind of place — *a Roma* but *in Italia*. Spanish chooses by whether there is movement.","**en** for being somewhere, whatever the place. **a** for going there.","Italian *da* has no single Spanish equivalent. For a person's place it becomes *en casa de* or *a casa de*; for origin it becomes *de*."],"pairs":[["Sono a Roma.","Estoy en Roma.","location → en"],["Sono in Italia.","Estoy en Italia.","also en"],["Vado a Roma.","Voy a Roma.","movement → a"],["Vado in Italia.","Voy a Italia.","still a"],["Sono a casa.","Estoy en casa.","en, not a"],["Vado da Mario.","Voy a casa de Mario.","no equivalent of da"],["Vengo da Roma.","Vengo de Roma.","origin → de"]],"watch":"*Estoy a Roma* and *voy en Roma* are the two errors, and they are mirror images of each other."},{"id":"ne-ci","title":"ne and ci do not exist","summary":"Two Italian pronouns with no Spanish counterpart at all.","body":["Italian *ne* ('of it', 'of them') and locative *ci* ('there') have no Spanish equivalents. Spanish either repeats the noun or says nothing.","The risk is not getting them wrong — it is inventing something to carry them."],"pairs":[["Ne voglio due.","Quiero dos.","ne disappears"],["Quanti ne hai?","¿Cuántos tienes?","ne disappears"],["Ci vado domani.","Voy mañana.","locative ci disappears"],["Non ci credo.","No lo creo.","lo, not ci"],["C'è un problema.","Hay un problema.","c'è → hay"],["Ci sono due libri.","Hay dos libros.","hay never pluralises"]],"watch":"**hay** is invariable. *Han dos libros* is a very common error."},{"id":"gender-shifts","title":"Words that changed gender","summary":"Most nouns keep their gender. These did not.","body":["Gender transfers almost perfectly, which makes the exceptions worth memorising individually — there are not many, and you will otherwise get them wrong every time.","Nouns ending in -aje, -or and -ma (from Greek) are masculine in Spanish; nouns in -umbre, -dad, -tad and -ción are feminine."],"pairs":[["il sangue","la sangre","m → f"],["il latte","la leche","m → f"],["il fiore","la flor","m → f"],["il naso","la nariz","m → f"],["il sale","la sal","m → f"],["il miele","la miel","m → f"],["il costume","la costumbre","m → f"],["l'origine (f)","el origen","f → m"],["l'analisi (f)","el análisis","f → m"],["il viaggio","el viaje","both m, note the -aje"]],"watch":"*el sangre* and *la origen* are the shape of this error."},{"id":"sound-shifts","title":"How the words changed shape","summary":"Most vocabulary transfers by rule. Learn the rule, not the words.","body":["Italian and Spanish share the great majority of their vocabulary, and the differences are largely regular. Recognising the correspondences turns thousands of Italian words into Spanish ones.","Spanish has **no double consonants** except rr, ll, cc and nn. Italian's doubles simplify."],"pairs":[["conversazione","conversación","-zione → -ción"],["città","ciudad","-tà → -dad"],["chiave","llave","chi- → ll-"],["fiamma","llama","fi- → ll-"],["pioggia","lluvia","pi- → ll-"],["scuola","escuela","s+cons → es-"],["spagnolo","español","s+cons → es-, gn → ñ"],["famiglia","familia","gli → li"],["dubbio","duda","no doubles"],["difficile","difícil","no doubles, -ile → -il"]],"watch":"Doubling a consonant is the most audible Italian accent in Spanish."},{"id":"false-friends","title":"Words that lie to you","summary":"The small set where the cognate is actively wrong.","body":["These are dangerous precisely because you will say them with confidence. There are not many, and they are worth learning as a list."],"pairs":[["burro = butter","el burro = donkey","butter is la mantequilla"],["salire = to go up","salir = to leave","to go up is subir"],["guardare = to look at","guardar = to keep","to look at is mirar"],["aceto = vinegar","el aceite = oil","vinegar is el vinagre"],["largo = wide","largo = long","wide is ancho"],["imbarazzata = embarrassed","embarazada = pregnant","embarrassed is avergonzada"],["sposa = bride","la esposa = wife",""],["prendere = to take","prender = to arrest, switch on","to take is tomar"],["topo = mouse","el topo = mole","mouse is el ratón"],["gamba = leg","la gamba = prawn","leg is la pierna"]],"watch":"*Quiero burro en el pan* asks for donkey on your bread."},{"id":"word-order","title":"Where the words go","summary":"Freer than English, and mostly like Italian — until it isn't.","body":["Both languages let you move things around for emphasis, and both drop the subject pronoun by default. Most of your instincts carry over.","Two places they part company. Spanish **inverts the subject in questions** far more consistently than Italian, which often relies on intonation alone. And Spanish will not split a compound verb: nothing goes between **haber** and the participle.","Adjectives normally follow the noun in both. Moving one in front changes the sense the same way in both languages: *un hombre pobre* is penniless, *un pobre hombre* is pitiable."],"pairs":[["Dove va Maria?","¿Adónde va María?","verb before subject"],["Maria è arrivata?","¿Llegó María?","inverted, not just intonation"],["Ho sempre detto questo.","Siempre he dicho eso.","nothing between haber and the participle"],["Non ho mai visto.","Nunca he visto.","adverb moves out front"],["Una casa grande","Una casa grande","adjective after, as in Italian"],["Un povero uomo","Un pobre hombre","before the noun: pitiable"],["Un uomo povero","Un hombre pobre","after the noun: penniless"]],"watch":"*He siempre dicho* is the error, and it comes straight from Italian word order."},{"id":"questions","title":"Asking and exclaiming","summary":"Spanish opens a question with an upside-down mark, and closes it.","body":["Every question is wrapped: **¿...?** And every exclamation: **¡...!** The opening mark goes where the question actually starts, which is not always the start of the sentence.","Question words carry a written accent — *qué*, *dónde*, *cuándo*, *quién*, *cómo*, *cuánto* — and lose it when they are not questioning."],"pairs":[["Come stai?","¿Cómo estás?","both marks"],["Che bello!","¡Qué bonito!","exclamation marks too"],["Maria, dove vai?","María, ¿adónde vas?","the mark opens at the question"],["So dove abita.","Sé dónde vive.","indirect question keeps the accent"],["La casa dove abito.","La casa donde vivo.","not a question, no accent"]],"watch":"Leaving off the opening ¿ is the most visible way to write Spanish like an Italian."},{"id":"object-pronouns","title":"Two pronouns in a row","summary":"le + lo becomes se lo. Italian has nothing that behaves like it.","body":["Placement works as it does in Italian: before a conjugated verb, attached to an infinitive, a gerund or an affirmative command.","The difference is what happens when two third-person pronouns meet. Italian turns *gli* + *lo* into *glielo*. Spanish turns **le** + **lo** into **se lo** — the indirect pronoun is replaced outright by *se*.","Latin America keeps **lo** and **la** for the direct object of a person. Spain often uses *le* for a man; you can ignore that."],"pairs":[["Lo vedo.","Lo veo.","same placement"],["Voglio vederlo.","Quiero verlo.","attached to the infinitive, same"],["Glielo do.","Se lo doy.","le + lo → se lo"],["Gliela mando.","Se la mando.","same rule"],["Me lo dai?","¿Me lo das?","first person is unchanged"],["Dammelo!","¡Dámelo!","attached to the command, with an accent added"]],"watch":"*Le lo doy* is never right. It is always *se lo doy*."},{"id":"se","title":"The many uses of se","summary":"Reflexive, impersonal, passive — and the replacement for le.","body":["Spanish *se* does the work of Italian *si*, and the two line up closely: reflexive, impersonal, and passive.","The impersonal is everywhere in Spanish, on signs and in speech, where English would use 'you' or a passive."],"pairs":[["Mi lavo.","Me lavo.","reflexive, as in Italian"],["Si parla spagnolo.","Se habla español.","impersonal, as in Italian"],["Si vendono case.","Se venden casas.","agrees with the plural, as in Italian"],["Come si dice?","¿Cómo se dice?","identical structure"],["Si è fatto tardi.","Se hizo tarde.","same idiom"]],"watch":"This one transfers almost perfectly. The only se that will surprise you is the one standing in for le."},{"id":"gustar","title":"gustar works like piacere","summary":"The structure is the same. The doubling is not.","body":["*Me gusta el café* is built exactly like *mi piace il caffè*: the thing liked is the subject, and you are the indirect object. That transfers without effort.","What Spanish adds is a habit of **doubling** the pronoun with *a mí*, *a ti*, *a Ana* — for emphasis, contrast, or simply because it sounds right. Italian does this far less.","The same pattern runs through a family of verbs: *encantar*, *interesar*, *parecer*, *faltar*, *doler*."],"pairs":[["Mi piace il caffè.","Me gusta el café.","identical structure"],["Mi piacciono i libri.","Me gustan los libros.","plural subject, plural verb"],["A me piace, a lui no.","A mí me gusta, a él no.","Spanish doubles the pronoun"],["Ad Ana piace il cinema.","A Ana le gusta el cine.","a Ana AND le"],["Mi fa male la testa.","Me duele la cabeza.","doler works the same way"],["Mi manca il mare.","Extraño el mar.","faltar does NOT mean this"]],"watch":"*Mi manca* is the trap: Spanish *me falta* means something is lacking, not that you miss it. To miss someone is **extrañar**."},{"id":"diminutives","title":"Diminutives, and how much they matter","summary":"-ito is everywhere in Mexico, and not always about size.","body":["Italian has -ino, -etto, -ello. Spanish has **-ito** and **-illo**, and in Mexico -ito is used constantly — for affection, for politeness, for softening a request, and only sometimes for size.","*Ahorita* is the one to know. Literally 'right now', in practice anywhere from this second to never."],"pairs":[["un momentino","un momentito","-ino → -ito"],["Adesso.","Ahorita.","softened, and vaguer than it looks"],["un caffè piccolo","un cafecito","affection, not size"],["poco","poquito","a little bit"],["Aspetta un attimo.","Espérame tantito.","very Mexican"]],"watch":"Using no diminutives at all reads as brusque in Mexico, in a way it would not in Italy."},{"id":"possessives","title":"Possessives drop the article","summary":"Italian says il mio libro. Spanish says mi libro, and never the other way.","body":["Italian puts an article in front of a possessive almost everywhere: *il mio libro*, *la tua casa*, *i nostri amici*. Spanish does not. The possessive stands alone — **mi libro**, **tu casa**, **nuestros amigos** — and adding *el* or *la* in front of it is simply wrong.","The short forms — mi, tu, su, nuestro — go before the noun and agree only in number, except nuestro/vuestro which agree in gender too. There is no masculine/feminine difference in mi, tu or su at all: *mi hermano* and *mi hermana* both.","There is also a long form that goes after the noun — **mío, tuyo, suyo** — used for emphasis, after ser, and in direct address. That one does agree in gender and number.","**Su** is the one that will trip you. It covers his, her, your (usted), their — everything Italian splits between *suo* and *loro*. Spanish leaves it ambiguous and clarifies with *de él*, *de ella*, *de usted* when the context does not."],"pairs":[["il mio libro","mi libro","no article, ever"],["la mia casa","mi casa","mi does not change for gender"],["i miei amici","mis amigos","only the number changes"],["la nostra casa","nuestra casa","nuestro does agree in gender"],["il nostro cane","nuestro perro","masculine"],["un mio amico","un amigo mío","long form, after the noun"],["È mio.","Es mío.","after ser, long form"],["il suo libro","su libro","his, her, your or their"],["il loro libro","su libro","loro collapses into su as well"],["il libro di lui","el libro de él","how you disambiguate su"],["Mamma mia!","¡Madre mía!","the long form survives in exclamations"]],"watch":"*El mi libro* and *la mi casa* are the errors to watch for, and they will feel natural for a long time. The other one is reaching for a plural to translate *loro* — Spanish has no separate word, and su does that work too."}]
+[
+ {
+  "id": "auxiliary",
+  "title": "One auxiliary, not two",
+  "summary": "The essere/avere choice simply does not exist in Spanish.",
+  "body": [
+   "Italian makes you choose an auxiliary for every compound tense, and then agree the participle when it is essere. Spanish has one auxiliary, **haber**, for every verb without exception — and the participle never agrees.",
+   "This is the single biggest simplification Spanish offers you. Movement verbs, reflexives, **ser** itself: all take haber."
+  ],
+  "pairs": [
+   [
+    "ho parlato",
+    "he hablado",
+    "avere → haber"
+   ],
+   [
+    "sono andato",
+    "he ido",
+    "essere → haber too"
+   ],
+   [
+    "sono stato",
+    "he sido",
+    "even ser takes haber"
+   ],
+   [
+    "mi sono lavato",
+    "me he lavado",
+    "reflexives too"
+   ],
+   [
+    "siamo andati",
+    "hemos ido",
+    "no plural agreement"
+   ],
+   [
+    "è andata",
+    "ha ido",
+    "no feminine agreement"
+   ]
+  ],
+  "watch": "Your instinct will produce *soy ido* and *somos idos*. There is no context in which that is right."
+ },
+ {
+  "id": "past-tense",
+  "title": "Which past tense to reach for",
+  "summary": "Italian's everyday past maps to the Spanish preterite, not the perfect.",
+  "body": [
+   "In Italian the **passato prossimo** is the ordinary past and the passato remoto is literary or southern. So your instinct is: past → compound tense.",
+   "In Latin American Spanish that instinct is wrong. The ordinary past is the simple **pretérito**. The compound **pretérito perfecto** exists and looks exactly like the passato prossimo, which is the trap: it is used far less.",
+   "This affects nearly every past-tense sentence you will say, which makes it the highest-frequency error available to you."
+  ],
+  "pairs": [
+   [
+    "Ieri ho mangiato alle otto.",
+    "Ayer comí a las ocho.",
+    "not *he comido*"
+   ],
+   [
+    "Sono andato al mercato.",
+    "Fui al mercado.",
+    "not *he ido*"
+   ],
+   [
+    "Che cosa hai detto?",
+    "¿Qué dijiste?",
+    "not *has dicho*"
+   ],
+   [
+    "Stamattina ho visto Ana.",
+    "Esta mañana vi a Ana.",
+    "still the preterite"
+   ]
+  ],
+  "watch": "In Spain `he comido hoy` is normal and much closer to Italian. You chose Latin American, so the preterite is your default."
+ },
+ {
+  "id": "articles-possessive",
+  "title": "Possessives take no article",
+  "summary": "il mio libro → mi libro. Spanish never puts an article there.",
+  "body": [
+   "Italian requires the definite article before a possessive: *il mio libro*, *la tua casa*. Spanish never does.",
+   "Italian's own exception — dropping the article for singular unmodified family members, *mio fratello* — is a rule you can forget entirely, because Spanish treats every noun the same way.",
+   "Spanish also has a second, stressed possessive that goes **after** the noun: *un amigo mío*, *¿es tuyo?* That is the form that looks like Italian's."
+  ],
+  "pairs": [
+   [
+    "il mio libro",
+    "mi libro",
+    "no article"
+   ],
+   [
+    "la tua casa",
+    "tu casa",
+    "no article"
+   ],
+   [
+    "mio fratello",
+    "mi hermano",
+    "same in Spanish, no exception needed"
+   ],
+   [
+    "i miei genitori",
+    "mis padres",
+    "the possessive itself pluralises"
+   ],
+   [
+    "un mio amico",
+    "un amigo mío",
+    "stressed form goes after"
+   ]
+  ],
+  "watch": "*el mi libro* is the error, and it is one you will make."
+ },
+ {
+  "id": "partitive",
+  "title": "There is no partitive",
+  "summary": "del pane, dei libri → just pan, libros.",
+  "body": [
+   "Italian uses *del*, *della*, *dei*, *delle* to mean 'some'. Spanish has no partitive at all. Where Italian puts a word, Spanish puts nothing.",
+   "This one is easy to fix because the correction is always deletion."
+  ],
+  "pairs": [
+   [
+    "Vorrei del pane.",
+    "Quiero pan.",
+    "no word for 'some'"
+   ],
+   [
+    "Ho comprato dei libri.",
+    "Compré libros.",
+    "bare plural"
+   ],
+   [
+    "Bevi del vino?",
+    "¿Bebes vino?",
+    "bare noun"
+   ],
+   [
+    "C'è dell'acqua?",
+    "¿Hay agua?",
+    "bare noun"
+   ]
+  ],
+  "watch": "*Quiero del pan* is wrong. So is *compré de los libros*."
+ },
+ {
+  "id": "ser-estar",
+  "title": "ser and estar are not essere and stare",
+  "summary": "The concept transfers; the boundary does not.",
+  "body": [
+   "Italian has essere and stare, so the idea of two 'to be' verbs is familiar. The problem is that the line falls in a different place, and the cognate pull is towards the wrong one.",
+   "**estar** covers location, and temporary or changed states — including many that Italian expresses with essere.",
+   "**ser** covers identity, origin, material, time, and inherent qualities.",
+   "Location is the clearest rule: things and people are **estar**. The one exception is events, which use ser: *la fiesta es en mi casa*."
+  ],
+  "pairs": [
+   [
+    "Sono stanco.",
+    "Estoy cansado.",
+    "state → estar"
+   ],
+   [
+    "Sono a casa.",
+    "Estoy en casa.",
+    "location → estar"
+   ],
+   [
+    "Sono italiana.",
+    "Soy italiana.",
+    "identity → ser"
+   ],
+   [
+    "È mia sorella.",
+    "Es mi hermana.",
+    "identity → ser"
+   ],
+   [
+    "La zuppa è fredda.",
+    "La sopa está fría.",
+    "it has gone cold → estar"
+   ],
+   [
+    "Il ghiaccio è freddo.",
+    "El hielo es frío.",
+    "ice is inherently cold → ser"
+   ],
+   [
+    "Dov'è la stazione?",
+    "¿Dónde está la estación?",
+    "location → estar"
+   ],
+   [
+    "La festa è a casa mia.",
+    "La fiesta es en mi casa.",
+    "event → ser"
+   ]
+  ],
+  "watch": "*soy cansado* means something like 'I am a tiring person'. *soy en casa* is simply wrong."
+ },
+ {
+  "id": "personal-a",
+  "title": "The personal a",
+  "summary": "Spanish marks a human direct object with a. Italian has nothing like it.",
+  "body": [
+   "When the direct object of a verb is a specific person, Spanish puts **a** in front of it. Italian does not, and there is no equivalent to transfer from.",
+   "It applies to people and to pets, not to things. It also applies to *alguien*, *nadie*, and to *quién* in questions."
+  ],
+  "pairs": [
+   [
+    "Vedo Maria.",
+    "Veo a María.",
+    "a person → a"
+   ],
+   [
+    "Vedo la casa.",
+    "Veo la casa.",
+    "a thing → no a"
+   ],
+   [
+    "Cerco mio fratello.",
+    "Busco a mi hermano.",
+    "a person → a"
+   ],
+   [
+    "Cerco un taxi.",
+    "Busco un taxi.",
+    "a thing → no a"
+   ],
+   [
+    "Non vedo nessuno.",
+    "No veo a nadie.",
+    "nadie takes it"
+   ],
+   [
+    "Chi hai visto?",
+    "¿A quién viste?",
+    "questions too"
+   ]
+  ],
+  "watch": "Omitting it is the classic Italian-speaker error, and it is audible in every sentence about a person."
+ },
+ {
+  "id": "por-para",
+  "title": "per splits into por and para",
+  "summary": "One Italian preposition, two Spanish ones, and the choice is obligatory.",
+  "body": [
+   "Italian *per* does several jobs. Spanish divides them between **por** and **para**, and you must pick.",
+   "**para** points forwards: destination, purpose, recipient, deadline.",
+   "**por** points backwards or through: cause, exchange, duration, means, movement through a place.",
+   "The shortest test that works most of the time: *para* answers 'what for?', *por* answers 'why?' or 'in exchange for what?'"
+  ],
+  "pairs": [
+   [
+    "Parto per Madrid.",
+    "Salgo para Madrid.",
+    "destination → para"
+   ],
+   [
+    "È per te.",
+    "Es para ti.",
+    "recipient → para"
+   ],
+   [
+    "Per domani.",
+    "Para mañana.",
+    "deadline → para"
+   ],
+   [
+    "Grazie per il regalo.",
+    "Gracias por el regalo.",
+    "cause → por"
+   ],
+   [
+    "L'ho comprato per dieci euro.",
+    "Lo compré por diez euros.",
+    "exchange → por"
+   ],
+   [
+    "Ho studiato per due ore.",
+    "Estudié por dos horas.",
+    "duration → por"
+   ],
+   [
+    "Passo per il parco.",
+    "Paso por el parque.",
+    "through → por"
+   ]
+  ],
+  "watch": "There is no safe default. Guessing *por* everywhere is wrong about half the time."
+ },
+ {
+  "id": "prepositions-place",
+  "title": "Where things are, and where you are going",
+  "summary": "Italian's a/in/da do not line up with Spanish a/en/de.",
+  "body": [
+   "Italian chooses between *a* and *in* partly by the kind of place — *a Roma* but *in Italia*. Spanish chooses by whether there is movement.",
+   "**en** for being somewhere, whatever the place. **a** for going there.",
+   "Italian *da* has no single Spanish equivalent. For a person's place it becomes *en casa de* or *a casa de*; for origin it becomes *de*."
+  ],
+  "pairs": [
+   [
+    "Sono a Roma.",
+    "Estoy en Roma.",
+    "location → en"
+   ],
+   [
+    "Sono in Italia.",
+    "Estoy en Italia.",
+    "also en"
+   ],
+   [
+    "Vado a Roma.",
+    "Voy a Roma.",
+    "movement → a"
+   ],
+   [
+    "Vado in Italia.",
+    "Voy a Italia.",
+    "still a"
+   ],
+   [
+    "Sono a casa.",
+    "Estoy en casa.",
+    "en, not a"
+   ],
+   [
+    "Vado da Mario.",
+    "Voy a casa de Mario.",
+    "no equivalent of da"
+   ],
+   [
+    "Vengo da Roma.",
+    "Vengo de Roma.",
+    "origin → de"
+   ]
+  ],
+  "watch": "*Estoy a Roma* and *voy en Roma* are the two errors, and they are mirror images of each other."
+ },
+ {
+  "id": "ne-ci",
+  "title": "ne and ci do not exist",
+  "summary": "Two Italian pronouns with no Spanish counterpart at all.",
+  "body": [
+   "Italian *ne* ('of it', 'of them') and locative *ci* ('there') have no Spanish equivalents. Spanish either repeats the noun or says nothing.",
+   "The risk is not getting them wrong — it is inventing something to carry them."
+  ],
+  "pairs": [
+   [
+    "Ne voglio due.",
+    "Quiero dos.",
+    "ne disappears"
+   ],
+   [
+    "Quanti ne hai?",
+    "¿Cuántos tienes?",
+    "ne disappears"
+   ],
+   [
+    "Ci vado domani.",
+    "Voy mañana.",
+    "locative ci disappears"
+   ],
+   [
+    "Non ci credo.",
+    "No lo creo.",
+    "lo, not ci"
+   ],
+   [
+    "C'è un problema.",
+    "Hay un problema.",
+    "c'è → hay"
+   ],
+   [
+    "Ci sono due libri.",
+    "Hay dos libros.",
+    "hay never pluralises"
+   ]
+  ],
+  "watch": "**hay** is invariable. *Han dos libros* is a very common error."
+ },
+ {
+  "id": "gender-shifts",
+  "title": "Words that changed gender",
+  "summary": "Most nouns keep their gender. These did not.",
+  "body": [
+   "Gender transfers almost perfectly, which makes the exceptions worth memorising individually — there are not many, and you will otherwise get them wrong every time.",
+   "Nouns ending in -aje, -or and -ma (from Greek) are masculine in Spanish; nouns in -umbre, -dad, -tad and -ción are feminine."
+  ],
+  "pairs": [
+   [
+    "il sangue",
+    "la sangre",
+    "m → f"
+   ],
+   [
+    "il latte",
+    "la leche",
+    "m → f"
+   ],
+   [
+    "il fiore",
+    "la flor",
+    "m → f"
+   ],
+   [
+    "il naso",
+    "la nariz",
+    "m → f"
+   ],
+   [
+    "il sale",
+    "la sal",
+    "m → f"
+   ],
+   [
+    "il miele",
+    "la miel",
+    "m → f"
+   ],
+   [
+    "il costume",
+    "la costumbre",
+    "m → f"
+   ],
+   [
+    "l'origine (f)",
+    "el origen",
+    "f → m"
+   ],
+   [
+    "l'analisi (f)",
+    "el análisis",
+    "f → m"
+   ],
+   [
+    "il viaggio",
+    "el viaje",
+    "both m, note the -aje"
+   ]
+  ],
+  "watch": "*el sangre* and *la origen* are the shape of this error."
+ },
+ {
+  "id": "sound-shifts",
+  "title": "How the words changed shape",
+  "summary": "Most vocabulary transfers by rule. Learn the rule, not the words.",
+  "body": [
+   "Italian and Spanish share the great majority of their vocabulary, and the differences are largely regular. Recognising the correspondences turns thousands of Italian words into Spanish ones.",
+   "Spanish has **no double consonants** except rr, ll, cc and nn. Italian's doubles simplify."
+  ],
+  "pairs": [
+   [
+    "conversazione",
+    "conversación",
+    "-zione → -ción"
+   ],
+   [
+    "città",
+    "ciudad",
+    "-tà → -dad"
+   ],
+   [
+    "chiave",
+    "llave",
+    "chi- → ll-"
+   ],
+   [
+    "fiamma",
+    "llama",
+    "fi- → ll-"
+   ],
+   [
+    "pioggia",
+    "lluvia",
+    "pi- → ll-"
+   ],
+   [
+    "scuola",
+    "escuela",
+    "s+cons → es-"
+   ],
+   [
+    "spagnolo",
+    "español",
+    "s+cons → es-, gn → ñ"
+   ],
+   [
+    "famiglia",
+    "familia",
+    "gli → li"
+   ],
+   [
+    "dubbio",
+    "duda",
+    "no doubles"
+   ],
+   [
+    "difficile",
+    "difícil",
+    "no doubles, -ile → -il"
+   ]
+  ],
+  "watch": "Doubling a consonant is the most audible Italian accent in Spanish."
+ },
+ {
+  "id": "apocope",
+  "title": "Adjectives that drop their ending",
+  "summary": "Both languages shorten a few adjectives before a noun — but not the same ones, and not to the same degree.",
+  "body": [
+   "Italian already does this, so the idea is familiar: you say **un buon caffè**, not *un buono caffè*, and **un gran problema** rather than *un grande problema*. Spanish does the same thing, more systematically, and the list of words it applies to is not identical.",
+   "The Spanish rule is tighter than the Italian one. **bueno**, **malo**, **primero**, **tercero**, **alguno** and **ninguno** drop their final **-o** before a masculine singular noun, and only there. **grande** shortens to **gran** before a singular noun of either gender. **ciento** becomes **cien** before any noun, and before **mil** and **millones**.",
+   "Two differences will catch you out. Spanish shortens only before the noun it modifies, never after it and never standing alone — *el libro es bueno*, never *es buen*. And **grande** changes meaning when it moves: **un gran hombre** is a great man, **un hombre grande** is a big one. Italian has the same split with **grande**, so trust that instinct.",
+   "Where Italian is looser, Spanish is stricter. Italian lets **bello**, **santo** and **quello** take a whole family of shapes depending on the sound that follows — *bel libro*, *bell'uomo*, *begli occhi*. Spanish has nothing of this: **bello** never shortens, and **santo** shortens to **san** only before a man's name, not before ordinary nouns."
+  ],
+  "pairs": [
+   [
+    "un buon caffè",
+    "un buen café",
+    "both shorten"
+   ],
+   [
+    "una buona idea",
+    "una buena idea",
+    "feminine: neither shortens"
+   ],
+   [
+    "il caffè è buono",
+    "el café es bueno",
+    "after the noun, full form"
+   ],
+   [
+    "un gran problema",
+    "un gran problema",
+    "grande → gran, same in both"
+   ],
+   [
+    "una grande casa",
+    "una gran casa",
+    "Spanish shortens before feminine too"
+   ],
+   [
+    "un uomo grande",
+    "un hombre grande",
+    "after the noun: big, not great"
+   ],
+   [
+    "il primo giorno",
+    "el primer día",
+    "primero → primer"
+   ],
+   [
+    "la prima volta",
+    "la primera vez",
+    "feminine keeps the -a"
+   ],
+   [
+    "un bel libro",
+    "un libro bonito",
+    "Italian shortens, Spanish will not"
+   ],
+   [
+    "nessun problema",
+    "ningún problema",
+    "both shorten; note the accent"
+   ],
+   [
+    "cento euro",
+    "cien euros",
+    "ciento → cien before a noun"
+   ],
+   [
+    "centoventi euro",
+    "ciento veinte euros",
+    "full form before a number"
+   ],
+   [
+    "San Pietro",
+    "San Pedro",
+    "santo → san before a name"
+   ]
+  ],
+  "watch": "The trap is assuming the two lists match. Italian shortens **bello** and Spanish does not; Spanish shortens **grande** before feminine nouns and Italian will not. Your ear offers *un bel libro* and Spanish has no such form — it wants **un libro bonito**."
+ },
+ {
+  "id": "false-friends",
+  "title": "Words that lie to you",
+  "summary": "The small set where the cognate is actively wrong.",
+  "body": [
+   "These are dangerous precisely because you will say them with confidence. There are not many, and they are worth learning as a list."
+  ],
+  "pairs": [
+   [
+    "burro = butter",
+    "el burro = donkey",
+    "butter is la mantequilla"
+   ],
+   [
+    "salire = to go up",
+    "salir = to leave",
+    "to go up is subir"
+   ],
+   [
+    "guardare = to look at",
+    "guardar = to keep",
+    "to look at is mirar"
+   ],
+   [
+    "aceto = vinegar",
+    "el aceite = oil",
+    "vinegar is el vinagre"
+   ],
+   [
+    "largo = wide",
+    "largo = long",
+    "wide is ancho"
+   ],
+   [
+    "imbarazzata = embarrassed",
+    "embarazada = pregnant",
+    "embarrassed is avergonzada"
+   ],
+   [
+    "sposa = bride",
+    "la esposa = wife",
+    ""
+   ],
+   [
+    "prendere = to take",
+    "prender = to arrest, switch on",
+    "to take is tomar"
+   ],
+   [
+    "topo = mouse",
+    "el topo = mole",
+    "mouse is el ratón"
+   ],
+   [
+    "gamba = leg",
+    "la gamba = prawn",
+    "leg is la pierna"
+   ]
+  ],
+  "watch": "*Quiero burro en el pan* asks for donkey on your bread."
+ },
+ {
+  "id": "word-order",
+  "title": "Where the words go",
+  "summary": "Freer than English, and mostly like Italian — until it isn't.",
+  "body": [
+   "Both languages let you move things around for emphasis, and both drop the subject pronoun by default. Most of your instincts carry over.",
+   "Two places they part company. Spanish **inverts the subject in questions** far more consistently than Italian, which often relies on intonation alone. And Spanish will not split a compound verb: nothing goes between **haber** and the participle.",
+   "Adjectives normally follow the noun in both. Moving one in front changes the sense the same way in both languages: *un hombre pobre* is penniless, *un pobre hombre* is pitiable."
+  ],
+  "pairs": [
+   [
+    "Dove va Maria?",
+    "¿Adónde va María?",
+    "verb before subject"
+   ],
+   [
+    "Maria è arrivata?",
+    "¿Llegó María?",
+    "inverted, not just intonation"
+   ],
+   [
+    "Ho sempre detto questo.",
+    "Siempre he dicho eso.",
+    "nothing between haber and the participle"
+   ],
+   [
+    "Non ho mai visto.",
+    "Nunca he visto.",
+    "adverb moves out front"
+   ],
+   [
+    "Una casa grande",
+    "Una casa grande",
+    "adjective after, as in Italian"
+   ],
+   [
+    "Un povero uomo",
+    "Un pobre hombre",
+    "before the noun: pitiable"
+   ],
+   [
+    "Un uomo povero",
+    "Un hombre pobre",
+    "after the noun: penniless"
+   ]
+  ],
+  "watch": "*He siempre dicho* is the error, and it comes straight from Italian word order."
+ },
+ {
+  "id": "questions",
+  "title": "Asking and exclaiming",
+  "summary": "Spanish opens a question with an upside-down mark, and closes it.",
+  "body": [
+   "Every question is wrapped: **¿...?** And every exclamation: **¡...!** The opening mark goes where the question actually starts, which is not always the start of the sentence.",
+   "Question words carry a written accent — *qué*, *dónde*, *cuándo*, *quién*, *cómo*, *cuánto* — and lose it when they are not questioning."
+  ],
+  "pairs": [
+   [
+    "Come stai?",
+    "¿Cómo estás?",
+    "both marks"
+   ],
+   [
+    "Che bello!",
+    "¡Qué bonito!",
+    "exclamation marks too"
+   ],
+   [
+    "Maria, dove vai?",
+    "María, ¿adónde vas?",
+    "the mark opens at the question"
+   ],
+   [
+    "So dove abita.",
+    "Sé dónde vive.",
+    "indirect question keeps the accent"
+   ],
+   [
+    "La casa dove abito.",
+    "La casa donde vivo.",
+    "not a question, no accent"
+   ]
+  ],
+  "watch": "Leaving off the opening ¿ is the most visible way to write Spanish like an Italian."
+ },
+ {
+  "id": "object-pronouns",
+  "title": "Two pronouns in a row",
+  "summary": "le + lo becomes se lo. Italian has nothing that behaves like it.",
+  "body": [
+   "Placement works as it does in Italian: before a conjugated verb, attached to an infinitive, a gerund or an affirmative command.",
+   "The difference is what happens when two third-person pronouns meet. Italian turns *gli* + *lo* into *glielo*. Spanish turns **le** + **lo** into **se lo** — the indirect pronoun is replaced outright by *se*.",
+   "Latin America keeps **lo** and **la** for the direct object of a person. Spain often uses *le* for a man; you can ignore that."
+  ],
+  "pairs": [
+   [
+    "Lo vedo.",
+    "Lo veo.",
+    "same placement"
+   ],
+   [
+    "Voglio vederlo.",
+    "Quiero verlo.",
+    "attached to the infinitive, same"
+   ],
+   [
+    "Glielo do.",
+    "Se lo doy.",
+    "le + lo → se lo"
+   ],
+   [
+    "Gliela mando.",
+    "Se la mando.",
+    "same rule"
+   ],
+   [
+    "Me lo dai?",
+    "¿Me lo das?",
+    "first person is unchanged"
+   ],
+   [
+    "Dammelo!",
+    "¡Dámelo!",
+    "attached to the command, with an accent added"
+   ]
+  ],
+  "watch": "*Le lo doy* is never right. It is always *se lo doy*."
+ },
+ {
+  "id": "se",
+  "title": "The many uses of se",
+  "summary": "Reflexive, impersonal, passive — and the replacement for le.",
+  "body": [
+   "Spanish *se* does the work of Italian *si*, and the two line up closely: reflexive, impersonal, and passive.",
+   "The impersonal is everywhere in Spanish, on signs and in speech, where English would use 'you' or a passive."
+  ],
+  "pairs": [
+   [
+    "Mi lavo.",
+    "Me lavo.",
+    "reflexive, as in Italian"
+   ],
+   [
+    "Si parla spagnolo.",
+    "Se habla español.",
+    "impersonal, as in Italian"
+   ],
+   [
+    "Si vendono case.",
+    "Se venden casas.",
+    "agrees with the plural, as in Italian"
+   ],
+   [
+    "Come si dice?",
+    "¿Cómo se dice?",
+    "identical structure"
+   ],
+   [
+    "Si è fatto tardi.",
+    "Se hizo tarde.",
+    "same idiom"
+   ]
+  ],
+  "watch": "This one transfers almost perfectly. The only se that will surprise you is the one standing in for le."
+ },
+ {
+  "id": "gustar",
+  "title": "gustar works like piacere",
+  "summary": "The structure is the same. The doubling is not.",
+  "body": [
+   "*Me gusta el café* is built exactly like *mi piace il caffè*: the thing liked is the subject, and you are the indirect object. That transfers without effort.",
+   "What Spanish adds is a habit of **doubling** the pronoun with *a mí*, *a ti*, *a Ana* — for emphasis, contrast, or simply because it sounds right. Italian does this far less.",
+   "The same pattern runs through a family of verbs: *encantar*, *interesar*, *parecer*, *faltar*, *doler*."
+  ],
+  "pairs": [
+   [
+    "Mi piace il caffè.",
+    "Me gusta el café.",
+    "identical structure"
+   ],
+   [
+    "Mi piacciono i libri.",
+    "Me gustan los libros.",
+    "plural subject, plural verb"
+   ],
+   [
+    "A me piace, a lui no.",
+    "A mí me gusta, a él no.",
+    "Spanish doubles the pronoun"
+   ],
+   [
+    "Ad Ana piace il cinema.",
+    "A Ana le gusta el cine.",
+    "a Ana AND le"
+   ],
+   [
+    "Mi fa male la testa.",
+    "Me duele la cabeza.",
+    "doler works the same way"
+   ],
+   [
+    "Mi manca il mare.",
+    "Extraño el mar.",
+    "faltar does NOT mean this"
+   ]
+  ],
+  "watch": "*Mi manca* is the trap: Spanish *me falta* means something is lacking, not that you miss it. To miss someone is **extrañar**."
+ },
+ {
+  "id": "diminutives",
+  "title": "Diminutives, and how much they matter",
+  "summary": "-ito is everywhere in Mexico, and not always about size.",
+  "body": [
+   "Italian has -ino, -etto, -ello. Spanish has **-ito** and **-illo**, and in Mexico -ito is used constantly — for affection, for politeness, for softening a request, and only sometimes for size.",
+   "*Ahorita* is the one to know. Literally 'right now', in practice anywhere from this second to never."
+  ],
+  "pairs": [
+   [
+    "un momentino",
+    "un momentito",
+    "-ino → -ito"
+   ],
+   [
+    "Adesso.",
+    "Ahorita.",
+    "softened, and vaguer than it looks"
+   ],
+   [
+    "un caffè piccolo",
+    "un cafecito",
+    "affection, not size"
+   ],
+   [
+    "poco",
+    "poquito",
+    "a little bit"
+   ],
+   [
+    "Aspetta un attimo.",
+    "Espérame tantito.",
+    "very Mexican"
+   ]
+  ],
+  "watch": "Using no diminutives at all reads as brusque in Mexico, in a way it would not in Italy."
+ },
+ {
+  "id": "possessives",
+  "title": "Possessives drop the article",
+  "summary": "Italian says il mio libro. Spanish says mi libro, and never the other way.",
+  "body": [
+   "Italian puts an article in front of a possessive almost everywhere: *il mio libro*, *la tua casa*, *i nostri amici*. Spanish does not. The possessive stands alone — **mi libro**, **tu casa**, **nuestros amigos** — and adding *el* or *la* in front of it is simply wrong.",
+   "The short forms — mi, tu, su, nuestro — go before the noun and agree only in number, except nuestro/vuestro which agree in gender too. There is no masculine/feminine difference in mi, tu or su at all: *mi hermano* and *mi hermana* both.",
+   "There is also a long form that goes after the noun — **mío, tuyo, suyo** — used for emphasis, after ser, and in direct address. That one does agree in gender and number.",
+   "**Su** is the one that will trip you. It covers his, her, your (usted), their — everything Italian splits between *suo* and *loro*. Spanish leaves it ambiguous and clarifies with *de él*, *de ella*, *de usted* when the context does not."
+  ],
+  "pairs": [
+   [
+    "il mio libro",
+    "mi libro",
+    "no article, ever"
+   ],
+   [
+    "la mia casa",
+    "mi casa",
+    "mi does not change for gender"
+   ],
+   [
+    "i miei amici",
+    "mis amigos",
+    "only the number changes"
+   ],
+   [
+    "la nostra casa",
+    "nuestra casa",
+    "nuestro does agree in gender"
+   ],
+   [
+    "il nostro cane",
+    "nuestro perro",
+    "masculine"
+   ],
+   [
+    "un mio amico",
+    "un amigo mío",
+    "long form, after the noun"
+   ],
+   [
+    "È mio.",
+    "Es mío.",
+    "after ser, long form"
+   ],
+   [
+    "il suo libro",
+    "su libro",
+    "his, her, your or their"
+   ],
+   [
+    "il loro libro",
+    "su libro",
+    "loro collapses into su as well"
+   ],
+   [
+    "il libro di lui",
+    "el libro de él",
+    "how you disambiguate su"
+   ],
+   [
+    "Mamma mia!",
+    "¡Madre mía!",
+    "the long form survives in exclamations"
+   ]
+  ],
+  "watch": "*El mi libro* and *la mi casa* are the errors to watch for, and they will feel natural for a long time. The other one is reaching for a plural to translate *loro* — Spanish has no separate word, and su does that work too."
+ }
+]
