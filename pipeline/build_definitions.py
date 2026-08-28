@@ -57,6 +57,9 @@ def norm(s):
     return "".join(c for c in s if unicodedata.category(c) != "Mn")
 
 
+strip_accents = norm
+
+
 def dictionary(wikt_it2es_path):
     """spanish -> {italian -> {spanish parts of speech it was listed under}}"""
     out = collections.defaultdict(lambda: collections.defaultdict(set))
@@ -107,7 +110,31 @@ def build(wikt_it2es_path):
     # The Italian side was never lemmatised, so `lascia`, `vanno`, `succede`
     # and 113 others became prompts. italian_pos.json is built from readings a
     # word has in its own right, so membership in it is the test.
+    # Apertium writes Italian without accents -- `perche`, `abilita`,
+    # `affinita` -- where Wiktionary accents them. 395 candidates were being
+    # rejected for that alone, most of them the whole `-ità` class. Match the
+    # exact spelling first, then the accent-free one where nothing else claims
+    # it, exactly as the Spanish side does.
     it_base = set(it_pos)
+    _bare = collections.defaultdict(set)
+    for _w in it_base:
+        _bare[strip_accents(_w)].add(_w)
+    # Where several spellings collapse to the same bare form -- `perché` and
+    # the common misspelling `perchè` -- take the commonest in Italian rather
+    # than giving up, which is what left `porque` with no definition at all.
+    from wordfreq import zipf_frequency as _z
+    it_alias = {b: max(v, key=lambda w: _z(w, "it")) for b, v in _bare.items()}
+
+    def italian(it):
+        """The Italian word in its commonest spelling, or None if unknown.
+
+        Always through the alias, not an exact-match shortcut: Wiktionary
+        carries misspellings as entries, so `citta` matches itself and the card
+        keeps the unaccented form. Going through the alias picks `città`."""
+        best = it_alias.get(strip_accents(it))
+        if best:
+            return best
+        return it if it in it_base else None
     try:
         shares = json.load(open("data/shares.json"))["share"]
     except FileNotFoundError:
@@ -147,7 +174,7 @@ def build(wikt_it2es_path):
 
         # what the dictionary offers, ranked by how often it is the alignment
         scored = sorted(((prob.get(it, 0.0), it) for it in proposed
-                         if it in it_base), reverse=True)
+                         if italian(it)), reverse=True)
         attested = [(p, it) for p, it in scored if p >= MIN_PROB]
 
         corpus_only = False
@@ -160,10 +187,25 @@ def build(wikt_it2es_path):
             # `acta` is `verbale`, and in both the corpus is right and the
             # dictionary is not. Losing `año` for want of an agreement is the
             # worse error. Flagged so these can be looked at.
-            rows = [(it, p) for it, p in aligned.get(es, [])
-                    if p >= 0.10 and it in it_base]
+            # Through the tagged alignment where it exists, so the fallback
+            # obeys part of speech too. Untagged, `intento` fell back on
+            # `tentativo, di` -- a noun answered by a preposition, because
+            # nothing here was checking.
+            rows = []
+            for pos in poss:
+                tp = tagged_prob(pos)
+                for it, p in sorted(tp.items(), key=lambda kv: -kv[1]):
+                    if p >= 0.10 and italian(it):
+                        rows.append((it, p))
+            if not rows:
+                rows = [(it, p) for it, p in aligned.get(es, [])
+                        if p >= 0.10 and italian(it)
+                        and not (it_pos.get(italian(it))
+                                 and set(it_pos[italian(it)]) <= CLOSED
+                                 and not (set(poss) & CLOSED))]
             if not rows:
                 continue
+            rows.sort(key=lambda r: -r[1])
             topp = rows[0][1]
             keep = [(it, p) for it, p in rows if 100 * p / topp >= RELATIVE]
             corpus_only = True
@@ -178,12 +220,12 @@ def build(wikt_it2es_path):
             tp = tagged_prob(pos)
             if tp and pos not in CLOSED:
                 ranked = sorted(((p, it) for it, p in tp.items()
-                                 if it in proposed and it in it_base), reverse=True)
+                                 if it in proposed and italian(it)), reverse=True)
                 if ranked:
                     top_p = ranked[0][0]
                     here = [(it, p) for p, it in ranked
                             if 100 * p / top_p >= RELATIVE]
-                    by_pos[pos] = [{"it": it, "prob": round(p, 3),
+                    by_pos[pos] = [{"it": italian(it), "prob": round(p, 3),
                                     "pct": round(pct.get(it, 0.0), 1)}
                                    for it, p in here]
                     continue
@@ -191,12 +233,13 @@ def build(wikt_it2es_path):
                 # dictionary order, no corpus ranking, no percentage
                 offered = [it for it in proposed
                            if pos in (proposed[it] - {""}) or not (proposed[it] - {""})]
+                offered = [it for it in offered if italian(it)]
                 offered = [it for it in offered
-                           if it in it_base
-                           and (not it_pos.get(it) or pos in it_pos[it]
-                                or set(it_pos[it]) & CLOSED)]
+                           if not it_pos.get(italian(it))
+                           or pos in it_pos[italian(it)]
+                           or set(it_pos[italian(it)]) & CLOSED]
                 if offered:
-                    by_pos[pos] = [{"it": it, "prob": None, "pct": None}
+                    by_pos[pos] = [{"it": italian(it), "prob": None, "pct": None}
                                    for it in offered[:4]]
                 continue
             here = []
@@ -218,7 +261,7 @@ def build(wikt_it2es_path):
             # preposition, stand as the definition of `intento`, a noun --
             # the part of speech is the whole point of grouping.
             if here:
-                by_pos[pos] = [{"it": it, "prob": round(p, 3),
+                by_pos[pos] = [{"it": italian(it), "prob": round(p, 3),
                                 "pct": round(pct.get(it, 0.0), 1)} for it, p in here]
         for pos in poss:
             if pos not in by_pos:
@@ -240,7 +283,7 @@ def build(wikt_it2es_path):
         for it, p in aligned.get(es, []):
             if it in proposed or not cutoff or p < cutoff or p < ADD_PROB:
                 continue
-            if it not in it_base:
+            if not italian(it):
                 continue
             # A word the dictionary never lists that outranks everything it
             # does list is not an extra sense -- it says the dictionary has the
