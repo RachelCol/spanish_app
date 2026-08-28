@@ -24,11 +24,19 @@ import collections
 import csv
 import json
 import math
+import os
 import sys
 
 from wordfreq import word_frequency, zipf_frequency
 
-DEPTH = 500                      # cover the commonest 500 Spanish verbs
+DEPTH = 700                      # cover the commonest 700 Spanish verbs
+
+# Barron's 501 is a teaching list, not a frequency list: it carries verbs
+# chosen to demonstrate irregular stems. Frequency ranking will never reach
+# `tanher` or `zurcir`, so the list is taken as given -- minus the ones no one
+# says, judged on the gerund and the reflexive as well as the infinitive,
+# because `ducharse` is ordinary while `duchar` alone looks rare.
+EXTRA = "content/barrons_verbs.txt"
 JUNK = {"estan", "habia", "mayar", "unir", "car", "dir", "sar"}
 # `cagar` clears the frequency bar and is excluded by choice, in
 # content/excluded.csv, rather than here -- it is not a data error.
@@ -75,11 +83,24 @@ def main(wikt_es_path):
     rows = list(csv.DictReader(open("content/lexicon.csv")))
     have = {r["spanish"] for r in rows}
     ranked = [v for v in sorted(freq, key=lambda v: -freq[v]) if freq[v] > 0]
-    add = [v for v in ranked[:DEPTH] if v not in have and v not in JUNK]
+    extra = []
+    if os.path.exists(EXTRA):
+        extra = [l.strip() for l in open(EXTRA) if l.strip()]
+    # JUNK guards the frequency ranking, where `unir` scores highly only
+    # because `una` is one of its forms. It is still a real verb, so an
+    # explicit request for it stands.
+    named = list(dict.fromkeys(extra + ["basar", "soler"]))
+    ranked_add = [v for v in ranked[:DEPTH] if v not in JUNK]
+    add = [v for v in dict.fromkeys(ranked_add + named) if v not in have]
 
     def eff_zipf(v):
-        """The zipf the verb would have had if written the way it is used."""
-        return round(math.log10(freq[v] * 1e9), 2) if freq.get(v) else 0.0
+        """The zipf the verb would have had if written the way it is used.
+
+        A verb Barron's carries but the corpus barely does still needs a band,
+        so fall back to the plain frequency of the infinitive."""
+        if freq.get(v):
+            return round(math.log10(freq[v] * 1e9), 2)
+        return round(zipf_frequency(v, "es"), 2)
 
     for v in add:
         rows.append({"rank": "", "spanish": v, "pos": "vblex",

@@ -34,6 +34,9 @@ LOCKED = {
     "a bordo": "bordo",
     "en absoluto": "absoluto",
     "de inmediato": "inmediato",
+    # `obstante` occurs only inside `no obstante` -- 100% of its uses, measured
+    # -- and had no card at all, so the connector was going untaught.
+    "no obstante": "obstante",
     # Found in the overruled review: each of these is why a bare word was
     # credited with the phrase's meaning. The words themselves have real
     # standalone uses, so they keep their own cards and the phrase joins them.

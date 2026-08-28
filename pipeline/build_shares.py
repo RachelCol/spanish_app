@@ -15,6 +15,8 @@ import json
 import os
 import re
 import sys
+
+from phrase_mask import masker
 import unicodedata
 
 TOKEN = re.compile(r"[A-Za-zÁÉÍÓÚÜÑÀÈÌÒÙáéíóúüñàèìòùç]+")
@@ -39,6 +41,7 @@ def main(corpus_dir):
     seen = collections.Counter()
     hit = collections.defaultdict(collections.Counter)
 
+    mask = masker()
     files = [(os.path.join(corpus_dir, f), os.path.join(corpus_dir, f[:-3] + ".it"))
              for f in sorted(os.listdir(corpus_dir)) if f.endswith(".es")]
     for es_path, it_path in files:
@@ -49,7 +52,7 @@ def main(corpus_dir):
                 n += 1
                 if n % 5_000_000 == 0:
                     sys.stderr.write(f"    {n:,}\n")
-                hits = {w for t in TOKEN.findall(es_line)
+                hits = {w for t in TOKEN.findall(mask(es_line))
                         if (w := look.get(t.lower()) or look.get(strip(t)))}
                 if not hits:
                     continue

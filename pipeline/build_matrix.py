@@ -26,6 +26,8 @@ import json
 import os
 import re
 import sys
+
+from phrase_mask import masker
 import unicodedata
 
 from wordfreq import zipf_frequency
@@ -55,6 +57,7 @@ def build(corpus_dir, cap=3000, keep_always=None):
     seen = collections.Counter()
     tally = collections.defaultdict(collections.Counter)
 
+    mask = masker()
     files = [(os.path.join(corpus_dir, f), os.path.join(corpus_dir, f[:-3] + ".it"))
              for f in sorted(os.listdir(corpus_dir)) if f.endswith(".es")]
 
@@ -67,7 +70,7 @@ def build(corpus_dir, cap=3000, keep_always=None):
                 if n % 5_000_000 == 0:
                     sys.stderr.write(f"    {n:,}\n")
                 hits = set()
-                for t in TOKEN.findall(es_line):
+                for t in TOKEN.findall(mask(es_line)):
                     w = wanted.get(t.lower()) or wanted.get(strip(t))
                     if w is not None and seen[w] < cap:
                         hits.add(w)
