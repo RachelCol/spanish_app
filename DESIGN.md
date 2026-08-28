@@ -28,9 +28,23 @@ approach turned out to be wrong.
 - Require the Italian token to have real currency in Italian, by Italian
   frequency. This keeps `leader`, `account`, `staff` and `trend`, which
   Italians genuinely say, and drops untranslated English in subtitle files.
-- Keep the top translation, plus any scoring **at least 10–15% relative to
-  it**. `costo` scores 7% relative to `costa`, so the two stay apart on their
-  own.
+- **The dictionary proposes, the corpus decides.** Candidate Italian words
+  come from the dictionaries; the corpus ranks them, supplies the percentage,
+  and drops the ones it does not attest. Measured, the corpus alone misses 152
+  of 639 verified pairings -- `no -> non` among them, because `non` appears in
+  a third of all Italian sentences and cannot stand out from its own baseline.
+  It is excellent at ranking and at catching errors, and unreliable at recall.
+- Keep the top translation, plus any scoring **at least 15% relative to it**.
+  Measured against 639 hand-verified pairings, every cut between 5% and 30%
+  keeps the same set, and 19 of 20 known-wrong pairings score zero -- the
+  corpus separates cleanly rather than gradually, so the stricter end is free.
+  `costo` scores 7% against `costa`, so those two stay apart on their own.
+- **An Italian word the corpus attests above the threshold that no dictionary
+  lists for that Spanish word does not go on the card.** It goes to a review
+  spreadsheet with a yes/no column. Answering `yes` and uploading the file adds
+  it to that word's definition permanently. This is what catches a missing
+  definition -- the corpus found `auto -> macchina` at 37%, which no dictionary
+  has -- without letting a collocation like `tiempo -> anche` onto a card.
 - **Each Italian word carries its own part-of-speech tag.** Used for mapping
   backwards in step 3; not necessarily shown.
 - **The definition is organised by the *Spanish* word's parts of speech** —
@@ -48,12 +62,14 @@ approach turned out to be wrong.
 - For each, all the Spanish words that mapped to it. **Nothing is trimmed on
   frequency in this direction** — a Spanish word we set out to learn cannot be
   lost here.
-- **Ordered by frequency**, measured from sentence pairs starting from the
-  Italian word, each marked with its percentage.
+- Once the definitions are settled, every Italian word in them goes back
+  through the corpus to be **ordered by frequency**, each marked with its
+  percentage, measured from sentence pairs starting from the Italian word.
 - If a Spanish word *not* on the list translates that Italian word above the
-  threshold, **add it** with its percentage, but give it no detail card.
-  Tapping it says *"No card for this one — it's outside your deck."*
-  Otherwise generating detail cards never terminates.
+  threshold, **it appears on the card** with its percentage, so its use is
+  visible -- but it gets no detail card. Tapping it says *"No card for this
+  one — it's outside your deck."* Otherwise generating detail cards never
+  terminates. These also go to a review list.
 
 ## 4 · Cards
 
@@ -88,7 +104,21 @@ by the corpus counts above. Its direction markers (`LR`/`RL`) are **not** a
 quality signal — tested twice, filtering on them would have removed
 `dopo → luego`, `ciao → hola` and `caffè → café`.
 
+## Review lists
+
+Nothing enters the deck from the corpus without being seen. Two lists come out
+of the build, both as spreadsheet columns to fill in and upload back:
+
+| list | what it holds |
+|---|---|
+| additions | Italian words the corpus attests for a Spanish word that no dictionary lists. `yes` adds it to that definition. |
+| off-list answers | Spanish words outside the frequency list that translate an Italian word above the threshold |
+| dropped parts of speech | a part of speech with no attested translation, and the word it came from |
+
 ## Open decisions
 
-- The threshold: 10% or 15%, to be chosen from the measured distribution.
-- Whether one threshold suits function words and nouns alike. Probably not.
+- Plural-only nouns: `vacaciones` is dropped because `vacación` is listed,
+  though Spanish uses the plural. A small class, worth handling rather than
+  losing.
+- `cualquier`, which Wiktionary files as an apocopic form of `cualquiera`.
+  Same for `gran`, `buen`, `primer`.
