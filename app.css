@@ -855,3 +855,12 @@ button.secondary {
 
 /* one verb's label and paradigm, kept together */
 .present-section { display: flex; flex-direction: column; align-items: center; gap: .1rem; }
+
+/* --- how often this is really the translation --- */
+.share-mark {
+  font-style: italic; font-weight: 500;
+  font-size: .62rem; letter-spacing: .02em;
+  color: color-mix(in srgb, var(--accent) 45%, var(--muted));
+  margin-left: .1rem;
+}
+.detail-sense .share-mark { margin-left: .45rem; }

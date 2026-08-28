@@ -73,8 +73,19 @@ def dictionary(wikt_it2es_path):
     return out
 
 
+def read_lexicon(path="content/lexicon.csv"):
+    """The frozen list. Membership does not change here; definitions do."""
+    out = []
+    with open(path, newline="") as fh:
+        for r in csv.DictReader(fh):
+            out.append({"es": r["spanish"], "pos": r["pos"].split(),
+                        "tier": r["band"], "zipf": float(r["zipf"]),
+                        "rank": int(r["rank"])})
+    return out
+
+
 def build(wikt_it2es_path):
-    words = json.load(open("data/wordlist.json"))
+    words = read_lexicon()
     matrix = json.load(open("data/matrix.json"))
     aligned = json.load(open("data/aligned.json"))
     it_pos = json.load(open("data/italian_pos.json"))
@@ -150,6 +161,8 @@ def build(wikt_it2es_path):
                 dropped.append({"spanish": es, "dropped_pos": pos,
                                 "kept": ",".join(sorted(by_pos)) or "nothing"})
         if not by_pos:
+            thin.append({"spanish": es, "pos": ",".join(poss),
+                         "pairs": entry["pairs"]})
             continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
         if corpus_only:

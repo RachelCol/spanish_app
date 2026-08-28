@@ -537,12 +537,14 @@ function reveal() {
       const label = document.createElement('div');
       label.className = 'sense-pos';
       label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
-      blocks.push(label, ...words.map(w => answerRow(w)));
+      const share = Object.fromEntries(answers.map(a => [a.es, a.pct]));
+      blocks.push(label, ...words.map(w => answerRow(w, share[w], answers.length > 1)));
     }
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
-    $('#answers').replaceChildren(...answers.map(a => answerRow(a.es)));
+    $('#answers').replaceChildren(
+      ...answers.map(a => answerRow(a.es, a.pct, answers.length > 1)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
@@ -585,9 +587,25 @@ function reveal() {
 // one of them: `fare` is on the card for `hacer`, but `echar` and `formar` are
 // not wrong. These two give the full answer set, so the Italian -> Spanish
 // side can show it the way the Spanish -> Italian side shows its senses.
+// How often this really is the translation, out of every sentence pair
+// containing the word -- so a low figure means Italian usually says it another
+// way, which is worth knowing rather than hiding.
+function shareMark(pct, showIt) {
+  if (!showIt || pct === undefined || pct === null) return null;
+  const el = document.createElement('i');
+  el.className = 'share-mark';
+  // Below one percent, say so rather than rounding to a bare 0%, which reads
+  // as an error rather than as "this pairing is rare".
+  el.textContent = pct < 1 ? '<1%' : Math.round(pct) + '%';
+  el.title = 'share of sentence pairs where this is the translation';
+  return el;
+}
+
 // One Spanish answer. Tappable whenever there is more than one on the card:
 // the word opens its own entry, which knows more than the card face does.
-function answerRow(word) {
+// The percentage is only worth showing when there is something to compare it
+// against. On a card with one answer it is noise.
+function answerRow(word, pct, many) {
   const row = document.createElement('div');
   row.className = 'word-row';
 
@@ -599,6 +617,8 @@ function answerRow(word) {
   span.replaceChildren(
     withGender(word, genderFor(state.gender, null, word, 'es'), 'es'));
   row.append(span);
+  const mark = shareMark(pct, many);
+  if (mark) row.append(mark);
 
   if (canSpeak()) {
     const play = document.createElement('button');
@@ -685,10 +705,14 @@ function openDetail(es) {
     label.className = 'sense-pos detail-pos';
     label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
     parts.push(label);
+    const shares = Object.fromEntries(
+      ((card.by_pos || {})[g] || []).map(i => [i.it, i.pct]));
     for (const w of words) {
       const row = document.createElement('div');
       row.className = 'detail-sense';
       row.replaceChildren(withGender(w, genderFor(state.gender, card, w, 'it'), 'it'));
+      const mark = shareMark(shares[w], words.length > 1);
+      if (mark) row.append(mark);
       parts.push(row);
     }
   }

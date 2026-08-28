@@ -48,8 +48,17 @@ def build():
             seen.add(es)
             p = prob.get(es, {}).get(it, 0.0)
             weight = p * pairs.get(es, 0)
+            # The share of sentence pairs, from the definition -- how often
+            # this Italian word appears at all beside this Spanish one. A
+            # single-answer card would otherwise always read 100%, which says
+            # nothing; this says how often the sentence is phrased another way.
+            corpus_pct = None
+            for items in defs[es]["by_pos"].values():
+                for i in items:
+                    if i["it"] == it:
+                        corpus_pct = i["pct"]
             answers.append({"es": es, "pos": pos, "prob": round(p, 3),
-                            "weight": weight})
+                            "pct": corpus_pct, "weight": weight})
         # a Spanish word outside our list that this Italian word reaches
         for es, rows in prob.items():
             pass

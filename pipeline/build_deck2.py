@@ -40,7 +40,12 @@ def bucket(a, b):
 
 
 def main():
-    words = {w["es"]: w for w in json.load(open("data/wordlist.json"))}
+    import csv
+    words = {}
+    with open("content/lexicon.csv", newline="") as fh:
+        for r in csv.DictReader(fh):
+            words[r["spanish"]] = {"es": r["spanish"], "pos": r["pos"].split(),
+                                   "tier": r["band"], "zipf": float(r["zipf"])}
     defs = json.load(open("data/definitions.json"))
     prompts = json.load(open("data/prompts_new.json"))
 
@@ -70,8 +75,11 @@ def main():
         rows = []
         for a in answers:
             row = {"es": a["es"], "pos": a["pos"] or None}
+            # the corpus share, not the split between answers
+            if a.get("pct") is not None:
+                row["pct"] = a["pct"]
             if a.get("share") is not None:
-                row["pct"] = a["share"]
+                row["rank"] = a["share"]
             if a.get("off_list"):
                 row["off"] = True
             rows.append(row)
