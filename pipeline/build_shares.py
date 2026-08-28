@@ -53,11 +53,18 @@ def main(corpus_dir):
                         if (w := look.get(t.lower()) or look.get(strip(t)))}
                 if not hits:
                     continue
-                its = {norm(t) for t in TOKEN.findall(it_line)}
+                its = set()
+                for t in TOKEN.findall(it_line):
+                    its.add(t.lower())
+                    its.add(strip(t))
                 for w in hits:
                     seen[w] += 1
-                    for cand in lookup[w] & its:
-                        hit[w][cand] += 1
+                    # Count the accent-free form as the accented one: subtitle
+                    # text writes `citta` and `città` interchangeably, and
+                    # splitting them left `società` reading 0%.
+                    for cand in lookup[w]:
+                        if cand in its or strip(cand) in its:
+                            hit[w][cand] += 1
         sys.stderr.write(f"    {n:,}\n")
 
     out = {}

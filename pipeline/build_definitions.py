@@ -154,7 +154,17 @@ def build(wikt_it2es_path):
 
         # Exact counts where we have them; matrix.json truncates at thirty
         # neighbours and those are mostly function words.
-        pct = dict(shares.get(nes) or {}) or {it: p for it, p in entry["it"]}
+        pct = dict(shares.get(es) or shares.get(nes) or {}) \
+            or {it: p for it, p in entry["it"]}
+
+        def share_of(it):
+            """The count is stored under the canonical spelling, so look it up
+            there -- `citta` was asking for a figure filed under `città`."""
+            can = italian(it)
+            for k in (can, it):
+                if k is not None and k in pct:
+                    return round(pct[k], 1)
+            return 0.0
         prob = {it: p for it, p in aligned.get(es, [])}
 
         def tagged_prob(pos):
@@ -226,7 +236,7 @@ def build(wikt_it2es_path):
                     here = [(it, p) for p, it in ranked
                             if 100 * p / top_p >= RELATIVE]
                     by_pos[pos] = [{"it": italian(it), "prob": round(p, 3),
-                                    "pct": round(pct.get(it, 0.0), 1)}
+                                    "pct": share_of(it)}
                                    for it, p in here]
                     continue
             if pos in CLOSED:
@@ -262,7 +272,7 @@ def build(wikt_it2es_path):
             # the part of speech is the whole point of grouping.
             if here:
                 by_pos[pos] = [{"it": italian(it), "prob": round(p, 3),
-                                "pct": round(pct.get(it, 0.0), 1)} for it, p in here]
+                                "pct": share_of(it)} for it, p in here]
         for pos in poss:
             if pos not in by_pos:
                 dropped.append({"spanish": es, "dropped_pos": pos,
@@ -291,7 +301,7 @@ def build(wikt_it2es_path):
             additions.append({"beats_dictionary": "yes" if p > best_dict else "",
                               "spanish": es, "italian": it,
                               "prob": round(p, 3),
-                              "pct": round(pct.get(it, 0.0), 1),
+                              "pct": share_of(it),
                               "of_top": round(100 * p / keep[0][1]),
                               "band": w["tier"], "add": ""})
 
