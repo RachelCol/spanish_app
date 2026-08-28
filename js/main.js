@@ -699,7 +699,11 @@ function openDetail(es) {
   }
   parts.push(head);
 
-  const groups = card.by_pos || { [posGroups(card)[0]]: card.senses || [card.it] };
+  // by_pos entries carry their share now, so they are objects rather than
+  // bare strings. `senses` is still a plain list.
+  const raw = card.by_pos || { [posGroups(card)[0]]: card.senses || [card.it] };
+  const groups = Object.fromEntries(Object.entries(raw).map(
+    ([g, items]) => [g, items.map(i => (typeof i === 'string' ? i : i.it))]));
   for (const [g, words] of Object.entries(groups)) {
     const label = document.createElement('div');
     label.className = 'sense-pos detail-pos';

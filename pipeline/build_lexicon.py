@@ -40,8 +40,15 @@ PARTICIPLE_ONLY = True
 # a beech tree beside `haber`, `nueva` as "news" beside `nuevo`. Judged by hand
 # because no rule separates them from `falta` and `pasa`, which are ordinary
 # nouns that merely look like inflections. Add to this list as more turn up.
-BY_HAND_OUT = {"son", "haya", "nueva", "buena", "primera", "segunda", "poca",
-               "deja"}   # a textile remnant, per Wiktionary, beside `dejar`
+BY_HAND_OUT = {
+    "son", "haya", "nueva", "buena", "primera", "segunda", "poca",
+    "deja",    # a textile remnant, per Wiktionary, beside `dejar`
+    "pasa",    # a raisin, but the corpus sees only the verb: it defined as `che`
+    "queda",   # a curfew, likewise: defined as `la, chiusa`
+    "trata",   # trade, likewise
+    "van",     # the vehicle, beside `ir`
+    "he",      # a Hebrew letter, beside `haber`
+}
 
 SIZE = 3000
 OUT = "content/lexicon.csv"
