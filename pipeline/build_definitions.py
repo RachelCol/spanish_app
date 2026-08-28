@@ -44,6 +44,7 @@ RELATIVE = 15.0        # keep anything within this % of the top translation
 MIN_PAIRS = 30         # below this the corpus has no opinion worth having
 MIN_PROB = 0.01        # an alignment weaker than this is noise
 ADD_PROB = 0.15        # what an unlisted word must reach to be worth reviewing
+BEATS = 1.5            # how far the corpus must beat the dictionary to overrule it
 
 # Apertium's Spanish-side tags, grouped the way the app groups them.
 GROUP = {"vblex": "vblex", "vbmod": "vblex", "vbhaver": "vblex", "vbser": "vblex",
@@ -125,12 +126,21 @@ def build(wikt_it2es_path):
     from wordfreq import zipf_frequency as _z
     it_alias = {b: max(v, key=lambda w: _z(w, "it")) for b, v in _bare.items()}
 
-    def italian(it):
-        """The Italian word in its commonest spelling, or None if unknown.
+    def italian(it, from_dictionary=True):
+        """The Italian word as it should be written, or None if unknown.
 
-        Always through the alias, not an exact-match shortcut: Wiktionary
-        carries misspellings as entries, so `citta` matches itself and the card
-        keeps the unaccented form. Going through the alias picks `città`."""
+        Where the spelling came from decides how to read it. Apertium drops
+        accents as a matter of course, so its `citta` means `città` and should
+        be resolved through the accent-free form. The corpus reads real text
+        through a lemmatiser, so its `papà` really is `papà` and must be left
+        alone -- resolving that one too turned the word for "dad" into the
+        Pope, and `metà` into a destination.
+
+        Accent pairs are mostly not variants of one another: Wiktionary has
+        `citta` as the feminine of `citto`, and only `perchè` is actually
+        marked a misspelling of `perché`."""
+        if it in it_base and not from_dictionary:
+            return it
         best = it_alias.get(strip_accents(it))
         if best:
             return best
@@ -141,7 +151,7 @@ def build(wikt_it2es_path):
         shares = {}
     dic = dictionary(wikt_it2es_path)
 
-    defs, additions, dropped, thin, unsupported = {}, [], [], [], []
+    defs, additions, dropped, thin, unsupported, overruled = {}, [], [], [], [], []
 
     for w in words:
         es, poss = w["es"], w["pos"]
@@ -157,10 +167,10 @@ def build(wikt_it2es_path):
         pct = dict(shares.get(es) or shares.get(nes) or {}) \
             or {it: p for it, p in entry["it"]}
 
-        def share_of(it):
+        def share_of(it, from_dict=True):
             """The count is stored under the canonical spelling, so look it up
             there -- `citta` was asking for a figure filed under `città`."""
-            can = italian(it)
+            can = italian(it, from_dict)
             for k in (can, it):
                 if k is not None and k in pct:
                     return round(pct[k], 1)
@@ -231,12 +241,30 @@ def build(wikt_it2es_path):
             if tp and pos not in CLOSED:
                 ranked = sorted(((p, it) for it, p in tp.items()
                                  if it in proposed and italian(it)), reverse=True)
+                # A word the dictionary never lists that beats everything it
+                # does list is not an extra sense -- it says the dictionary has
+                # the primary wrong. `carta` is `lettera` before it is `carta`,
+                # `papel` is `ruolo`, and `más` is `più` rather than `oltre`.
+                # Must be a real Italian word: `parlamente` is a tagger slip.
+                outside = sorted(((p, it) for it, p in tp.items()
+                                  if it not in proposed and italian(it)
+                                  and italian(it) in it_pos), reverse=True)
+                if outside and (not ranked or outside[0][0] > ranked[0][0] * BEATS) \
+                        and outside[0][0] >= ADD_PROB:
+                    overruled.append({
+                        "band": w["tier"], "spanish": es, "pos": pos,
+                        "corpus": italian(outside[0][1], False),
+                        "prob": round(outside[0][0], 3),
+                        "dictionary": italian(ranked[0][1]) if ranked else "",
+                        "revert": ""})
+                    ranked = [outside[0]] + [r for r in ranked
+                                             if r[0] >= outside[0][0] * RELATIVE / 100]
                 if ranked:
                     top_p = ranked[0][0]
                     here = [(it, p) for p, it in ranked
                             if 100 * p / top_p >= RELATIVE]
-                    by_pos[pos] = [{"it": italian(it), "prob": round(p, 3),
-                                    "pct": share_of(it)}
+                    by_pos[pos] = [{"it": italian(it, it in proposed),
+                                    "prob": round(p, 3), "pct": share_of(it)}
                                    for it, p in here]
                     continue
             if pos in CLOSED:
@@ -305,7 +333,7 @@ def build(wikt_it2es_path):
                               "of_top": round(100 * p / keep[0][1]),
                               "band": w["tier"], "add": ""})
 
-    return defs, additions, dropped, thin, unsupported
+    return defs, additions, dropped, thin, unsupported, overruled
 
 
 def write_csv(path, rows, fields):
@@ -317,7 +345,7 @@ def write_csv(path, rows, fields):
 
 if __name__ == "__main__":
     wikt = sys.argv[1]
-    defs, additions, dropped, thin, unsupported = build(wikt)
+    defs, additions, dropped, thin, unsupported, overruled = build(wikt)
     json.dump(defs, open("data/definitions.json", "w"),
               ensure_ascii=False, separators=(",", ":"))
     additions.sort(key=lambda r: (r["beats_dictionary"] != "yes", -r["prob"]))
@@ -328,6 +356,8 @@ if __name__ == "__main__":
     write_csv("review_thin.csv", thin, ["spanish", "pos", "pairs"])
     write_csv("review_corpus_only.csv", unsupported,
               ["band", "spanish", "definition", "keep"])
+    write_csv("review_overruled.csv", overruled,
+              ["band", "spanish", "pos", "corpus", "prob", "dictionary", "revert"])
 
     print(f"{len(defs)} Spanish words defined -> data/definitions.json")
     n_senses = sum(len(v) for d in defs.values() for v in d["by_pos"].values())
@@ -336,3 +366,4 @@ if __name__ == "__main__":
     print(f"  review_dropped_pos.csv  {len(dropped):5d}  parts of speech with no translation")
     print(f"  review_thin.csv         {len(thin):5d}  too little corpus evidence")
     print(f"  review_corpus_only.csv  {len(unsupported):5d}  defined by the corpus, no dictionary agreed")
+    print(f"  review_overruled.csv    {len(overruled):5d}  corpus overruled the dictionary")
