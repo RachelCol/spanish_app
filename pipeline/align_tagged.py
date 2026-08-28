@@ -139,12 +139,22 @@ def main():
     sys.stderr.write(f"{len(pairs):,} tagged pairs\n")
     t = train(pairs, iters)
 
+    # Only the readings the lexicon actually asks about. The full table covers
+    # every tagged word in the corpus and runs to 19MB, which is not something
+    # to carry in a repository that is also the website.
+    import csv
+    keep = set()
+    with open("content/lexicon.csv", newline="") as fh:
+        for r in csv.DictReader(fh):
+            for p in r["pos"].split():
+                keep.add(f"{r['spanish']}|{p}")
+
     out = collections.defaultdict(list)
     for f, row in t.items():
         for e, p in row.items():
-            if p >= 0.01:
+            if p >= 0.01 and e in keep:
                 out[e].append((round(p, 4), f))
-    result = {e: [[f, p] for p, f in sorted(v, reverse=True)[:20]]
+    result = {e: [[f, p] for p, f in sorted(v, reverse=True)[:12]]
               for e, v in out.items()}
     json.dump(result, open("data/aligned_pos.json", "w"),
               ensure_ascii=False, separators=(",", ":"))
