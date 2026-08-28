@@ -1,21 +1,23 @@
-"""Count how a Spanish word is actually translated, across millions of pairs.
+"""Step 2: count how each Spanish word is actually translated.
 
-Which Italian words belong on a Spanish card has been a judgement call, made by
-Apertium's ordering and then by me. This replaces it with a count: take every
-aligned sentence pair where the Spanish word appears, and tally what the
-Italian side contains.
+For every Spanish base form, take aligned sentence pairs whose Spanish side
+contains that exact word, and tally what the Italian side contains -- exactly,
+no stemming and no lemmatising, so `costa` and `costo` never merge. Matching
+the Spanish base form keeps the Italian side in the same number, so plurals
+need no special handling.
 
-    costa -> costa 46%  riva 3%  costo 2%   (of all pairs containing `costa`)
+Two filters on the Italian side:
 
-The denominator is every pair containing the Spanish word, including those
-where Italian said it another way entirely -- so the numbers run low, and a
-low top score is itself information: it means the sentence is usually
-restructured. Inclusion is decided on the ratio between senses rather than the
-raw figure, which makes the denominator cancel out.
+  capitalised tokens are skipped unless the Spanish word is itself a proper
+  noun, or `costa` acquires *Rica* as a meaning;
 
-Matching is by stem, not exact form, so `hablar` sees `habla` and `hablando`.
-That over-matches slightly (`hablador`) and is fine for counting; the parts of
-speech come later, from a tagged sample rather than from all 32 million lines.
+  the token must have real currency in Italian, by Italian frequency. This
+  keeps `leader`, `account`, `staff` and `trend`, which Italians say, and drops
+  untranslated English sitting in subtitle files.
+
+Percentages are of all pairs containing the Spanish word, including those where
+Italian phrased it differently -- so a low top score means the sentence is
+usually restructured, which is worth knowing.
 
     python pipeline/build_matrix.py <corpus-dir> [--cap N]
 """
@@ -26,21 +28,11 @@ import re
 import sys
 import unicodedata
 
-TOKEN = re.compile(r"[a-záéíóúüñàèìòùçA-ZÁÉÍÓÚÜÑÀÈÌÒÙ]+")
+from wordfreq import zipf_frequency
 
-# Counting these tells us nothing -- they appear beside everything.
-IT_SKIP = set("""
-il lo la i gli le un uno una l di a da in con su per tra fra e ed o od che se ma
-non ci si mi ti vi ne io tu lui lei noi voi loro questo questa quello quella
-essere avere fare dire come dove quando più meno molto poco tutto altro
-del della dei delle nel nella dal dalla al alla sul sulla è sono ha ho hanno
-era erano sia siamo siete stato stata cosa qui qua lì là ora poi già ancora
-anche solo sempre mai nulla niente bene male grande piccolo buono
-""".split())
-
-
-def stem(w):
-    return w[:max(4, len(w) - 2)]
+TOKEN = re.compile(r"[A-Za-zÁÉÍÓÚÜÑÀÈÌÒÙáéíóúüñàèìòùç]+")
+MIN_IT_ZIPF = 2.5      # `leader` clears this; untranslated English does not
+KEEP_TOP = 30
 
 
 def norm(s):
@@ -48,71 +40,72 @@ def norm(s):
     return "".join(c for c in s if unicodedata.category(c) != "Mn")
 
 
-def build(corpus_dir, cap=4000):
-    deck = json.load(open("data/deck.json"))
-    cards = [c["es"] for c in deck]
+def build(corpus_dir, cap=3000):
+    words = json.load(open("data/wordlist.json"))
+    wanted = {norm(w["es"]): w["es"] for w in words}
 
-    # stem -> the card words that stem reaches
-    by_stem = collections.defaultdict(set)
-    for w in cards:
-        by_stem[stem(norm(w))].add(w)
-    stems = set(by_stem)
-    maxstem = max(len(s) for s in stems)
+    seen = collections.Counter()
+    tally = collections.defaultdict(collections.Counter)
 
-    seen = collections.Counter()                       # pairs counted per card
-    tally = collections.defaultdict(collections.Counter)   # card -> italian -> n
-
-    pairs = [(os.path.join(corpus_dir, f), os.path.join(corpus_dir, f[:-3] + ".it"))
+    files = [(os.path.join(corpus_dir, f), os.path.join(corpus_dir, f[:-3] + ".it"))
              for f in sorted(os.listdir(corpus_dir)) if f.endswith(".es")]
 
-    for es_path, it_path in pairs:
-        name = os.path.basename(es_path)
-        sys.stderr.write(f"  {name} ...\n")
+    for es_path, it_path in files:
+        sys.stderr.write(f"  {os.path.basename(es_path)}\n")
         n = 0
         with open(es_path, errors="ignore") as fe, open(it_path, errors="ignore") as fi:
             for es_line, it_line in zip(fe, fi):
                 n += 1
-                if n % 2_000_000 == 0:
-                    sys.stderr.write(f"    {n:,} lines\n")
-                es_toks = TOKEN.findall(es_line)
-                if not es_toks or len(es_toks) > 40:
-                    continue
+                if n % 5_000_000 == 0:
+                    sys.stderr.write(f"    {n:,}\n")
                 hits = set()
-                for t in es_toks:
-                    t = norm(t)
-                    for k in range(4, min(len(t), maxstem) + 1):
-                        for w in by_stem.get(t[:k], ()):
-                            if seen[w] < cap:
-                                hits.add(w)
+                for t in TOKEN.findall(es_line):
+                    w = wanted.get(norm(t))
+                    if w is not None and seen[w] < cap:
+                        hits.add(w)
                 if not hits:
                     continue
-                it_toks = {norm(t) for t in TOKEN.findall(it_line)}
-                it_toks -= IT_SKIP
-                if not it_toks:
+                # Capitalisation is read before lowercasing: a token that is
+                # capitalised mid-sentence is a name, not a translation.
+                it_toks = TOKEN.findall(it_line)
+                keep = set()
+                for i, t in enumerate(it_toks):
+                    if i > 0 and t[:1].isupper():
+                        continue
+                    keep.add(norm(t))
+                if not keep:
                     continue
                 for w in hits:
                     seen[w] += 1
-                    tally[w].update(it_toks)
-        sys.stderr.write(f"    {n:,} lines\n")
+                    tally[w].update(keep)
+        sys.stderr.write(f"    {n:,}\n")
 
     out = {}
-    for w in cards:
+    for w in wanted.values():
         total = seen.get(w, 0)
-        if not total:
+        if total < 20:
             continue
-        top = tally[w].most_common(25)
-        out[w] = {"pairs": total,
-                  "it": [[it, round(100 * c / total, 1)] for it, c in top if c >= 3]}
+        rows = []
+        for it, c in tally[w].most_common(120):
+            if c < 3 or it == norm(w) and False:
+                continue
+            if zipf_frequency(it, "it") < MIN_IT_ZIPF:
+                continue
+            rows.append([it, round(100 * c / total, 2)])
+            if len(rows) >= KEEP_TOP:
+                break
+        out[w] = {"pairs": total, "it": rows}
     return out
 
 
 if __name__ == "__main__":
     d = sys.argv[1]
-    cap = 4000
+    cap = 3000
     if "--cap" in sys.argv:
         cap = int(sys.argv[sys.argv.index("--cap") + 1])
     m = build(d, cap)
     json.dump(m, open("data/matrix.json", "w"), ensure_ascii=False, separators=(",", ":"))
-    covered = sum(1 for v in m.values() if v["pairs"] >= 50)
     print(f"\n{len(m)} Spanish words counted -> data/matrix.json")
-    print(f"  with at least 50 example pairs: {covered}")
+    for floor in (50, 200, 1000):
+        print(f"  with at least {floor:4d} pairs: "
+              f"{sum(1 for v in m.values() if v['pairs'] >= floor)}")
