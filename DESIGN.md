@@ -106,8 +106,8 @@ quality signal — tested twice, filtering on them would have removed
 
 ## Review lists
 
-Nothing enters the deck from the corpus without being seen. Two lists come out
-of the build, both as spreadsheet columns to fill in and upload back:
+Nothing enters the deck from the corpus without being seen. These come out of
+the build as spreadsheets to fill in and upload back:
 
 | list | what it holds |
 |---|---|

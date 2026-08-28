@@ -28,3 +28,7 @@ _t
 verbecc.log
 review.csv
 changes.md
+review_additions.csv
+review_dropped_pos.csv
+review_thin.csv
+data/matrix.json
