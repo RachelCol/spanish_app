@@ -9,6 +9,10 @@ import { initVoices, onVoicesReady, setAccent, ACCENTS, describeVoice, SAMPLE, s
          differsByAccent, hasAccentPair, speakOtherAccent, otherAccent,
          available as canSpeak, speak, speakSequence, stop as stopSpeech } from './speech.js';
 
+// Categories that existed before settings carried a `pos` list.
+const NAMED_POS = new Set(
+  ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num']);
+
 const $ = sel => document.querySelector(sel);
 
 const state = {
@@ -90,7 +94,15 @@ async function start() {
   state.prompts = await loadPrompts();
   await releaseFixedChecks();
   const saved = await db.getMeta('settings');
-  if (saved) state.settings = { ...DEFAULT_SETTINGS, ...saved };
+  if (saved) {
+    state.settings = { ...DEFAULT_SETTINGS, ...saved };
+    // A saved `pos` list overrides the default wholesale, so a category added
+    // after those settings were written would stay switched off for good and
+    // its cards would never be seen. Only ever adds what did not exist then.
+    for (const p of DEFAULT_SETTINGS.pos)
+      if (!NAMED_POS.has(p) && !state.settings.pos.includes(p))
+        state.settings.pos.push(p);
+  }
   await refresh();
   renderFilters();
   wire();

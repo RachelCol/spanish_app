@@ -47,6 +47,7 @@ export const POS_LABEL = {
   det: 'Determiners',
   ij: 'Expressions',
   num: 'Numbers',
+  phrase: 'Phrases',
 };
 
 // Apertium distinguishes more verb and conjunction types than a learner cares
@@ -160,7 +161,7 @@ export function buildItems(deck, prompts, progressList, settings) {
 export const DEFAULT_SETTINGS = {
   tiers: ['core', 'common', 'useful'],
   buckets: ['near', 'shifted', 'distinct'],   // `identical` off by default: little to learn
-  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num'],
+  pos: ['n', 'vblex', 'adj', 'adv', 'pr', 'prn', 'cnj', 'det', 'ij', 'num', 'phrase'],
   directions: ['it>es'],
   autoSpeak: true,
   accent: 'es-MX',   // locale, not a voice name -- see speech.js

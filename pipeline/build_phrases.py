@@ -34,6 +34,12 @@ LOCKED = {
     "a bordo": "bordo",
     "en absoluto": "absoluto",
     "de inmediato": "inmediato",
+    # Found in the overruled review: each of these is why a bare word was
+    # credited with the phrase's meaning. The words themselves have real
+    # standalone uses, so they keep their own cards and the phrase joins them.
+    "a pesar": "pesar",         "de vez en cuando": "vez",
+    "en concreto": "concreto",  "a lo largo": "largo",
+    "alrededor de": "alrededor",
 }
 
 IT_SKIP = set("""il lo la i gli le un uno una l di a da in con su per tra fra e ed o che se ma
