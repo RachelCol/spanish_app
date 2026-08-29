@@ -4,7 +4,13 @@ Nothing here is written. Every sentence is an attested Spanish sentence with an
 attested Italian translation, and the gap is cut out of the real thing, so the
 answer is what a speaker actually said rather than what I would have guessed.
 
-Three banks: prepositions, articles, and the auxiliaries.
+Four banks: prepositions, articles, the auxiliaries, and the shortened forms.
+
+The shortened-form bank drills apocopation, which Italian also does -- `un buon
+caffe` -- on a list that does not quite match Spanish's. It also carries the
+muy/mucho split, which is not positional at all: muy goes before an adjective
+or adverb and mucho before a noun or after a verb, and Italian has only
+`molto` for both.
 
 The auxiliary bank drills the split an Italian speaker cannot feel, because
 one Italian verb is doing the work of two or three Spanish ones. `avere` is
@@ -24,6 +30,20 @@ import csv, json, re, collections, random
 V = 'vendor/tatoeba/'
 MAX_WORDS = 12
 NO_ARTICLE = '—'
+
+# Each pair is (the form used here, the form that is wrong here). Both are
+# real words; the drill is about which slot each belongs in.
+APOCOPE = [
+    ('buen', 'bueno'), ('bueno', 'buen'),
+    ('mal', 'malo'), ('malo', 'mal'),
+    ('gran', 'grande'), ('grande', 'gran'),
+    ('primer', 'primero'), ('primero', 'primer'),
+    ('tercer', 'tercero'),
+    ('algún', 'alguno'), ('ningún', 'ninguno'),
+    ('cien', 'ciento'), ('ciento', 'cien'),
+    ('san', 'santo'),
+    ('muy', 'mucho'), ('mucho', 'muy'),
+]
 
 AUX = ['ser', 'estar', 'tener', 'haber', 'deber']
 
@@ -153,6 +173,37 @@ def build_prepositions(pairs, per_prep=14):
     return items
 
 
+def build_apocope(pairs, per_form=10):
+    """Gap a shortened form or its full one; offer the other as the wrong answer."""
+    out, seen, made = [], set(), collections.Counter()
+    for want, rival in APOCOPE:
+        for es, it in pairs:
+            if made[want] >= per_form:
+                break
+            if es in seen:
+                continue
+            words = es.split()
+            if not (3 <= len(words) <= MAX_WORDS):
+                continue
+            hit = next((i for i, w in enumerate(words)
+                        if re.sub(r"[^\wáéíóúüñ]", "", w.lower()) == want), None)
+            if hit is None:
+                continue
+            gapped = words[:hit] + ['___'] + words[hit + 1:]
+            answer = words[hit].strip('.,;:!?¿¡')
+            other = rival[:1].upper() + rival[1:] if answer[:1].isupper() else rival
+            # Two options, not four. The question is which of the pair belongs
+            # in this slot, and padding it with unrelated words would make it
+            # easier than the real choice.
+            opts = [answer, other]
+            random.shuffle(opts)
+            out.append({'italian': it, 'gapped': ' '.join(gapped),
+                        'answer': answer, 'full': es, 'options': opts})
+            seen.add(es)
+            made[want] += 1
+    return out
+
+
 def build_auxiliaries(pairs, per_verb=22):
     """Gap a conjugated auxiliary; offer the same slot of its rivals."""
     conj = json.load(open('data/conjugations.json'))['verbs']
@@ -250,7 +301,9 @@ if __name__ == '__main__':
     preps = build_prepositions(pairs)
     arts = build_articles(pairs)
     auxes = build_auxiliaries(pairs)
-    json.dump({'prepositions': preps, 'articles': arts, 'auxiliaries': auxes},
+    apoc = build_apocope(pairs)
+    json.dump({'prepositions': preps, 'articles': arts, 'auxiliaries': auxes,
+               'apocope': apoc},
               open('data/drill_bank.json', 'w'),
               ensure_ascii=False, separators=(',', ':'))
 
@@ -260,6 +313,9 @@ if __name__ == '__main__':
     print(f"article items: {len(arts)}  "
           f"(no-article: {sum(1 for a in arts if a['answer'] == NO_ARTICLE)})")
     print(f"auxiliary items: {len(auxes)}")
+    print(f"shortened-form items: {len(apoc)}")
+    for row in apoc[:6]:
+        print(f"  {row['italian']}\n  {row['gapped']}\n  {row['options']}  -> {row['answer']}\n")
     print(f"data/drill_bank.json: {os.path.getsize('data/drill_bank.json')/1024:.0f} KB\n")
     for row in auxes[:5]:
         print(f"  {row['italian']}\n  {row['gapped']}\n  {row['options']}  -> {row['answer']}\n")

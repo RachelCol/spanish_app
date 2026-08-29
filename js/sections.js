@@ -398,6 +398,13 @@ const GAP_CONFIG = {
          + 'The wrong answers are the same person and tense of the rival verb, '
          + 'so the only question is which verb.',
   },
+  apocope: {
+    view: 'apocope', title: 'Shortened forms',
+    intro: 'Which of the pair belongs in the slot. Italian shortens adjectives '
+         + 'too — un buon caffè — on a list that does not quite match. muy and '
+         + 'mucho are here for a different reason: that split is not positional '
+         + 'at all, and Italian has only molto for both.',
+  },
   articles: {
     view: 'articles', title: 'Articles',
     intro: 'The Italian sentence, then the Spanish with the article removed. '
@@ -522,4 +529,6 @@ export function initSections(showView, conjugationData) {
   $('#close-articles').addEventListener('click', () => show('home'));
   $('#open-aux').addEventListener('click', openGap('auxiliaries'));
   $('#close-aux').addEventListener('click', () => show('home'));
+  $('#open-apocope').addEventListener('click', openGap('apocope'));
+  $('#close-apocope').addEventListener('click', () => show('home'));
 }
