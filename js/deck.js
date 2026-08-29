@@ -152,15 +152,16 @@ export function buildItems(deck, prompts, progressList, settings) {
 
   const items = [];
   for (const [prompt, all] of Object.entries(prompts)) {
-    // The prompt belongs to its best answer, and is only asked where that
-    // answer is in scope. Keeping a prompt because some *other* answer
-    // survived the filter is how `fare` came to mean `desayunar` in the wider
-    // deck: `hacer` is a first-band word, so it was filtered out and the
-    // leftovers were shown as though they were the meaning.
-    if (!passes(byId.get(all[0].es))) continue;
-    // Every answer, whatever band it is in. The filter decides which prompts
-    // to ask, not what a card is allowed to mean: a card that hid two of its
-    // three Spanish words would be teaching something false about the Italian.
+    // A prompt surfaces when *any* of its answers is in a selected band, and
+    // then shows all of them. So a band is a way in, not a wall: picking the
+    // wider band surfaces a common Italian word whose second or third Spanish
+    // answer is the rare one, which is the answer worth looking at. Picking a
+    // common band shows the rarer answers too, for recognition.
+    //
+    // This only works because a card's answers are its real ones. While
+    // `desayunar` still answered the bare `fare`, surfacing on any answer made
+    // `fare` look as though it meant breakfast.
+    if (!all.some(a => passes(byId.get(a.es)))) continue;
     const answers = all.filter(a => byId.get(a.es));
     if (!answers.length) continue;
     const lead = byId.get(answers[0].es);
