@@ -123,9 +123,20 @@ approach turned out to be wrong.
 ## 4 · Cards
 
 - Flashcards run **Italian → Spanish**, from the step 3 list.
+- **WordReference, Reverso and YouGlish for the prompt** sit on the back,
+  pointed Italian to Spanish. The Spanish answers had their links taken off
+  the back because each answer opens its own entry -- but the Italian word has
+  no entry to hold them, so the card is the only place they can live.
 - Tapping a Spanish answer opens its detail card, from the step 2 list, with
   the Italian definitions **grouped by that Spanish word's parts of speech**.
-- **Percentages are shown on both** the flashcard back and the detail card.
+- **Percentages are shown on both**, and each is measured from the word the
+  card is about. The flashcard asks *you have this Italian word, which Spanish
+  word do you reach for*, so its figures are counted from pairs holding the
+  Italian word and share a denominator: `mai` reads `nunca 50%, jamás 5%`.
+  The detail card asks about one Spanish word, so its figures are counted from
+  pairs holding that word: `nunca -> mai 76%`. Measuring the flashcard from the
+  Spanish side put `nunca 76%` beside `jamás 74%` -- two denominators summing
+  past 100, hiding that `nunca` is ten times commoner.
 - The percentage is of *all* pairs containing the word, including those where
   Italian phrased it differently. A low top score is information: it means the
   sentence is usually restructured. Because the threshold is relative, the

@@ -555,6 +555,7 @@ function reveal() {
   const card = item.card;
   const dir = DIRECTIONS[item.direction];
 
+
   // Going to Italian, show every sense: where a Spanish word does not map
   // one-to-one, that is the useful information and one gloss would hide it.
   // Where the senses split by part of speech -- bajo is basso as an adjective
@@ -585,11 +586,21 @@ function reveal() {
   $('#meta').classList.remove('hidden');
   $('#pos-line').classList.add('hidden');
 
-  // Links and example sentences belong to a word, not to a card, and every
-  // answer now opens its own entry -- so they live there and nowhere else.
-  // The conjugation tables stay: a paradigm is glanceable, and wanting one is
-  // not the same as wanting to look a word up.
-  $('#card-links').classList.add('hidden');
+  // Example sentences belong to a word, not to a card, and every Spanish
+  // answer opens its own entry -- so they live there and nowhere else. The
+  // conjugation tables stay: a paradigm is glanceable, and wanting one is not
+  // the same as wanting to look a word up.
+  //
+  // The links are the exception, and they point at the *prompt*. The Italian
+  // word has no entry of its own to hold them, so the back of the card is the
+  // only place they can be, and Italian to Spanish is the direction you are
+  // working in.
+  const links = dir.prompt === 'it' ? promptLinks(item.prompt)
+                                    : detailLinks(item.prompt);
+  $('#link-wr').href = links.wr;
+  $('#link-rev').href = links.rev;
+  $('#link-yg').href = links.yg;
+  $('#card-links').classList.remove('hidden');
   $('#examples-btn').classList.add('hidden');
   $('#conj-btn').classList.add('hidden');
   renderPresentTables(answers);
@@ -676,6 +687,17 @@ function answerRow(word, pct, many, pos) {
 // same examples, conjugation and links. It stopped being a question and became
 // a reference, and it carries more than the card face does -- the card only
 // showed the sense that prompted you.
+
+// The same three resources, pointed at an Italian word and going to Spanish,
+// which is the direction of the card you are looking at.
+function promptLinks(it) {
+  const w = encodeURIComponent(it);
+  return {
+    wr:  `https://www.wordreference.com/ites/${w}`,
+    rev: `https://context.reverso.net/translation/italian-spanish/${w}`,
+    yg:  `https://youglish.com/pronounce/${w}/italian`,
+  };
+}
 
 function detailLinks(es) {
   const w = encodeURIComponent(es);
