@@ -501,6 +501,14 @@ function renderCard() {
   const item = state.queue[state.index];
   const dir = DIRECTIONS[item.direction];
   state.revealed = false;
+  // Seeing a card is what stops it being new. Grading is what schedules it.
+  // Keeping only the second meant a card looked at and left ungraded came back
+  // in every `new` session for good.
+  if (!item.firstSeen) {
+    item.firstSeen = Date.now();
+    const { card, ...bare } = item;
+    db.putProgress(bare).catch(() => {});
+  }
 
   $('#direction').textContent = dir.label;
   const promptPos = answersFor(item).map(a => a.pos);
@@ -1839,6 +1847,12 @@ function wire() {
 
   document.addEventListener('keydown', e => {
     if ($('#view-review').classList.contains('hidden')) return;
+    // Not while typing. A space in the check-pile note was grading the card
+    // and moving on, which looked like the form vanishing; a digit graded it
+    // and Escape ended the session.
+    const t = e.target;
+    if (t && (t.tagName === 'TEXTAREA' || t.tagName === 'INPUT'
+              || t.tagName === 'SELECT' || t.isContentEditable)) return;
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); state.revealed ? applyGrade(GOOD) : reveal(); }
     else if (e.key >= '1' && e.key <= '4') applyGrade(Number(e.key) - 1);
     else if (e.key === 'Escape') finish();

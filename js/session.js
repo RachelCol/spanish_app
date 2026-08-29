@@ -15,8 +15,10 @@ export function buildQueue(items, settings, now = Date.now()) {
   const fresh = items.filter(isNew)
     .sort((a, b) => b.card.zipf - a.card.zipf);          // most frequent first
 
-  // Studying new cards deliberately: no ratio, no interleaving.
-  if (settings.newOnly) return fresh.slice(0, size);
+  // Studying new cards deliberately: no ratio, no interleaving. `new` here
+  // means never shown, not merely never graded -- looking at a card and
+  // leaving it ungraded still counts as having met it.
+  if (settings.newOnly) return fresh.filter(i => !i.firstSeen).slice(0, size);
 
   const seen = items.filter(i => !isNew(i));
   const due = seen.filter(i => isDue(i, now)).sort((a, b) => a.due - b.due);
