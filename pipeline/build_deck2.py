@@ -11,6 +11,8 @@ fact about spelling rather than usage.
 """
 import json
 
+import editorial
+
 from wordfreq import zipf_frequency
 
 
@@ -52,7 +54,7 @@ def main():
     # Prepositions, articles and interjections are taught in their own
     # sections. What matters about a preposition is which words it goes with,
     # which a translation card cannot show.
-    SECTIONED = {"pr", "det", "ij"}
+    SECTIONED = editorial.SECTIONED
 
     # Fixed phrases are cards but not lexicon rows, so give them a band from
     # the word they replaced.

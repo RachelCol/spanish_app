@@ -20,6 +20,8 @@ import csv
 import json
 import sys
 
+import editorial
+
 OFF_LIST_PROB = 0.20      # what an off-list Spanish word must reach to appear
 
 
@@ -38,7 +40,7 @@ def build():
 
     # italian -> [(spanish, part of speech)]
     by_it = collections.defaultdict(list)
-    SECTIONED = {"det", "ij", "prn", "cnj"}   # `phrase` stays
+    SECTIONED = editorial.SECTIONED
     for es, entry in defs.items():
         for pos, items in entry["by_pos"].items():
             if pos in SECTIONED:

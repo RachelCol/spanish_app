@@ -17,6 +17,12 @@ done and the evidence for it. None of them show on a card.
 import csv
 import os
 
+# Which parts of speech are taught in a section rather than on a card. Kept
+# here because it was copied into three pipeline scripts and they drifted:
+# build_deck2 still sectioned prepositions after the other two had stopped, so
+# `de`, `en`, `por` and eleven more had definitions and no card.
+SECTIONED = {"det", "ij", "prn", "cnj"}
+
 C = os.path.join(os.path.dirname(__file__), "..", "content")
 
 
