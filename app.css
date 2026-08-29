@@ -888,3 +888,18 @@ button.secondary {
 .see-also-it { color: var(--muted); }
 .see-also-arrow { color: var(--muted); opacity: .7; }
 .see-also-es { color: var(--ink); font-weight: 600; }
+
+/* --- conjugation tables fold away when there are more than two --- */
+.present-fold { margin: 0; }
+.present-summary {
+  cursor: pointer; list-style: none;
+  font-size: .78rem; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--muted); padding: .35rem 0; user-select: none;
+}
+.present-summary::-webkit-details-marker { display: none; }
+.present-summary::before {
+  content: '\25B8'; display: inline-block; margin-right: .4rem;
+  transition: transform .15s ease;
+}
+.present-fold[open] > .present-summary::before { transform: rotate(90deg); }
+.present-summary:hover { color: var(--ink); }

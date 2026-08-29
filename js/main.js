@@ -1146,7 +1146,20 @@ function renderPresentTables(answers) {
       }
     }
     if (!blocks.length) return;
-    host.replaceChildren(...blocks);
+    // Three or more paradigms push the grade buttons off the screen, so they
+    // start folded behind a caret. One or two stay open -- that is the case
+    // where seeing both side by side is the whole point.
+    if (blocks.length > 2) {
+      const fold = document.createElement('details');
+      fold.className = 'present-fold';
+      const cap = document.createElement('summary');
+      cap.className = 'present-summary';
+      cap.textContent = `${blocks.length} conjugations`;
+      fold.append(cap, ...blocks);
+      host.replaceChildren(fold);
+    } else {
+      host.replaceChildren(...blocks);
+    }
     host.classList.remove('hidden');
   });
 }
