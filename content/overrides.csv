@@ -25,3 +25,5 @@ aguantar,vblex,sopportare,Set by hand. `tenere` is a fragment of `tenere duro`.
 calzar,vblex,calzare,Set by hand. `portare` is the generic wear-verb; `calzare` is the shoe-specific one this word means.
 marchar,vblex,andarsene,Set by hand. Bare `andare` is `ir`; `marchar(se)` carries the leaving sense.
 acudir,vblex,accorrere,"Set by hand. `venire` is too generic; `acudir` is to come to something, often to help."
+muy,adv,molto,"Set by hand. Newly added from included.csv, so the corpus counts do not reach it.  is the answer for both muy and mucho -- Italian does not make the split, which is exactly what the card is for."
+después,adv,dopo|poi,"Set by hand. Tagged alignment gives dopo|adv 0.121 and poi|adv 0.120 -- a tie -- but no dictionary lists poi for despues, so the addition rule declined it. Both are right: `despues` is `dopo` for after and `poi` for then."

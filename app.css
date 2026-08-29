@@ -199,6 +199,12 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
 }
 .example-es b { color: var(--accent); font-weight: 650; }
 .example-es .say { vertical-align: middle; margin-left: .3rem; }
+/* On a detail card the play button sits to the right of the sentence rather
+   than below it, and may sit over the card's edge -- there is margin there. */
+.detail-examples .example-es { position: relative; padding-right: 1.6rem; }
+.detail-examples .example-es .say {
+  position: absolute; right: -.5rem; top: 0; margin-left: 0;
+}
 .example-it { margin: .2rem 0 0; font-size: .92rem; color: var(--muted); }
 .example-credit { margin: .8rem 0 0; font-size: .7rem; color: var(--muted); text-align: center; }
 .example-credit a { color: inherit; }

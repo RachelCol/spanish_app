@@ -18,6 +18,27 @@ TIERS = {"first", "core", "common", "useful", "wider"}
 
 
 def main():
+    import sys, os
+    sys.path.insert(0, os.path.dirname(__file__))
+    import editorial
+    # Words the lexicon's own rules kept out. Added here so every corpus step
+    # sees them, which is what `muy` was missing: it was never a candidate.
+    lex_rows = list(csv.DictReader(open("content/lexicon.csv")))
+    have_lex = {r["spanish"] for r in lex_rows}
+    added_lex = []
+    for r in editorial.included():
+        if r["spanish"] not in have_lex:
+            lex_rows.append({"rank": str(len(lex_rows) + 1), "spanish": r["spanish"],
+                             "pos": r["pos"], "zipf": r["zipf"], "band": r["band"],
+                             "note": "from content/included.csv"})
+            added_lex.append(r["spanish"])
+    if added_lex:
+        with open("content/lexicon.csv", "w", newline="") as fh:
+            wr = csv.DictWriter(fh, fieldnames=["rank", "spanish", "pos", "zipf",
+                                                "band", "note"])
+            wr.writeheader(); wr.writerows(lex_rows)
+        print(f"lexicon: added {', '.join(added_lex)} from included.csv")
+
     words = json.load(open("data/wordlist.json"))
     have = {w["es"]: w for w in words}
     added = []

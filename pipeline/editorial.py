@@ -3,6 +3,7 @@
 Four files under content/, each carrying a note column that records what was
 done and the evidence for it. None of them show on a card.
 
+  included.csv  words the lexicon's own rules keep out but that belong in it.
   excluded.csv  words in the frozen lexicon that should not become cards.
                 The list stays frozen -- these are skipped at build time, so
                 nothing is recomputed and nothing churns.
@@ -24,6 +25,13 @@ def _rows(name):
     if not os.path.exists(path):
         return []
     return list(csv.DictReader(open(path)))
+
+
+def included():
+    """Words to put in the lexicon that its own rules would keep out.
+
+    One word long, and the file says why it is one word long."""
+    return _rows("included.csv")
 
 
 def excluded():

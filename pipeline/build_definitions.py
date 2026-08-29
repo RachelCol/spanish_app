@@ -284,7 +284,12 @@ def build(wikt_it2es_path):
                         if p >= 0.10 and italian(it)
                         and not (it_pos.get(italian(it))
                                  and set(it_pos[italian(it)]) <= CLOSED
-                                 and not (set(poss) & CLOSED))]
+                                 and not ((set(poss) - SECTIONED) & CLOSED))]
+            # The exemption is for a word that really is glue, and glue no
+            # longer gets a card -- so it has to be measured against the
+            # readings that survive. `para` is a preposition and a noun; the
+            # preposition is sectioned, and leaving the exemption on let `per`
+            # sit in the noun slot. Same for `yo` and `io`.
             if not rows and not forced_here:
                 continue
             if not rows:
@@ -332,6 +337,14 @@ def build(wikt_it2es_path):
                                      % (outside[0][0] / max(ranked[0][0], 1e-9)))})
                     ranked = [outside[0]] + [r for r in ranked
                                              if r[0] >= outside[0][0] * RELATIVE / 100]
+                if ranked:
+                    # Glue cannot be the meaning of a noun. The other branch
+                    # checked this and this one did not, which is how `para`
+                    # kept `per` and `yo` kept `io` once their preposition and
+                    # pronoun readings were sectioned away.
+                    ranked = [(p, it) for p, it in ranked
+                              if not (it_pos.get(italian(it))
+                                      and set(it_pos[italian(it)]) <= CLOSED)]
                 if ranked:
                     top_p = ranked[0][0]
                     here = [(it, p) for p, it in ranked
@@ -393,7 +406,9 @@ def build(wikt_it2es_path):
         # `hola` straight back.
         if not by_pos and not set(poss) <= SECTIONED:
             rescue = [(p, it) for it, p in aligned.get(es, [])
-                      if p >= RESCUE_PROB and italian(it, False)]
+                      if p >= RESCUE_PROB and italian(it, False)
+                      and not (it_pos.get(italian(it, False))
+                               and set(it_pos[italian(it, False)]) <= CLOSED)]
             if rescue:
                 p_best, it_best = max(rescue)
                 canon = italian(it_best, False)
@@ -415,7 +430,9 @@ def build(wikt_it2es_path):
         # The rescue above runs before those decisions, so try it again here.
         if not by_pos and not set(poss) <= SECTIONED:
             again = [(p, it) for it, p in aligned.get(es, [])
-                     if p >= RESCUE_PROB and italian(it, False)]
+                     if p >= RESCUE_PROB and italian(it, False)
+                      and not (it_pos.get(italian(it, False))
+                               and set(it_pos[italian(it, False)]) <= CLOSED)]
             if again:
                 p_best, it_best = max(again)
                 canon = italian(it_best, False)

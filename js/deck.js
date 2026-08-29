@@ -158,7 +158,10 @@ export function buildItems(deck, prompts, progressList, settings) {
     // deck: `hacer` is a first-band word, so it was filtered out and the
     // leftovers were shown as though they were the meaning.
     if (!passes(byId.get(all[0].es))) continue;
-    const answers = all.filter(a => passes(byId.get(a.es)));
+    // Every answer, whatever band it is in. The filter decides which prompts
+    // to ask, not what a card is allowed to mean: a card that hid two of its
+    // three Spanish words would be teaching something false about the Italian.
+    const answers = all.filter(a => byId.get(a.es));
     if (!answers.length) continue;
     const lead = byId.get(answers[0].es);
     const key = itemKey(prompt, 'it>es');
