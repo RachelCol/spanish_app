@@ -634,7 +634,8 @@ function reveal() {
   // aloud is noise -- and the Italian is the side already known. Each sense
   // has its own button for the pairs that sound nearly identical.
   if (state.settings.autoSpeak && canSpeak()) {
-    speak(spokenForm(card.es, genderFor(state.gender, card, card.es, 'es')), 'es');
+    speak(spokenForm(card.es, genderFor(state.gender, card, card.es, 'es',
+                     posGroups(card).includes('n') ? 'n' : 'x')), 'es');
   }
   $('#reveal-row').classList.add('hidden');
   $('#grade-row').classList.remove('hidden');
@@ -691,7 +692,7 @@ function answerRow(word, pct, many, pos) {
     play.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
-      speak(spokenForm(word, genderFor(state.gender, null, word, 'es')), 'es');
+      speak(spokenForm(word, genderFor(state.gender, null, word, 'es', pos)), 'es');
     });
     row.append(play);
   }
@@ -769,7 +770,8 @@ function openDetail(es) {
     play.textContent = '\u25B6';
     play.setAttribute('aria-label', 'Hear ' + es);
     play.addEventListener('click', () =>
-      speak(spokenForm(es, genderFor(state.gender, null, es, 'es')), 'es'));
+      speak(spokenForm(es, genderFor(state.gender, null, es, 'es',
+                       posGroups(card).includes('n') ? 'n' : 'x')), 'es'));
     head.append(play);
   }
   parts.push(head);
@@ -1867,7 +1869,9 @@ function wire() {
     // the card spoke the wrong word for every prompt but the first.
     const word = (dir.prompt === 'it' && item.prompt) ? item.prompt
                                                       : item.card[dir.prompt];
-    speak(spokenForm(word, genderFor(state.gender, item.card, word, dir.prompt)),
+    const pos = answersFor(item).map(a => a.pos);
+    speak(spokenForm(word, genderFor(state.gender, item.card, word, dir.prompt,
+                     pos.includes('n') ? 'n' : pos[0])),
           dir.prompt);
   });
   $('#accents').addEventListener('click', () => {
