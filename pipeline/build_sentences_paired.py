@@ -31,9 +31,8 @@ from wordfreq import zipf_frequency
 
 V = 'vendor/tatoeba/'
 PER_CARD = 2
-MIN_TOKENS, MAX_TOKENS = 4, 9
-PREFER_TOKENS = 6      # a four-word example carries too little content;
-                       # 6-8 is the sweet spot, 9 the outer edge
+MIN_TOKENS, MAX_TOKENS = 6, 14
+SWEET = (6, 8)         # the norm; anything longer is only a fallback
 
 
 def load_pairs():
@@ -56,18 +55,25 @@ def load_pairs():
 
 
 def score(text, tokens, target):
-    """Lower is better. Rewards sentences long enough to give the word a
-    context, then short ones built from common words.
+    """Lower is better. Six to eight words, then as far as fourteen.
 
-    Length leads the key rather than filtering, so a card with only short
-    sentences still gets them -- the shorter ones simply rank behind every
-    sentence that clears the bar.
+    Length leads the key rather than filtering, so a card with nothing in the
+    sweet spot widens one word at a time instead of being left bare. Some
+    cards end up with no example, which is the honest outcome when Tatoeba has
+    nothing short enough -- `luego` has three pairs and all are ten words or
+    more.
     """
     n = len(tokens)
     if not (MIN_TOKENS <= n <= MAX_TOKENS):
         return None
     hard = sum(1 for t in tokens if zipf_frequency(t, 'es') < 3.5 and t != target)
-    return (0 if n >= PREFER_TOKENS else 1, hard, n, len(text))
+    # Six to eight words is the norm and every one of them ranks ahead of
+    # anything longer. Past that the tier grows a step per word, so a card with
+    # nothing in the sweet spot reaches for nine before ten, and ten before
+    # eleven, rather than jumping to whatever is shortest overall. Nothing
+    # under six is offered at all -- a five-word example carried too little.
+    tier = 0 if n <= SWEET[1] else n - SWEET[1]
+    return (tier, hard, n, len(text))
 
 
 def too_alike(a, b):
