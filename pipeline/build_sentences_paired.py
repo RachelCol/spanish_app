@@ -70,6 +70,20 @@ def score(text, tokens, target):
     return (0 if n >= PREFER_TOKENS else 1, hard, n, len(text))
 
 
+def too_alike(a, b):
+    """Two examples that differ by a letter teach nothing twice.
+
+    `Yo no soy baja` and `Yo no soy bajo` were offered together for `bajo` --
+    the same sentence in two genders. Exact-match de-duplication could not see
+    it, so this compares the words they are built from.
+    """
+    wa = set(re.findall(r"[\w']+", a.lower()))
+    wb = set(re.findall(r"[\w']+", b.lower()))
+    if not wa or not wb:
+        return a == b
+    return len(wa & wb) / len(wa | wb) >= 0.6
+
+
 def variants(word):
     """The written forms a word may legitimately take in a sentence.
 
@@ -190,7 +204,7 @@ def build():
                     break
                 if pass_no == 0 and sense in seen_senses:
                     continue
-                if any(r['es'] == spa[sid] for r in rows):
+                if any(too_alike(r['es'], spa[sid]) for r in rows):
                     continue
                 seen_senses.add(sense)
                 rows.append({'es': spa[sid], 'it': ita[iid]})

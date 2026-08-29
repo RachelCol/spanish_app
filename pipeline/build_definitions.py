@@ -52,7 +52,7 @@ CLOSED = {"pr", "cnj", "det", "prn"}
 # sentence, and it is learned by choosing it -- so prepositions, determiners,
 # pronouns and conjunctions go to their sections, and interjections are
 # dropped outright, being five words and not worth a room of their own.
-SECTIONED = {"pr", "det", "ij", "prn", "cnj"}
+SECTIONED = {"det", "ij", "prn", "cnj"}
 
 RESCUE_PROB = 0.25     # what the corpus must reach to save a word from vanishing
 RELATIVE = 15.0        # keep anything within this % of the top translation

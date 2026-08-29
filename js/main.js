@@ -326,8 +326,25 @@ async function save() {
 // Kept in `meta` rather than in a store of its own: the pile is small, and a
 // schema change costs a database upgrade that can block on an open tab.
 
+// Everything the card shows, so that any change to it releases the card from
+// the check pile. The Spanish words alone were not enough: the day the
+// percentages moved from being counted off the Spanish word to being counted
+// off the Italian one, every figure on every card changed and nothing was
+// released, because the words themselves had not moved.
 function promptSignature(answers) {
-  return (answers || []).map(a => a.es).join('|');
+  const byEs = new Map((state.deck || []).map(c => [c.es, c]));
+  return (answers || [])
+    .map(a => {
+      const card = byEs.get(a.es) || {};
+      // the Italian senses too, since those are the detail card
+      const senses = Object.values(card.by_pos || {})
+        .flat()
+        .map(i => (typeof i === 'string' ? i : `${i.it}=${i.pct}`))
+        .join('~');
+      const pct = a.pct === null || a.pct === undefined ? '' : a.pct;
+      return [a.es, a.pos, pct, senses].join(':');
+    })
+    .join('|');
 }
 
 async function loadCheckPile() {

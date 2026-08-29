@@ -164,6 +164,15 @@ by the corpus counts above. Its direction markers (`LR`/`RL`) are **not** a
 quality signal — tested twice, filtering on them would have removed
 `dopo → luego`, `ciao → hola` and `caffè → café`.
 
+## The check pile
+
+A flagged card is held out of review until the card changes, and *any* change
+to it counts: a different Spanish answer, a different part of speech, a
+percentage that moved, a different Italian sense. The signature was the list
+of Spanish words alone, which meant the day every figure moved from being
+counted off the Spanish word to being counted off the Italian one, nothing was
+released -- the words had not moved, only everything else about the card.
+
 ## Hand decisions
 
 Four lists under `content/`, each with a `note` column recording what was done

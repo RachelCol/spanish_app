@@ -51,3 +51,6 @@ afeitar,vblex,fare,radere,Reverted. `fare` is a fragment of `farsi la barba`.
 burlar,vblex,prendere,beffare,Reverted. `prendere` is a fragment of `prendere in giro`.
 delinquir,vblex,trasformare,,Dropped. `trasformare` is unrelated noise.
 activo,n,bene,,"Dropped. `bene` is right for `activo` in the accounting sense of assets, but at 2.5% it is too marginal to sit on the `bene` prompt beside `bien`."
+hasta,pr,pure,fino a,"Reverted. `pure` is wrong: `hasta` as a preposition is `fino a`. Its adverb reading, the `hasta yo` / `anche io` sense, is untouched."
+hacia,pr,per,,"Dropped. `hacia` is `verso`; `per` is por and para, not this."
+bajo,n,pianterreno,,Dropped. `bajo` as a ground floor is real but the corpus attests it at 0.0%. Its adjective and preposition readings carry the word.

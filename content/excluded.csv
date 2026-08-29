@@ -109,3 +109,7 @@ sino,not wanted,"A conjunction -- `no X sino Y`. Its only card was a noun readin
 pero,not wanted,A conjunction. Its noun reading is a pear tree.
 cualquiera,not wanted,A determiner. Its noun reading is `a nobody`.
 yo,not wanted,"A pronoun. Its noun reading is a tagger artifact -- `io` is tagged n as well as prn in Italian, so the glue guard could not see it as glue. Pronouns are taught in a section."
+so,not wanted,Archaic outside `so pena de`. No corpus evidence.
+sub,not Spanish,"A prefix, not a word."
+vs,not Spanish,An abbreviation of versus.
+pro,not wanted,"As a preposition it is rare in Spanish. Its card read `pro, quanto, vi` -- the last two noise, and the band came from the English abbreviation."
