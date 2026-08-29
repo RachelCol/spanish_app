@@ -28,7 +28,19 @@ def levenshtein(a, b):
     return prev[-1]
 
 
-def bucket(a, b):
+def bucket(a, senses):
+    """How far the Spanish is from the Italian it is actually taught as.
+
+    Judged on the *primary* sense, deliberately. Judging on the closest sense
+    reads better for `manera`, whose lead is `modo` while `maniera` sits on the
+    same card -- but it destroys the cards that matter most. `carta` is
+    `lettera`, `primo` is `cugino`, `caro` is `costoso`: in each the lookalike
+    is also a sense, and calling the card identical to Italian says there is
+    nothing to learn, which is exactly backwards. 25 cards moved into
+    `identical`, which is switched off by default, and every one of them was a
+    false friend.
+    """
+    b = senses[0] if isinstance(senses, (list, tuple)) else senses
     if not a or not b:
         return "distinct"
     sim = 1 - levenshtein(a, b) / max(len(a), len(b))
@@ -98,7 +110,7 @@ def main():
             "pos_all": [p for p in w["pos"] if p in by_pos],
             "by_pos": by_pos,
             **({"see_also": entry["see_also"]} if entry.get("see_also") else {}),
-            "bucket": bucket(es, senses[0]),
+            "bucket": bucket(es, senses),
             "tier": w["tier"], "zipf": w["zipf"],
         })
     deck.sort(key=lambda c: -c["zipf"])
