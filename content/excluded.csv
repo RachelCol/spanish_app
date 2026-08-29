@@ -98,3 +98,13 @@ ojalar,no usable card,Rare; no corpus evidence.
 peorar,no usable card,A non-standard variant of `empeorar`.
 numerar,no usable card,No corpus evidence.
 paginar,no usable card,No corpus evidence.
+as,not wanted,"The card was `asso`, the playing card. Not vocabulary worth a slot."
+ca,not Spanish,An abbreviation; its card answered `ca`.
+ex,not wanted,"A prefix and a borrowing, identical in both languages."
+go,not Spanish,"English, and the board game."
+tv,not Spanish,"An abbreviation, identical in both languages."
+ni,not wanted,"Excluded at Rachel's request. Its readings were `non` (the bare negator, which beats nothing), `ne`, and the letter `O`. The `ni ... ni` construction is a conjunction and belongs in a section."
+mi,not wanted,The noun reading is the musical note; the common `mi` is a possessive determiner and belongs in a section.
+sino,not wanted,"A conjunction -- `no X sino Y`. Its only card was a noun reading answering `ma`, which is the conjunction sense leaking into the noun slot."
+pero,not wanted,A conjunction. Its noun reading is a pear tree.
+cualquiera,not wanted,A determiner. Its noun reading is `a nobody`.

@@ -50,3 +50,4 @@ bañar,vblex,fare,bagnare,Reverted. `fare` is a fragment of `fare il bagno`.
 afeitar,vblex,fare,radere,Reverted. `fare` is a fragment of `farsi la barba`.
 burlar,vblex,prendere,beffare,Reverted. `prendere` is a fragment of `prendere in giro`.
 delinquir,vblex,trasformare,,Dropped. `trasformare` is unrelated noise.
+activo,n,bene,,"Dropped. `bene` is right for `activo` in the accounting sense of assets, but at 2.5% it is too marginal to sit on the `bene` prompt beside `bien`."

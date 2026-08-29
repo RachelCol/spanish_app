@@ -1,6 +1,10 @@
 spanish,pos,italian,prob,note
-si,cnj,se,0.718,would have had no card at all; taken from the untagged alignment
-mi,n,mio,0.377,would have had no card at all; taken from the untagged alignment
+para,n,per,0.643,a hand decision left no card; taken from the untagged alignment
 cuando,adv,quando,0.606,a hand decision left no card; taken from the untagged alignment
+yo,n,io,0.51,a hand decision left no card; taken from the untagged alignment
+algo,adv,qualcosa,0.342,a hand decision left no card; taken from the untagged alignment
+cada,adv,ogni,0.413,a hand decision left no card; taken from the untagged alignment
+nadie,n,nessuno,0.617,a hand decision left no card; taken from the untagged alignment
 mayor,n,maggiore,0.333,would have had no card at all; taken from the untagged alignment
 demás,adj,altri,0.404,would have had no card at all; taken from the untagged alignment
+ambos,adj,entrambi,0.321,a hand decision left no card; taken from the untagged alignment

@@ -47,7 +47,12 @@ CLOSED = {"pr", "cnj", "det", "prn"}
 # become cards, and they are kept off the review lists so no time is spent on
 # words that are leaving. What a preposition needs taught is which words it
 # attaches to, which a translation card cannot carry.
-SECTIONED = {"pr", "det", "ij"}
+# Cards are for words you produce: nouns, verbs, adjectives, adverbs, plus
+# numbers and the fixed phrases. Everything else is glue you choose inside a
+# sentence, and it is learned by choosing it -- so prepositions, determiners,
+# pronouns and conjunctions go to their sections, and interjections are
+# dropped outright, being five words and not worth a room of their own.
+SECTIONED = {"pr", "det", "ij", "prn", "cnj"}
 
 RESCUE_PROB = 0.25     # what the corpus must reach to save a word from vanishing
 RELATIVE = 15.0        # keep anything within this % of the top translation
@@ -383,7 +388,10 @@ def build(wikt_it2es_path):
         #
         # The rescue is deliberately strict: only where nothing else survived,
         # only from the untagged alignment, and only when it is confident.
-        if not by_pos:
+        # Glue is not rescued: a word that is only a preposition or a pronoun
+        # is meant to leave the deck, and rescuing it put `de`, `que` and
+        # `hola` straight back.
+        if not by_pos and not set(poss) <= SECTIONED:
             rescue = [(p, it) for it, p in aligned.get(es, [])
                       if p >= RESCUE_PROB and italian(it, False)]
             if rescue:
@@ -405,7 +413,7 @@ def build(wikt_it2es_path):
         # A hand decision can empty a word too -- dropping `cuando -> tanto`
         # left `cuando` with nothing, though it aligns to `quando` at 0.61.
         # The rescue above runs before those decisions, so try it again here.
-        if not by_pos:
+        if not by_pos and not set(poss) <= SECTIONED:
             again = [(p, it) for it, p in aligned.get(es, [])
                      if p >= RESCUE_PROB and italian(it, False)]
             if again:
@@ -472,6 +480,10 @@ def finish(es, by_pos, share_of, reverts, overrides):
 
     out = {}
     for pos, items in by_pos.items():
+        # Glue does not get a card. It is chosen inside a sentence, so it is
+        # learned by choosing it, in its own section.
+        if pos in SECTIONED:
+            continue
         if True:
             swap = reverts.get((es, pos))
             if swap:

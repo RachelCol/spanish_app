@@ -31,9 +31,9 @@ from wordfreq import zipf_frequency
 
 V = 'vendor/tatoeba/'
 PER_CARD = 2
-MIN_TOKENS, MAX_TOKENS = 4, 14
-PREFER_TOKENS = 6      # a four-word example carries too little content
-MAX_INFLECTION = 3       # `casa` may reach `casitas`, not `casualidad`
+MIN_TOKENS, MAX_TOKENS = 4, 9
+PREFER_TOKENS = 6      # a four-word example carries too little content;
+                       # 6-8 is the sweet spot, 9 the outer edge
 
 
 def load_pairs():
@@ -70,10 +70,21 @@ def score(text, tokens, target):
     return (0 if n >= PREFER_TOKENS else 1, hard, n, len(text))
 
 
-def stem(word):
-    """Enough of a word to catch its inflections and no more. `mucho` keeps
-    `much`, which `muy` does not start with; `tan` keeps `tan`."""
-    return word[:max(3, len(word) - 2)].lower()
+def variants(word):
+    """The written forms a word may legitimately take in a sentence.
+
+    Truncating to a stem was catching other words entirely. `hasta` became
+    `has`, so `has` -- a form of `haber` -- illustrated it; `tanto` became
+    `tan`, so `tan` sentences were offered for `el tanto`. Spelling out the
+    regular inflections instead costs nothing and cannot reach a different
+    word.
+    """
+    w = word.lower()
+    out = {w, w + "s", w + "es"}
+    if w.endswith(("o", "a", "e")):
+        root = w[:-1]
+        out |= {root + x for x in ("o", "a", "os", "as")}
+    return out
 
 
 def build():
@@ -90,9 +101,10 @@ def build():
     # than one word -- cannot be found in a set of single tokens. They are
     # matched against the sentence as written instead.
     multi = {w for w in words if " " in w}
-    by_stem = collections.defaultdict(set)
+    by_form = collections.defaultdict(set)
     for w in words - multi:
-        by_stem[stem(w)].add(w)
+        for v in variants(w):
+            by_form[v].add(w)
 
     def flat(text):
         """Lowercased words with punctuation gone, so `Sin embargo,` matches."""
@@ -103,16 +115,21 @@ def build():
         low = flat(text)
         return {w for w in multi if f" {w} " in low}
 
-    def surface_hits(tokens):
-        """Non-verb cards whose word appears in the sentence as written."""
+    def surface_hits(tagged):
+        """Non-verb cards whose word appears in the sentence as written.
+
+        The token's own part of speech has to agree. `era` is a noun on its
+        card and a form of `ser` in most sentences, and offering one for the
+        other teaches the wrong word.
+        """
         out = set()
-        for t in tokens:
-            for n in range(3, len(t) + 1):
-                for w in by_stem.get(t[:n], ()):
-                    if w in verbs:
-                        continue
-                    if t.startswith(stem(w)) and len(t) - len(stem(w)) <= MAX_INFLECTION:
-                        out.add(w)
+        for text, pos in tagged:
+            for w in by_form.get(text, ()):
+                if w in verbs:
+                    continue
+                if pos in ("VERB", "AUX") and w not in verbs:
+                    continue
+                out.add(w)
         return out
 
     es_nlp = spacy.load('es_core_news_md', disable=['ner', 'parser'])
@@ -131,7 +148,7 @@ def build():
     candidates = collections.defaultdict(list)
     for sid, doc in zip(ids, es_nlp.pipe([spa[i] for i in ids], batch_size=256)):
         lemmas = [t.lemma_.lower() for t in doc if t.is_alpha]
-        surfaces = [t.text.lower() for t in doc if t.is_alpha]
+        surfaces = [(t.text.lower(), t.pos_) for t in doc if t.is_alpha]
         found_phrases = phrase_hits(spa[sid])
         hits = {t for t in lemmas if t in verbs} | surface_hits(surfaces)
         # A word inside a phrase belongs to the phrase. `Empezo a pesar de la

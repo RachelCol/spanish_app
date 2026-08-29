@@ -7,7 +7,7 @@ hacer,vblex,fare,"Set by hand to drop the noun reading, which the corpus filled 
 quedar,vblex,restare|rimanere,"Set by hand. The corpus put `essere` first at 8.8%, which is noise from copular sentences. `restare` and `rimanere` are near-synonyms and both belong."
 andar,vblex,camminare,"Set by hand. `andare` is the false friend and the corpus offered it at 11.1%: Italian `andare` is Spanish `ir`, not `andar`. `andar` is to walk, so `camminare`."
 parecer,vblex,sembrare,"Set by hand. `sembrare` at 19.5% is correct but sorted below `parere` at 1.6%. `parere` as a noun is opinion, a different word, and is not this card."
-necesitar,vblex,avere bisogno di,"Set by hand. Italian has no everyday single verb for `to need` -- `necessitare` is formal -- so it says `ho bisogno di`. The corpus saw this correctly and could only report the pieces: `bisogno` as a noun at 0.29 and `avere` at 0.20. This is the first Italian answer that is a phrase rather than a word."
+necesitar,vblex,avere bisogno di,Set by hand. Italian has no everyday single verb for `to need` -- `necessitare` is formal -- so it says `ho bisogno di`. The corpus saw this correctly and could only report the pieces: `bisogno` as a noun at 0.29 and `avere` at 0.20. This is the first Italian answer that is a phrase rather than a word.
 conmigo,adv,con me,Set by hand. The corpus reads `me` at 65.9% because it can only see the pieces: `conmigo` is one word in Spanish and two in Italian.
 video,n,video,"Set by hand. Aligns at 0.247, just under the rescue threshold, so the word was disappearing. Italian uses the same word."
 contigo,adv,con te,"Set by hand. The corpus reads `con` alone because `contigo` is one word in Spanish and two in Italian, the same as `conmigo`."
@@ -17,3 +17,11 @@ apoderar,vblex,impadronire,Set by hand. Occurs as `apoderarse de`; the bare infi
 editar,vblex,modificare,"Set by hand. Too few pairs to rank, and `editare` is a calque Italians use only of software."
 delinquir,vblex,delinquere,"Set by hand. Its only corpus answer was noise, and it is on Barron's list."
 inmigrar,vblex,immigrare,Set by hand. 25 pairs is too few to rank.
+desayunar,vblex,fare colazione,Set by hand. `fare` alone is a fragment: Italian has no single verb for it and says `fare colazione`.
+doler,vblex,fare male,Set by hand. `fare` is a fragment of `fare male`. `dolere` exists but is rare.
+acostar,vblex,andare a letto,"Set by hand. `andare` is a fragment of `andare a letto`, which is why the `andare` prompt was reaching `acostar`."
+caber,vblex,entrarci,"Set by hand. `essere` is copular noise; `caber` is to fit, which Italian says with `entrarci` or `starci`."
+aguantar,vblex,sopportare,Set by hand. `tenere` is a fragment of `tenere duro`.
+calzar,vblex,calzare,Set by hand. `portare` is the generic wear-verb; `calzare` is the shoe-specific one this word means.
+marchar,vblex,andarsene,Set by hand. Bare `andare` is `ir`; `marchar(se)` carries the leaving sense.
+acudir,vblex,accorrere,"Set by hand. `venire` is too generic; `acudir` is to come to something, often to help."

@@ -462,7 +462,8 @@ function openCardPreview(prompt) {
     for (const w of words) {
       const row = document.createElement('div');
       row.className = 'preview-answer';
-      row.replaceChildren(withGender(w, genderFor(state.gender, null, w, 'es'), 'es'));
+      row.replaceChildren(
+        withGender(w, genderFor(state.gender, null, w, 'es', g), 'es'));
       parts.push(row);
     }
   }
@@ -502,9 +503,11 @@ function renderCard() {
   state.revealed = false;
 
   $('#direction').textContent = dir.label;
+  const promptPos = answersFor(item).map(a => a.pos);
   $('#prompt').replaceChildren(
     withGender(item.prompt,
-               genderFor(state.gender, item.card, item.prompt, 'it'), 'it'));
+               genderFor(state.gender, item.card, item.prompt, 'it',
+                         promptPos.includes('n') ? 'n' : promptPos[0]), 'it'));
 
   // Pooled across every answer the card will show, not read off one of them.
   // The front should never claim something the back contradicts: `vicino`
@@ -560,13 +563,14 @@ function reveal() {
       label.className = 'sense-pos';
       label.textContent = POS_LABEL[g] ? POS_LABEL[g].toLowerCase().replace(/s$/, '') : g;
       const share = Object.fromEntries(answers.map(a => [a.es, a.pct]));
-      blocks.push(label, ...words.map(w => answerRow(w, share[w], answers.length > 1)));
+      blocks.push(label,
+                  ...words.map(w => answerRow(w, share[w], answers.length > 1, g)));
     }
     $('#answers').replaceChildren(...blocks);
     $('#answers').classList.add('grouped');
   } else {
     $('#answers').replaceChildren(
-      ...answers.map(a => answerRow(a.es, a.pct, answers.length > 1)));
+      ...answers.map(a => answerRow(a.es, a.pct, answers.length > 1, a.pos)));
     $('#answers').classList.remove('grouped');
   }
   $('#answers').classList.remove('hidden');
@@ -627,7 +631,7 @@ function shareMark(pct, showIt) {
 // the word opens its own entry, which knows more than the card face does.
 // The percentage is only worth showing when there is something to compare it
 // against. On a card with one answer it is noise.
-function answerRow(word, pct, many) {
+function answerRow(word, pct, many, pos) {
   const row = document.createElement('div');
   row.className = 'word-row';
 
@@ -637,7 +641,7 @@ function answerRow(word, pct, many) {
   span.setAttribute('aria-label', word + ' \u2014 see this word');
   span.addEventListener('click', () => openDetail(word));
   span.replaceChildren(
-    withGender(word, genderFor(state.gender, null, word, 'es'), 'es'));
+    withGender(word, genderFor(state.gender, null, word, 'es', pos), 'es'));
   row.append(span);
   const mark = shareMark(pct, many);
   if (mark) row.append(mark);
@@ -708,7 +712,9 @@ function openDetail(es) {
 
   const head = document.createElement('div');
   head.className = 'detail-word';
-  head.replaceChildren(withGender(es, genderFor(state.gender, null, es, 'es'), 'es'));
+  head.replaceChildren(withGender(
+    es, genderFor(state.gender, null, es, 'es',
+                  posGroups(card).includes('n') ? 'n' : 'x'), 'es'));
   if (canSpeak()) {
     const play = document.createElement('button');
     play.type = 'button';
@@ -736,7 +742,8 @@ function openDetail(es) {
     for (const w of words) {
       const row = document.createElement('div');
       row.className = 'detail-sense';
-      row.replaceChildren(withGender(w, genderFor(state.gender, card, w, 'it'), 'it'));
+      row.replaceChildren(
+        withGender(w, genderFor(state.gender, card, w, 'it', g), 'it'));
       const mark = shareMark(shares[w], words.length > 1);
       if (mark) row.append(mark);
       parts.push(row);
@@ -774,6 +781,19 @@ function openDetail(es) {
       const pes = document.createElement('p');
       pes.className = 'example-es';
       pes.append(highlight(r.es, es, null));
+      if (canSpeak()) {
+        const say = document.createElement('button');
+        say.type = 'button';
+        say.className = 'say';
+        say.textContent = '\u25B6';
+        say.setAttribute('aria-label', 'Hear this sentence');
+        say.addEventListener('click', ev => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          speak(r.es, 'es', { rate: 0.85 });
+        });
+        pes.append(' ', say);
+      }
       const pit = document.createElement('p');
       pit.className = 'example-it';
       pit.textContent = r.it;
@@ -982,8 +1002,13 @@ function spokenForm(word, info) {
   return info.art.endsWith("'") ? info.art + word : info.art + ' ' + word;
 }
 
-function genderFor(all, card, word, which) {
+function genderFor(all, card, word, which, pos) {
   if (!all) return null;
+  // An article and a gender belong to a noun. The gender data is keyed by
+  // spelling alone, and plenty of words are a noun *and* something else --
+  // `tanto` is a score, `bien` is a good -- so the data is right and showing
+  // it against the adverb reading is not. `el tanto` for an adverb was this.
+  if (pos && posGroup(pos) !== 'n') return null;
   // Spanish is keyed directly, which is what lets any answer -- or a word in
   // the entry view, with no card in hand -- carry its own article. Italian is
   // keyed under the card it was glossed from, so it needs one.
@@ -1736,6 +1761,14 @@ async function importProgress(file) {
 function wire() {
   $('#start').addEventListener('click', startSession);
   $('#reveal').addEventListener('click', reveal);
+  // Tapping the card itself flips it. Anything you can actually operate --
+  // the play buttons, the check-pile note, a link, the detail panel -- keeps
+  // its own click, or typing a note would flip the card underneath you.
+  document.querySelector('.card').addEventListener('click', e => {
+    if (state.revealed) return;
+    if (e.target.closest('button, a, input, textarea, select, #detail, .flag-form')) return;
+    reveal();
+  });
   $('#quit').addEventListener('click', finish);
   $('#back-home').addEventListener('click', () => show('home'));
   $('#f-size').addEventListener('change', e => {
@@ -1782,7 +1815,11 @@ function wire() {
   $('#say-prompt').addEventListener('click', () => {
     const item = state.queue[state.index];
     const dir = DIRECTIONS[item.direction];
-    const word = item.card[dir.prompt];
+    // The prompt, not the card's lead sense. One card answers several Italian
+    // prompts -- `algo` answers both `qualcosa` and `alcunche` -- so reading
+    // the card spoke the wrong word for every prompt but the first.
+    const word = (dir.prompt === 'it' && item.prompt) ? item.prompt
+                                                      : item.card[dir.prompt];
     speak(spokenForm(word, genderFor(state.gender, item.card, word, dir.prompt)),
           dir.prompt);
   });

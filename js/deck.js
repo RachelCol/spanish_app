@@ -152,6 +152,12 @@ export function buildItems(deck, prompts, progressList, settings) {
 
   const items = [];
   for (const [prompt, all] of Object.entries(prompts)) {
+    // The prompt belongs to its best answer, and is only asked where that
+    // answer is in scope. Keeping a prompt because some *other* answer
+    // survived the filter is how `fare` came to mean `desayunar` in the wider
+    // deck: `hacer` is a first-band word, so it was filtered out and the
+    // leftovers were shown as though they were the meaning.
+    if (!passes(byId.get(all[0].es))) continue;
     const answers = all.filter(a => passes(byId.get(a.es)));
     if (!answers.length) continue;
     const lead = byId.get(answers[0].es);

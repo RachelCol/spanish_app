@@ -191,11 +191,14 @@ legend { font-size: .8rem; color: var(--muted); text-transform: uppercase; lette
   padding: .7rem 0;
 }
 .example-es {
+  /* Not a flex container. `highlight` splits the sentence into a <b> per
+     matched word and a text node between, so under flex every word became its
+     own item and wrapped wherever it liked -- a line break after one word,
+     mid-sentence. The play button is inline instead. */
   margin: 0; font-size: 1rem; line-height: 1.45;
-  display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap;
 }
 .example-es b { color: var(--accent); font-weight: 650; }
-.example-es .say { align-self: center; }
+.example-es .say { vertical-align: middle; margin-left: .3rem; }
 .example-it { margin: .2rem 0 0; font-size: .92rem; color: var(--muted); }
 .example-credit { margin: .8rem 0 0; font-size: .7rem; color: var(--muted); text-align: center; }
 .example-credit a { color: inherit; }

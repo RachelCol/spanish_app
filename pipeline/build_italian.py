@@ -34,7 +34,7 @@ def build():
 
     # italian -> [(spanish, part of speech)]
     by_it = collections.defaultdict(list)
-    SECTIONED = {"pr", "det", "ij"}   # `phrase` stays: those are cards
+    SECTIONED = {"pr", "det", "ij", "prn", "cnj"}   # `phrase` stays
     for es, entry in defs.items():
         for pos, items in entry["by_pos"].items():
             if pos in SECTIONED:

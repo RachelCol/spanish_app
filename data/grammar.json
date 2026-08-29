@@ -656,7 +656,8 @@
    "Italian already does this, so the idea is familiar: you say **un buon caffè**, not *un buono caffè*, and **un gran problema** rather than *un grande problema*. Spanish does the same thing, more systematically, and the list of words it applies to is not identical.",
    "The Spanish rule is tighter than the Italian one. **bueno**, **malo**, **primero**, **tercero**, **alguno** and **ninguno** drop their final **-o** before a masculine singular noun, and only there. **grande** shortens to **gran** before a singular noun of either gender. **ciento** becomes **cien** before any noun, and before **mil** and **millones**.",
    "Two differences will catch you out. Spanish shortens only before the noun it modifies, never after it and never standing alone — *el libro es bueno*, never *es buen*. And **grande** changes meaning when it moves: **un gran hombre** is a great man, **un hombre grande** is a big one. Italian has the same split with **grande**, so trust that instinct.",
-   "Where Italian is looser, Spanish is stricter. Italian lets **bello**, **santo** and **quello** take a whole family of shapes depending on the sound that follows — *bel libro*, *bell'uomo*, *begli occhi*. Spanish has nothing of this: **bello** never shortens, and **santo** shortens to **san** only before a man's name, not before ordinary nouns."
+   "Where Italian is looser, Spanish is stricter. Italian lets **bello**, **santo** and **quello** take a whole family of shapes depending on the sound that follows — *bel libro*, *bell'uomo*, *begli occhi*. Spanish has nothing of this: **bello** never shortens, and **santo** shortens to **san** only before a man's name, not before ordinary nouns.",
+   "One apocopation is not optional and not positional: **muy** and **mucho**. Spanish uses **muy** before an adjective or another adverb — *muy alto*, *muy bien* — and **mucho** before a noun or after a verb — *mucho tiempo*, *trabaja mucho*. You cannot swap them the way you can hesitate between *gran* and *grande*. Italian makes no such split: **molto** does all of it, which is why this one has to be learned rather than transferred."
   ],
   "pairs": [
    [
@@ -723,9 +724,34 @@
     "San Pietro",
     "San Pedro",
     "santo → san before a name"
+   ],
+   [
+    "molto alto",
+    "muy alto",
+    "before an adjective: muy"
+   ],
+   [
+    "molto bene",
+    "muy bien",
+    "before an adverb: muy"
+   ],
+   [
+    "molto tempo",
+    "mucho tiempo",
+    "before a noun: mucho"
+   ],
+   [
+    "lavora molto",
+    "trabaja mucho",
+    "after a verb: mucho"
+   ],
+   [
+    "molto meglio",
+    "mucho mejor",
+    "before a comparative: mucho"
    ]
   ],
-  "watch": "The trap is assuming the two lists match. Italian shortens **bello** and Spanish does not; Spanish shortens **grande** before feminine nouns and Italian will not. Your ear offers *un bel libro* and Spanish has no such form — it wants **un libro bonito**."
+  "watch": "The trap is assuming the two lists match. Italian shortens **bello** and Spanish does not; Spanish shortens **grande** before feminine nouns and Italian will not. Your ear offers *un bel libro* and Spanish has no such form — it wants **un libro bonito**. And Italian's single **molto** will offer you *muy tiempo* or *mucho alto*; Spanish splits what Italian does not."
  },
  {
   "id": "false-friends",

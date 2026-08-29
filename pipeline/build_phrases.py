@@ -23,6 +23,14 @@ import unicodedata
 TOKEN = re.compile(r"[A-Za-zÁÉÍÓÚÜÑÀÈÌÒÙáéíóúüñàèìòùç]+")
 
 # phrase -> the bare word it replaces on the lexicon
+# Italian drops the final -e of an infinitive before another word: `dover
+# fare`, `aver visto`, `esser certi`. The corpus sees the truncation, which is
+# not a word. `tener que` answered `dover` because of this.
+TRUNCATED = {"dover": "dovere", "aver": "avere", "esser": "essere",
+             "poter": "potere", "voler": "volere", "saper": "sapere",
+             "far": "fare", "andar": "andare", "veder": "vedere",
+             "voltar": "voltare", "esserci": "esserci"}
+
 LOCKED = {
     "sin embargo": "embargo",
     "a través": "través",
@@ -47,6 +55,10 @@ LOCKED = {
     "a pesar": None,            "de vez en cuando": None,
     "en concreto": None,        "a lo largo": None,
     "alrededor de": None,
+    # Italian `dovere` is `tener que` for a plain obligation and `deber` for a
+    # duty or a debt. Without the phrase the prompt could only reach `deber`,
+    # which is the heavier of the two and not the everyday one.
+    "tener que": None,
 }
 
 IT_SKIP = set("""il lo la i gli le un uno una l di a da in con su per tra fra e ed o che se ma
@@ -55,7 +67,7 @@ non ci si mi ti vi ne del della dei delle nel nella dal dalla al alla sul sulla
 questo questa quello quella qui qua lì là
 dell all nell sull dall coll quell un anche solo più molto po cosi coso
 commissione parlamento consiglio europea europeo signor presidente onorevole
-unione stato stati membro membri paese paesi piu piú più gia già
+unione stato stati membro membri paese paesi piu piú più gia già senza
 anni anno degli delle dei negli nelle ogni volta cosa modo caso punto
 pero perche quando dopo prima ora poi già ancora sempre mai""".split())
 
@@ -91,7 +103,12 @@ def main(corpus_dir, cap=4000):
     for phrase, total in seen.items():
         if total < 30:
             continue
-        rows = [(c / total, it) for it, c in tally[phrase].most_common(40)
+        # Fold a truncated infinitive back onto the real word before ranking,
+        # so `dover` and `dovere` count as one thing rather than splitting.
+        folded = collections.Counter()
+        for it, c in tally[phrase].items():
+            folded[TRUNCATED.get(it, it)] += c
+        rows = [(c / total, it) for it, c in folded.most_common(40)
                 if zipf_frequency(it, "it") >= 2.5]
         rows.sort(reverse=True)
         if not rows:
