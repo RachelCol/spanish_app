@@ -1,22 +1,22 @@
 spanish,pos,drop,keep,note
 editorial,n,casa,editoriale,"Reverted. `casa` is a fragment of `casa editrice`, the publishing house -- the word alone is not the meaning."
-acta,n,processo,atto,"Reverted. `processo` is a fragment of `processo verbale`. This is the same phrase that put `verbale` on `acta` before."
-digital,n,transizione,digitale,"Reverted. `transizione digitale` is a fixed collocation in Europarl; the corpus mistook the neighbour for the meaning."
-ejercicio,n,carica,esercizio,"Reverted. `carica` does not mean exercise; it arrived as noise."
+acta,n,processo,atto,Reverted. `processo` is a fragment of `processo verbale`. This is the same phrase that put `verbale` on `acta` before.
+digital,n,transizione,digitale,Reverted. `transizione digitale` is a fixed collocation in Europarl; the corpus mistook the neighbour for the meaning.
+ejercicio,n,carica,esercizio,Reverted. `carica` does not mean exercise; it arrived as noise.
 audiencia,n,audizione,udienza,"Reverted. `audizione` is a casting audition. `udienza` is the hearing, and also the audience of a broadcast."
-comentario,n,osservazione,commento,"Reverted. `osservazione` is a remark; `commento` is the direct word and English Wiktionary backs it."
+comentario,n,osservazione,commento,Reverted. `osservazione` is a remark; `commento` is the direct word and English Wiktionary backs it.
 tampoco,adv,non,neanche,"Reverted. `non` is the bare negator and appears in a third of Italian sentences, so it cannot stand out from its own baseline -- the same failure as `ni -> non`."
 abuela,n,nonno,nonna,"Reverted. Gender: the aligner lemmatises the Italian side to masculine singular, so `nonna` became `nonno`. The exact count has `nonna` at 85.9% against `nonno` at 1.9%."
 niña,n,bambino,bambina,"Reverted. Same masculine lemmatisation. `bambina` was never in the candidate set, so it is set here by hand."
 dama,n,signore,signora,"Reverted. Same masculine lemmatisation, and `signore` was the only candidate, so the relative threshold could not catch it."
-señora,n,signore,signora,"Reverted. As above."
-madrugada,n,notte,alba,"Reverted. `madrugada` is the small hours before dawn. `notte` is simply night and loses the distinction."
-campamento,n,campo,accampamento,"Reverted. `campo` is a field or any generic camp; `accampamento` is the encampment `campamento` names."
-igualmente,adv,anche,altrettanto,"Reverted. `anche` is `también`. `altrettanto` is the reciprocal `igualmente` -- what you say back to someone."
-redacción,n,formulazione,redazione,"Reverted. `formulazione` is the wording of a clause; `redazione` covers both the drafting and the editorial office."
-panorama,n,quadro,panorama,"Reverted. Italian has the identical word and uses it."
+señora,n,signore,signora,Reverted. As above.
+madrugada,n,notte,alba,Reverted. `madrugada` is the small hours before dawn. `notte` is simply night and loses the distinction.
+campamento,n,campo,accampamento,Reverted. `campo` is a field or any generic camp; `accampamento` is the encampment `campamento` names.
+igualmente,adv,anche,altrettanto,Reverted. `anche` is `también`. `altrettanto` is the reciprocal `igualmente` -- what you say back to someone.
+redacción,n,formulazione,redazione,Reverted. `formulazione` is the wording of a clause; `redazione` covers both the drafting and the editorial office.
+panorama,n,quadro,panorama,Reverted. Italian has the identical word and uses it.
 absurdo,n,assurdità,assurdo,"Reverted. As a noun Italian says `l'assurdo`. `assurdità` is the quality of being absurd, a different noun."
-suministro,n,approvvigionamento,fornitura,"Reverted. `approvvigionamento` is procurement as a process; `fornitura` is the supply itself and is far commoner."
+suministro,n,approvvigionamento,fornitura,Reverted. `approvvigionamento` is procurement as a process; `fornitura` is the supply itself and is far commoner.
 escrito,n,iscritto,scritto,"Reverted. `iscritto` means enrolled or registered, not written, and was ranked above `scritto` on 32.5% against 24.6%. The count came from `por escrito`."
 actriz,n,attore,attrice,"Reverted. Gender: the aligner lemmatises the Italian side to masculine, so `attrice` became `attore`. Same defect as `abuela -> nonno`."
 lado,n,parte,lato,"Reverted. `lato` is the word for side; `parte` comes from `por otro lado`, which is `d'altra parte`."
@@ -51,6 +51,6 @@ afeitar,vblex,fare,radere,Reverted. `fare` is a fragment of `farsi la barba`.
 burlar,vblex,prendere,beffare,Reverted. `prendere` is a fragment of `prendere in giro`.
 delinquir,vblex,trasformare,,Dropped. `trasformare` is unrelated noise.
 activo,n,bene,,"Dropped. `bene` is right for `activo` in the accounting sense of assets, but at 2.5% it is too marginal to sit on the `bene` prompt beside `bien`."
-hasta,pr,pure,fino a,"Reverted. `pure` is wrong: `hasta` as a preposition is `fino a`. Its adverb reading, the `hasta yo` / `anche io` sense, is untouched."
 hacia,pr,per,,"Dropped. `hacia` is `verso`; `per` is por and para, not this."
 bajo,n,pianterreno,,Dropped. `bajo` as a ground floor is real but the corpus attests it at 0.0%. Its adjective and preposition readings carry the word.
+hasta,adv,fino,,Dropped. `fino` and `fino a` are the same Italian word -- it takes the `a` before a noun -- so the preposition reading already carries it. The adverb reading is the `hasta yo` / `anche io` sense and `anche` is all it needs.

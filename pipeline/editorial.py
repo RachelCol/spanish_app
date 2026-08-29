@@ -4,6 +4,7 @@ Four files under content/, each carrying a note column that records what was
 done and the evidence for it. None of them show on a card.
 
   included.csv  words the lexicon's own rules keep out but that belong in it.
+  see_also.csv  a phrase to mention under a word whose other use lives in it.
   excluded.csv  words in the frozen lexicon that should not become cards.
                 The list stays frozen -- these are skipped at build time, so
                 nothing is recomputed and nothing churns.
@@ -40,15 +41,41 @@ def included():
     return _rows("included.csv")
 
 
+def see_also():
+    """spanish -> the phrase its other use lives in, shown under the card.
+
+    Some words are a card in one part of speech and a preposition only inside
+    a fixed phrase: `dado` is a noun and `dado que` is the conjunction, `junto`
+    is an adjective and `junto a` is the preposition. Teaching the phrase as
+    its own card would be wrong -- you meet these as phrases, not as words --
+    but leaving the use unmentioned loses it.
+    """
+    return {r["spanish"]: r for r in _rows("see_also.csv")}
+
+
 def excluded():
     """Spanish words to skip entirely -> reason."""
     return {r["spanish"]: r["reason"] for r in _rows("excluded.csv")}
 
 
 def reverts():
-    """(spanish, pos) -> (italian to drop, italian to put in its place)."""
-    return {(r["spanish"], r["pos"]): (r["drop"], r["keep"])
-            for r in _rows("reverts.csv")}
+    """(spanish, pos) -> (italian to drop, italian to put in its place).
+
+    One revert per reading: a second row for the same word and part of speech
+    replaces the first rather than adding to it. Two rows for `hasta` as a
+    preposition looked like they would drop two words and instead undid each
+    other, letting `pure` back onto the card. To change several senses of one
+    reading, state it outright in overrides.csv.
+    """
+    out = {}
+    for r in _rows("reverts.csv"):
+        key = (r["spanish"], r["pos"])
+        if key in out:
+            raise SystemExit(
+                f"reverts.csv has two rows for {key}; only one would apply. "
+                f"Use overrides.csv to state that reading outright.")
+        out[key] = (r["drop"], r["keep"])
+    return out
 
 
 def overrides():

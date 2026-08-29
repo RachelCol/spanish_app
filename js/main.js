@@ -799,6 +799,28 @@ function openDetail(es) {
     }
   }
 
+  // Where a word's other use only exists inside a phrase -- `dado` is a noun
+  // and `dado que` is the conjunction -- name the phrase rather than making it
+  // a card. You meet these as phrases, not as words.
+  if (card.see_also) {
+    const also = document.createElement('div');
+    also.className = 'detail-see-also';
+    const label = document.createElement('span');
+    label.className = 'see-also-label';
+    label.textContent = 'see also';
+    const it = document.createElement('span');
+    it.className = 'see-also-it';
+    it.textContent = card.see_also.it;
+    const arrow = document.createElement('span');
+    arrow.className = 'see-also-arrow';
+    arrow.textContent = '\u2192';
+    const sp = document.createElement('span');
+    sp.className = 'see-also-es';
+    sp.textContent = card.see_also.es;
+    also.append(label, it, arrow, sp);
+    parts.push(also);
+  }
+
   const actions = document.createElement('div');
   actions.className = 'detail-actions';
   const l = detailLinks(es);

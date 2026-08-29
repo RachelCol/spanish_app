@@ -97,6 +97,7 @@ def main():
             "pos": sorted(by_pos)[0],
             "pos_all": [p for p in w["pos"] if p in by_pos],
             "by_pos": by_pos,
+            **({"see_also": entry["see_also"]} if entry.get("see_also") else {}),
             "bucket": bucket(es, senses[0]),
             "tier": w["tier"], "zipf": w["zipf"],
         })

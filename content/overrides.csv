@@ -28,3 +28,6 @@ acudir,vblex,accorrere,"Set by hand. `venire` is too generic; `acudir` is to com
 muy,adv,molto,"Set by hand. Newly added from included.csv, so the corpus counts do not reach it.  is the answer for both muy and mucho -- Italian does not make the split, which is exactly what the card is for."
 después,adv,dopo|poi,"Set by hand. Tagged alignment gives dopo|adv 0.121 and poi|adv 0.120 -- a tie -- but no dictionary lists poi for despues, so the addition rule declined it. Both are right: `despues` is `dopo` for after and `poi` for then."
 contra,pr,contro,"Set by hand. The dictionary offered nothing for contra as a preposition, so only its marginal noun reading survived -- and the 54% it carried was the two prepositions co-occurring, since that is what the word overwhelmingly is. `el contra` is close to nonsense and `la Contra` is Nicaraguan."
+tras,pr,dopo|dietro,"Set by hand. `tras` is both after and behind. Only `dopo` was listed, so the `dietro` prompt reached `detrás` and `atrás` but never this."
+hasta,pr,fino a,"(applies to the whole word, so the adverb reading `anche` is folded in below) Set by hand. `fino a` is the citation form -- Italian takes the `a` before a noun. The dictionary offered `pure`, which is not what `hasta` means."
+hasta,adv,anche,"The other half of `hasta`: the `hasta yo` / `anche io` sense, where it means even."

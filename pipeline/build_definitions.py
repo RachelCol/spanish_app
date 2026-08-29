@@ -181,6 +181,7 @@ def build(wikt_it2es_path):
     replaced = {v["replaces"] for v in phrases.values() if v["replaces"]}
     EXCLUDED = editorial.excluded()
     REVERTS, OVERRIDES = editorial.reverts(), editorial.overrides()
+    SEE_ALSO = editorial.see_also()
 
     for phrase, v in phrases.items():
         defs[phrase] = {"pairs": v["pairs"],
@@ -445,6 +446,10 @@ def build(wikt_it2es_path):
         if not by_pos:
             continue
         defs[es] = {"pairs": entry["pairs"], "by_pos": by_pos}
+        if es in SEE_ALSO:
+            row = SEE_ALSO[es]
+            defs[es]["see_also"] = {"it": row["italian"],
+                                    "es": row["phrase"]}
         if corpus_only and not (set(poss) <= SECTIONED):
             unsupported.append({"spanish": es, "band": w["tier"],
                                 "definition": ", ".join(it for it, _ in keep),
@@ -490,10 +495,14 @@ def finish(es, by_pos, share_of, reverts, overrides):
     # nominalises its infinitives freely, so Wiktionary gives every verb a noun
     # reading and the corpus fills it -- which is where `hacer -> lavoro` and
     # `haber -> essere` came from. Setting the verb by hand should retire them.
-    for (w, pos), forced in overrides.items():
-        if w == es:
-            return {pos: [{"it": it, "prob": None, "pct": share_of(it, False)}
-                          for it in forced]}
+    forced_all = {pos: words for (w, pos), words in overrides.items() if w == es}
+    if forced_all:
+        # Every reading the file states, not just the first. `hasta` is
+        # `fino a` as a preposition and `anche` as an adverb, and returning on
+        # the first match threw the adverb away.
+        return {pos: [{"it": it, "prob": None, "pct": share_of(it, False)}
+                      for it in words]
+                for pos, words in forced_all.items()}
 
     out = {}
     for pos, items in by_pos.items():

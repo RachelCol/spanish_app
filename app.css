@@ -873,3 +873,18 @@ button.secondary {
   margin-left: .1rem;
 }
 .detail-sense .share-mark { margin-left: .45rem; }
+
+/* --- a word whose other use lives inside a phrase --- */
+.detail-see-also {
+  margin: .5rem 0 0; padding-top: .5rem;
+  border-top: 1px dashed var(--line);
+  display: flex; align-items: baseline; gap: .4rem;
+  flex-wrap: wrap; font-size: .9rem;
+}
+.see-also-label {
+  font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+}
+.see-also-it { color: var(--muted); }
+.see-also-arrow { color: var(--muted); opacity: .7; }
+.see-also-es { color: var(--ink); font-weight: 600; }
