@@ -114,9 +114,13 @@ def dictionary(wikt_it2es_path):
     # the Italian answer belongs to. Treating them as the latter let `algo`
     # take `qualcosa`, a pronoun, as an adverb, because the tag matched and the
     # check for glue sits behind that match.
+    # Keyed by the Italian word as written, accents and all. norm() strips them,
+    # and then the accent has to be guessed back by frequency -- which picks
+    # `si` over `sì` and `te` over `tè`, because the wrong word is commoner.
+    # Only Apertium drops accents; this source keeps them, so they are kept.
     for es, pairs in direct.items():
         for it in pairs:
-            out[norm(es)][norm(it)].add("")
+            out[norm(es)][it.lower()].add("")
     return out
 
 
@@ -164,6 +168,16 @@ def build(wikt_it2es_path):
     # the set happened to yield first -- and adding a dictionary changed the
     # set. Lowercase wins a tie, then the shorter spelling: `cosa` over `Cosa`,
     # `se` over `SE`, `signorina` over `Signorina`.
+    # Restoring an accent, not choosing a word. Dictionary candidates arrive
+    # accent-stripped, so `si` here may mean `sì`; only Apertium drops accents,
+    # every other source keeps them, so the accented spelling is the one being
+    # asked for. Frequency is the wrong judge -- `si` outranks `sì` and `te`
+    # outranks `tè`, which turned the Spanish for yes into the reflexive and
+    # the Spanish for tea into the Italian for you. Lowercase still wins over
+    # capitalised, so `cosa` beats `Cosa`.
+    # Frequency, with lowercase breaking a tie so `cosa` beats `Cosa`. Trying
+    # to prefer the accented spelling instead was worse -- the vocabulary holds
+    # `quì`, `ànno`, `cosà` and `sù`, which are misspellings and rare variants.
     it_alias = {b: max(v, key=lambda w: (_z(w, "it"), w == w.lower(), -len(w), w))
                 for b, v in _bare.items()}
 
@@ -180,7 +194,13 @@ def build(wikt_it2es_path):
         Accent pairs are mostly not variants of one another: Wiktionary has
         `citta` as the feminine of `citto`, and only `perchè` is actually
         marked a misspelling of `perché`."""
-        if it in it_base and not from_dictionary:
+        # An accented spelling is trusted as written, whoever proposed it.
+        # Apertium drops accents as a matter of course, so `citta` means
+        # `città` and must go through the alias -- but a source that kept the
+        # accent was telling us something, and frequency cannot second-guess
+        # it: `te` is commoner than `tè`, so the alias turned the Spanish for
+        # tea into the Italian for you.
+        if it in it_base and (not from_dictionary or strip_accents(it) != it):
             return it
         best = it_alias.get(strip_accents(it))
         if best:
