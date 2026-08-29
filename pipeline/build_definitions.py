@@ -97,6 +97,26 @@ def dictionary(wikt_it2es_path):
     for it, esl in json.load(open(wikt_it2es_path)).items():
         for es in esl:
             out[norm(es)][norm(it)].add("")
+
+    # A third proposer, and the only one that never goes through English: the
+    # Italian and Spanish Wiktionary editions list each other's words directly.
+    # It agrees with 88% of the deck already, which is what makes it worth
+    # having -- and it disagrees precisely where we are weakest, on the words
+    # no dictionary had an opinion about at all. It does not overrule anyone:
+    # it adds candidates, and the corpus still decides which survive.
+    try:
+        direct = json.load(open("data/direct_dict.json"))
+    except FileNotFoundError:
+        direct = {}
+    # Offered without a part of speech, like the English pivot. The tags these
+    # editions carry describe the *source* entry -- the Spanish word's part of
+    # speech in the Spanish edition -- not which reading of the Spanish word
+    # the Italian answer belongs to. Treating them as the latter let `algo`
+    # take `qualcosa`, a pronoun, as an adverb, because the tag matched and the
+    # check for glue sits behind that match.
+    for es, pairs in direct.items():
+        for it in pairs:
+            out[norm(es)][norm(it)].add("")
     return out
 
 
@@ -139,7 +159,13 @@ def build(wikt_it2es_path):
     # the common misspelling `perchè` -- take the commonest in Italian rather
     # than giving up, which is what left `porque` with no definition at all.
     from wordfreq import zipf_frequency as _z
-    it_alias = {b: max(v, key=lambda w: _z(w, "it")) for b, v in _bare.items()}
+    # The tie-break has to be deterministic. `cosa` and `Cosa` score the same
+    # in wordfreq, which is case-insensitive, so `max` was returning whichever
+    # the set happened to yield first -- and adding a dictionary changed the
+    # set. Lowercase wins a tie, then the shorter spelling: `cosa` over `Cosa`,
+    # `se` over `SE`, `signorina` over `Signorina`.
+    it_alias = {b: max(v, key=lambda w: (_z(w, "it"), w == w.lower(), -len(w), w))
+                for b, v in _bare.items()}
 
     def italian(it, from_dictionary=True):
         """The Italian word as it should be written, or None if unknown.
