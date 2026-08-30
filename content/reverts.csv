@@ -57,3 +57,4 @@ hasta,adv,fino,,Dropped. `fino` and `fino a` are the same Italian word -- it tak
 salvo,adv,se,,"Dropped. `se` is `if`. `salvo` means except, which the adjective reading already carries."
 localidad,n,villaggio,città,Reverted. `localidad` is a town or a locality; `villaggio` is a village and narrower. The direct dictionary offered it and it displaced the better answer.
 perro,adj,AI,,Dropped. `perro` is a dog. `AI` is an acronym that reached the adjective reading at a probability of 1.0 on almost no evidence -- 0.4% of the pairs.
+pelotudo,adj,insegnare,,Dropped. Found beside the hidalgo case and wrong the same way.

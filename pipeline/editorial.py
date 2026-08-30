@@ -61,6 +61,11 @@ def excluded():
 def reverts():
     """(spanish, pos) -> (italian to drop, italian to put in its place).
 
+    A revert drops a sense from one reading, not from the word. De-duplication
+    keeps an Italian word wherever it still scores, so dropping `mezzo` from
+    `hidalgo` as a noun moved it to the adjective. To remove a sense from a
+    word, state the word outright in overrides.csv.
+
     One revert per reading: a second row for the same word and part of speech
     replaces the first rather than adding to it. Two rows for `hasta` as a
     preposition looked like they would drop two words and instead undid each

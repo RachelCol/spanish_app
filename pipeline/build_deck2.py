@@ -119,7 +119,15 @@ def main():
     for it, answers in prompts.items():
         rows = []
         for a in answers:
-            row = {"es": a["es"], "pos": a["pos"] or None}
+            # How far this Italian word is from this Spanish one -- the pairing
+            # you are actually looking at, not the card's leading sense. One
+            # card has to pick one label and cannot say both things: `carta`
+            # answers `lettera`, which is the false friend worth studying, and
+            # `carta`, where there is nothing to learn. Per prompt it says
+            # `lettera -> carta` distinct and `carta -> carta` identical, and
+            # `maniera -> manera` stops being called completely different.
+            row = {"es": a["es"], "pos": a["pos"] or None,
+                   "bucket": bucket(it, a["es"])}
             # the corpus share, not the split between answers
             if a.get("pct") is not None:
                 row["pct"] = a["pct"]

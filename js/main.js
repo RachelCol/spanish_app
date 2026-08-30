@@ -528,11 +528,14 @@ function renderCard() {
   }
 
   $('#direction').textContent = dir.label;
+  // The leading answer decides, not whether any answer happens to be a noun.
+  // `male` answers `mal` as an adverb and `daño` as a noun, and asking whether
+  // any of them is a noun put `il` in front of a word that is mostly not one.
   const promptPos = answersFor(item).map(a => a.pos);
   $('#prompt').replaceChildren(
     withGender(item.prompt,
                genderFor(state.gender, item.card, item.prompt, 'it',
-                         promptPos.includes('n') ? 'n' : promptPos[0]), 'it'));
+                         promptPos[0]), 'it'));
 
   // Pooled across every answer the card will show, not read off one of them.
   // The front should never claim something the back contradicts: `vicino`
@@ -760,9 +763,12 @@ function openDetail(es) {
 
   const head = document.createElement('div');
   head.className = 'detail-word';
+  // The reading this card leads with, not any reading it has. `pasado` is an
+  // adjective answering `scorso` and a noun answering `passato`; arriving from
+  // `scorso` and being shown `el pasado` names the wrong one.
+  const headPos = Object.keys(card.by_pos || {})[0] || posGroups(card)[0];
   head.replaceChildren(withGender(
-    es, genderFor(state.gender, null, es, 'es',
-                  posGroups(card).includes('n') ? 'n' : 'x'), 'es'));
+    es, genderFor(state.gender, null, es, 'es', headPos), 'es'));
   if (canSpeak()) {
     const play = document.createElement('button');
     play.type = 'button';
@@ -771,7 +777,7 @@ function openDetail(es) {
     play.setAttribute('aria-label', 'Hear ' + es);
     play.addEventListener('click', () =>
       speak(spokenForm(es, genderFor(state.gender, null, es, 'es',
-                       posGroups(card).includes('n') ? 'n' : 'x')), 'es'));
+                       headPos)), 'es'));
     head.append(play);
   }
   parts.push(head);
@@ -1906,7 +1912,7 @@ function wire() {
                                                       : item.card[dir.prompt];
     const pos = answersFor(item).map(a => a.pos);
     speak(spokenForm(word, genderFor(state.gender, item.card, word, dir.prompt,
-                     pos.includes('n') ? 'n' : pos[0])),
+                     pos[0])),
           dir.prompt);
   });
   $('#accents').addEventListener('click', () => {

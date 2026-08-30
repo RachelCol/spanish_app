@@ -145,9 +145,11 @@ export function itemKey(cardId, direction) {
 export function buildItems(deck, prompts, progressList, settings) {
   const byId = new Map(deck.map(c => [c.id, c]));
   const stored = new Map(progressList.map(p => [p.key, p]));
-  const passes = card => card
+  // The bucket belongs to the pairing, not the card, so it is checked against
+  // the answer being offered rather than the card's leading sense.
+  const passes = (card, bucketOf) => card
     && settings.tiers.includes(card.tier)
-    && settings.buckets.includes(card.bucket)
+    && settings.buckets.includes(bucketOf || card.bucket)
     && posGroups(card).some(g => settings.pos.includes(g));
 
   const items = [];
@@ -161,7 +163,7 @@ export function buildItems(deck, prompts, progressList, settings) {
     // This only works because a card's answers are its real ones. While
     // `desayunar` still answered the bare `fare`, surfacing on any answer made
     // `fare` look as though it meant breakfast.
-    if (!all.some(a => passes(byId.get(a.es)))) continue;
+    if (!all.some(a => passes(byId.get(a.es), a.bucket))) continue;
     const answers = all.filter(a => byId.get(a.es));
     if (!answers.length) continue;
     const lead = byId.get(answers[0].es);
