@@ -55,6 +55,7 @@ CLOSED = {"pr", "cnj", "det", "prn"}
 SECTIONED = editorial.SECTIONED
 
 RESCUE_PROB = 0.25     # what the corpus must reach to save a word from vanishing
+FLAT = 1.15            # below this the alignment has no peak and knows nothing
 RELATIVE = 15.0        # keep anything within this % of the top translation
 MIN_PAIRS = 30         # below this the corpus has no opinion worth having
 MIN_PROB = 0.01        # an alignment weaker than this is noise
@@ -348,6 +349,18 @@ def build(wikt_it2es_path):
                 rows.sort(key=lambda r: -r[1])
                 topp = rows[0][1]
                 keep = [(it, p) for it, p in rows if 100 * p / topp >= RELATIVE]
+                # This is the fallback: no dictionary proposed anything, so the
+                # alignment is the only source. A flat distribution means it
+                # saw too little to have an opinion -- `hidalgo` has six
+                # candidates tied at 0.149 -- and the relative threshold then
+                # admits everything it saw, which is how `entendido` came back
+                # with six senses. Taking the first is no better: in a tie the
+                # order is arbitrary, and it picked `spirito` for hidalgo and
+                # `rovina` for pibe. Neither source knows, so there is no
+                # answer to give and the reading is dropped.
+                flat = [p for _, p in rows[:5]]
+                if len(flat) >= 3 and flat[0] / (sum(flat) / len(flat)) < FLAT:
+                    keep = []
                 corpus_only = True
 
         # Organise by the Spanish word's parts of speech. Apertium says which
@@ -396,6 +409,15 @@ def build(wikt_it2es_path):
                     top_p = ranked[0][0]
                     here = [(it, p) for p, it in ranked
                             if 100 * p / top_p >= RELATIVE]
+                    # The relative threshold assumes a peak. Where the aligner
+                    # saw too little to have one -- `hidalgo` has six
+                    # candidates tied at 0.149 -- everything is within 15% of
+                    # the top and the threshold admits the lot. A flat
+                    # distribution is the model saying it does not know, so
+                    # take its first answer and nothing else.
+                    peak = [p for p, _ in ranked[:5]]
+                    if len(peak) >= 3 and peak[0] / (sum(peak) / len(peak)) < FLAT:
+                        here = here[:1]
                     by_pos[pos] = [{"it": italian(it, it in proposed),
                                     "prob": round(p, 3), "pct": share_of(it)}
                                    for it, p in here]
